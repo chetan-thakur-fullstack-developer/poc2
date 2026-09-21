@@ -655,6 +655,7 @@ html.dark .ew-float-menu .popover-item.danger:hover{color:#FDA4AF}
 .pd-status-bar{position:relative;overflow:hidden}
 .pd-status-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(420px 160px at 0% 0%, rgba(139,92,246,.10), transparent 60%),radial-gradient(420px 160px at 100% 100%, rgba(236,72,153,.06), transparent 60%);pointer-events:none;}
 .pd-status-bar > * { position: relative; }
+
 .budget-group{border:1px solid var(--border);border-radius:14px;background:var(--surface-2);margin-bottom:10px;transition:border-color .15s,outline-color .15s;overflow:hidden;}
 .budget-group:hover{border-color:var(--border-strong);}
 .budget-group.drag-over{outline:2px dashed var(--accent);outline-offset:2px;}
@@ -677,57 +678,81 @@ html.dark .ew-float-menu .popover-item.danger:hover{color:#FDA4AF}
 .budget-cap-btn:hover{border-color:var(--border-hover)!important;background:var(--surface-3)!important;color:var(--text-1)!important;}
 .budget-cap-input{width:74px;padding:2px 5px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;background:var(--surface);border:1px solid var(--accent);border-radius:5px;color:var(--text-1);outline:none;box-shadow:0 0 0 3px rgba(139,92,246,.15);}
 .budget-empty-hint{font-size:11px;color:var(--text-4);}
-/* ═══ Currency Combobox ═══ */
-.curr-combobox-wrap{position:relative}
-.curr-combo-trigger{display:flex;align-items:center;gap:.85rem;width:100%;padding:.9rem 1rem;background:var(--surface);border:1.5px solid var(--border-strong);border-radius:14px;cursor:pointer;text-align:left;transition:all .18s ease;-webkit-tap-highlight-color:transparent;color:var(--text-1)}
-.curr-combo-trigger:hover{border-color:var(--border-hover);background:var(--surface-2)}
-.curr-combo-trigger:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,92,246,.14)}
-.curr-combo-trigger[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,92,246,.14)}
-.curr-combo-flag{font-size:26px;line-height:1;flex-shrink:0}
-.curr-combo-text{display:flex;flex-direction:column;min-width:0;flex-grow:1}
-.curr-combo-code{font-size:.8rem;font-weight:800;letter-spacing:.02em;color:var(--text-1);line-height:1.15}
-.curr-combo-name{font-size:.68rem;font-weight:600;color:var(--text-4);margin-top:2px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.curr-combo-symbol{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:800;color:#6D28D9;padding:.15rem .5rem;border-radius:8px;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.20);flex-shrink:0}
-html.dark .curr-combo-symbol{color:#C4B5FD}
-.curr-combo-chevron{color:var(--text-4);flex-shrink:0;transition:transform .22s cubic-bezier(.4,0,.2,1)}
-.curr-combo-trigger[aria-expanded="true"] .curr-combo-chevron{transform:rotate(180deg)}
 
-.curr-combo-popover{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:900;background:var(--surface);border:1px solid var(--border-strong);border-radius:14px;box-shadow:0 24px 60px -18px rgba(15,23,42,.35);overflow:hidden;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease;max-height:420px;display:flex;flex-direction:column}
-html.dark .curr-combo-popover{box-shadow:0 24px 60px -18px rgba(0,0,0,.7)}
-.curr-combo-popover.open{opacity:1;pointer-events:auto;transform:translateY(0)}
-.curr-combo-search{position:relative;display:flex;align-items:center;gap:.6rem;padding:.65rem .9rem;border-bottom:1px solid var(--border);background:var(--surface-2)}
-.curr-combo-search>i{color:var(--text-4);pointer-events:none;width:15px;height:15px;flex-shrink:0}
-.curr-combo-search input{flex-grow:1;background:transparent;border:none;outline:none;font-size:.8rem;font-weight:600;color:var(--text-1)}
-.curr-combo-search input::placeholder{color:var(--text-4);font-weight:500}
-.curr-combo-search .kbd{flex-shrink:0}
-.curr-combo-list{overflow-y:auto;padding:6px;max-height:340px}
-.curr-combo-group{padding:8px 10px 4px;font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-4)}
-.curr-combo-item{display:flex;align-items:center;gap:.75rem;width:100%;padding:.55rem .7rem;border-radius:10px;border:none;background:transparent;cursor:pointer;text-align:left;color:var(--text-2);transition:background-color .12s ease,color .12s ease;-webkit-tap-highlight-color:transparent}
-.curr-combo-item:hover,.curr-combo-item.highlight{background:var(--surface-2);color:var(--text-1)}
-.curr-combo-item.selected{background:rgba(139,92,246,.10);color:#6D28D9}
-html.dark .curr-combo-item.selected{color:#C4B5FD}
-.curr-combo-item .curr-item-flag{font-size:19px;line-height:1;flex-shrink:0}
-.curr-combo-item .curr-item-body{min-width:0;flex-grow:1}
-.curr-combo-item .curr-item-code{font-size:.72rem;font-weight:800;letter-spacing:.02em;line-height:1.15;color:inherit}
-.curr-combo-item .curr-item-name{font-size:.62rem;font-weight:500;color:var(--text-4);margin-top:2px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.curr-combo-item .curr-item-symbol{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:800;padding:.15rem .45rem;border-radius:6px;background:var(--surface-3);color:var(--text-3);border:1px solid var(--border);flex-shrink:0}
-.curr-combo-item.selected .curr-item-symbol{background:rgba(139,92,246,.16);color:#6D28D9;border-color:rgba(139,92,246,.32)}
-html.dark .curr-combo-item.selected .curr-item-symbol{color:#C4B5FD}
-.curr-combo-item .curr-item-check{color:#6D28D9;flex-shrink:0;opacity:0;transition:opacity .12s ease}
-html.dark .curr-combo-item .curr-item-check{color:#C4B5FD}
-.curr-combo-item.selected .curr-item-check{opacity:1}
-.curr-combo-empty{padding:2rem 1rem;text-align:center;font-size:.72rem;color:var(--text-4)}
-.curr-quick-chip{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .7rem;border-radius:9999px;background:var(--surface-2);border:1px solid var(--border-strong);font-size:.68rem;font-weight:700;color:var(--text-2);cursor:pointer;transition:all .15s ease;-webkit-tap-highlight-color:transparent;font-family:inherit}
-.curr-quick-chip:hover{border-color:var(--accent);color:var(--text-1);background:var(--surface-3);transform:translateY(-1px)}
-.curr-quick-chip.active{background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(236,72,153,.10));border-color:rgba(139,92,246,.40);color:#6D28D9}
-html.dark .curr-quick-chip.active{color:#C4B5FD}
-.curr-quick-chip .curr-chip-sym{font-family:'JetBrains Mono',monospace;font-weight:800;opacity:.65}
-.curr-preview-card{margin-top:1rem;padding:1rem;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,.06),rgba(236,72,153,.04)),var(--surface-2);border:1px solid var(--border-strong)}
-.curr-preview-cell{padding:.65rem .75rem;background:var(--app-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.curr-preview-val{font-size:.95rem;font-weight:800;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;margin-top:.2rem;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:640px){
-  .curr-combo-popover{position:fixed;top:auto;left:1rem;right:1rem;bottom:1rem;max-height:70vh}
-}
+/* ══════════════════════════════════════════════════════════
+   PRICING / SUBSCRIPTION TIER STYLES
+   ══════════════════════════════════════════════════════════ */
+.tier-card{position:relative;display:flex;flex-direction:column;gap:1rem;padding:1.75rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:20px;transition:all .25s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+.tier-card:hover{border-color:var(--border-hover);transform:translateY(-2px);box-shadow:var(--shadow-lift);}
+.tier-card.tier-current{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.14),var(--shadow-lift);}
+.tier-card.tier-featured{border-color:rgba(139,92,246,.5);background:linear-gradient(180deg,rgba(139,92,246,.05),rgba(236,72,153,.02)),var(--surface);}
+.tier-card.tier-featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#EC4899);}
+.tier-ribbon{position:absolute;top:14px;right:14px;font-size:.55rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .65rem;border-radius:9999px;background:linear-gradient(135deg,var(--accent),#EC4899);color:#fff;box-shadow:0 4px 12px -4px rgba(139,92,246,.6);}
+.tier-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tier-name{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--text-1);line-height:1.1;}
+.tier-tagline{font-size:.72rem;font-weight:600;color:var(--text-4);margin-top:2px;}
+.tier-price{display:flex;align-items:baseline;gap:.35rem;margin:.5rem 0;}
+.tier-price .amount{font-size:2.35rem;font-weight:900;letter-spacing:-.04em;color:var(--text-1);line-height:1;font-variant-numeric:tabular-nums;}
+.tier-price .period{font-size:.72rem;font-weight:700;color:var(--text-4);}
+.tier-price .was{font-size:.72rem;font-weight:700;color:var(--text-4);text-decoration:line-through;margin-left:.25rem;}
+.tier-features{display:flex;flex-direction:column;gap:.55rem;padding-top:1rem;border-top:1px solid var(--border);flex-grow:1;}
+.tier-feature{display:flex;align-items:flex-start;gap:.55rem;font-size:.75rem;font-weight:600;color:var(--text-2);line-height:1.35;}
+.tier-feature i{color:#059669;flex-shrink:0;margin-top:2px;}
+.tier-feature.muted{color:var(--text-4);}
+.tier-feature.muted i{color:var(--text-4);}
+.tier-feature.locked i{color:#BE123C;}
+.tier-cta{margin-top:auto;width:100%;padding:.85rem 1rem;border-radius:12px;font-size:.8rem;font-weight:800;letter-spacing:.01em;}
+.tier-cta.cta-current{background:var(--surface-3);color:var(--text-3);cursor:default;box-shadow:none;border:1px solid var(--border);}
+.tier-cta.cta-current:hover{background:var(--surface-3);transform:none;}
+.tier-cta.cta-trial{background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;box-shadow:0 4px 14px -6px rgba(59,130,246,.6);}
+.tier-cta.cta-upgrade{background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;box-shadow:0 4px 14px -6px rgba(139,92,246,.6);}
+.tier-cta.cta-downgrade{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border-strong);}
+.tier-cta.cta-downgrade:hover{background:var(--surface-3);color:var(--text-1);}
+
+.sub-status-banner{position:relative;display:flex;align-items:center;gap:1rem;padding:1.1rem 1.25rem;border-radius:16px;border:1px solid var(--border);background:var(--surface);flex-wrap:wrap;overflow:hidden;}
+.sub-status-banner::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.9;}
+.sub-status-banner.tone-free::before{background:radial-gradient(400px 160px at 0% 0%, rgba(113,113,122,.14), transparent 60%);}
+.sub-status-banner.tone-trial::before{background:radial-gradient(400px 160px at 0% 0%, rgba(59,130,246,.16), transparent 60%),radial-gradient(400px 160px at 100% 100%, rgba(139,92,246,.12), transparent 60%);}
+.sub-status-banner.tone-active::before{background:radial-gradient(400px 160px at 0% 0%, rgba(16,185,129,.14), transparent 60%),radial-gradient(400px 160px at 100% 100%, rgba(139,92,246,.10), transparent 60%);}
+.sub-status-banner.tone-downgrade::before{background:radial-gradient(400px 160px at 0% 0%, rgba(245,158,11,.16), transparent 60%);}
+.sub-status-banner > *{position:relative;}
+
+.pricing-table{width:100%;text-align:left;font-size:.75rem;}
+.pricing-table thead th{padding:14px 12px;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-4);border-bottom:1px solid var(--border);}
+.pricing-table tbody td{padding:12px;border-bottom:1px solid var(--border);color:var(--text-2);font-weight:600;}
+.pricing-table tbody tr:hover td{background:rgba(139,92,246,.03);}
+html.dark .pricing-table tbody tr:hover td{background:rgba(139,92,246,.06);}
+.pricing-table .cell-feature{font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:.55rem;}
+.pricing-table .cell-tier{text-align:center;font-weight:700;}
+.pricing-table .cell-tier.header-tier{padding:14px 12px;font-size:.72rem;font-weight:800;color:var(--text-1);text-transform:uppercase;letter-spacing:.05em;}
+.pricing-table .cell-tier.header-tier.tier-highlight{background:linear-gradient(180deg,rgba(139,92,246,.08),transparent);}
+.pricing-table .cell-check{color:#059669;}
+.pricing-table .cell-x{color:#BE123C;opacity:.6;}
+.pricing-table .row-group td{padding:10px 12px;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-4);background:var(--surface-2);}
+.pricing-faq-card{padding:1.25rem;border-radius:14px;background:var(--surface);border:1px solid var(--border);transition:border-color .15s ease;}
+.pricing-faq-card:hover{border-color:var(--border-strong);}
+.pricing-faq-card h4{font-size:.82rem;font-weight:800;color:var(--text-1);margin-bottom:.4rem;}
+.pricing-faq-card p{font-size:.72rem;line-height:1.55;color:var(--text-4);}
+.trial-countdown{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:9999px;background:rgba(59,130,246,.14);color:#1D4ED8;border:1px solid rgba(59,130,246,.32);font-size:.65rem;font-weight:800;letter-spacing:.02em;}
+html.dark .trial-countdown{color:#93C5FD;}
+.feature-gate-banner{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.32);color:#B45309;font-size:.72rem;font-weight:700;}
+.feature-gate-banner button{flex-shrink:0;}
+
+.sub-chip{display:flex;align-items:center;gap:.4rem;padding:.3rem .55rem;border-radius:8px;font-size:.6rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;border:1px solid;width:100%;justify-content:center;transition:all .15s ease;}
+.sub-chip:hover{transform:translateY(-1px);}
+.sub-chip[data-tier="free"]{background:rgba(113,113,122,.10);color:#52525B;border-color:rgba(113,113,122,.28);}
+.sub-chip[data-tier="basic"]{background:rgba(59,130,246,.12);color:#1D4ED8;border-color:rgba(59,130,246,.30);}
+.sub-chip[data-tier="pro"]{background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(236,72,153,.12));color:#6D28D9;border-color:rgba(139,92,246,.32);}
+.sub-chip[data-tier="trial"]{background:rgba(59,130,246,.14);color:#1D4ED8;border-color:rgba(59,130,246,.32);}
+html.dark .sub-chip[data-tier="free"]{color:#A1A1AA;}
+html.dark .sub-chip[data-tier="basic"]{color:#93C5FD;}
+html.dark .sub-chip[data-tier="pro"]{color:#C4B5FD;}
+html.dark .sub-chip[data-tier="trial"]{color:#93C5FD;}
+
+/* Demo override panel */
+.demo-override-panel{position:relative;overflow:hidden;border:1px dashed rgba(139,92,246,.5) !important;background:linear-gradient(180deg,rgba(139,92,246,.05),transparent),var(--surface);}
+.demo-override-panel::before{content:'';position:absolute;inset:0;background:radial-gradient(500px 200px at 0% 0%, rgba(139,92,246,.14), transparent 60%),radial-gradient(400px 160px at 100% 100%, rgba(236,72,153,.10), transparent 60%);pointer-events:none;}
+.demo-override-panel > * { position: relative; }
 </style>
 </head>
 <body>
@@ -842,9 +867,19 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
           <button onclick="switchMainTab(event,'tab-blueprint')" class="nav-item" title="Wealth Blueprint"><i data-lucide="compass" class="w-4 h-4 shrink-0"></i><span class="truncate">Wealth Blueprint</span></button>
         </div>
       </div>
+
+      <div class="nav-section" data-section="account">
+        <button class="nav-section-header" onclick="toggleNavSection(this)"><span>Account</span><i data-lucide="chevron-down" class="nav-section-icon"></i></button>
+        <div class="nav-section-body">
+          <button onclick="switchMainTab(event,'tab-pricing')" class="nav-item" title="Plans & Pricing"><i data-lucide="sparkles" class="w-4 h-4 shrink-0"></i><span class="truncate">Plans &amp; Pricing</span><span id="navPlanBadge" class="nav-badge">FREE</span></button>
+        </div>
+      </div>
     </nav>
 
     <div class="p-3 space-y-2 shrink-0" style="border-top:1px solid var(--border);">
+      <button onclick="switchMainTab(null,'tab-pricing',true)" class="sub-chip" id="sidebarSubChip" data-tier="free" title="Manage subscription">
+        <i data-lucide="sparkles" class="w-3 h-3"></i><span id="sidebarSubChipLabel">FREE PLAN</span>
+      </button>
       <div class="relative" id="sidebarProfileWrap">
         <button id="sidebarProfileTrigger" class="sidebar-profile-trigger" onclick="toggleProfileMenu(event)">
           <div class="profile-avatar" id="sidebarProfileAvatar">EW</div>
@@ -865,6 +900,7 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
             </div>
           </div>
           <button class="profile-popover-item" onclick="openSettingsSection('profile'); closeProfileMenu();"><i data-lucide="user-circle-2" class="w-4 h-4"></i><span>Profile &amp; Settings</span></button>
+          <button class="profile-popover-item" onclick="switchMainTab(null,'tab-pricing',true); closeProfileMenu();"><i data-lucide="sparkles" class="w-4 h-4"></i><span>Plans &amp; Pricing</span></button>
           <button class="profile-popover-item" onclick="openSettingsSection('household'); closeProfileMenu();"><i data-lucide="users" class="w-4 h-4"></i><span>Household &amp; Co-Owner</span></button>
           <button class="profile-popover-item" onclick="openSettingsSection('income'); closeProfileMenu();"><i data-lucide="banknote" class="w-4 h-4"></i><span>Income Profile</span></button>
           <button class="profile-popover-item" onclick="toggleThemeMode()"><i data-lucide="sun-moon" class="w-4 h-4"></i><span>Toggle Theme</span></button>
@@ -922,23 +958,7 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
 
         <div class="hidden md:flex items-center gap-1.5">
           <select id="currencySelector" onchange="changeActiveCurrency(this.value)" class="input !py-2 !w-auto !text-xs !font-bold" style="min-width:96px;">
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="GBP">GBP (£)</option>
-            <option value="INR">INR (₹)</option>
-            <option value="CAD">CAD (C$)</option>
-            <option value="AUD">AUD (A$)</option>
-            <option value="JPY">JPY (¥)</option>
-            <option value="CHF">CHF (Fr)</option>
-            <option value="CNY">CNY (¥)</option>
-            <option value="SGD">SGD (S$)</option>
-            <option value="HKD">HKD (HK$)</option>
-            <option value="NZD">NZD (NZ$)</option>
-            <option value="BRL">BRL (R$)</option>
-            <option value="MXN">MXN (MX$)</option>
-            <option value="ZAR">ZAR (R)</option>
-            <option value="AED">AED (د.إ)</option>
-            <option value="KRW">KRW (₩)</option>
+            <option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option><option value="INR">INR (₹)</option><option value="CAD">CAD (C$)</option><option value="AUD">AUD (A$)</option><option value="JPY">JPY (¥)</option>
           </select>
         </div>
 
@@ -1000,7 +1020,6 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
 
     <!-- PORTFOLIO OVERVIEW -->
     <div id="tab-overview" class="main-tab-content space-y-5 hidden">
-
       <div class="surface pd-status-bar p-4 lg:p-5 flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0">
           <span class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(236,72,153,.10));border:1px solid rgba(139,92,246,.26);">
@@ -1609,7 +1628,7 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
                   <div class="min-w-0"><span class="text-[10px] font-extrabold uppercase tracking-widest block" style="color:var(--text-4);">Starting Amount</span>
                     <div class="flex items-baseline gap-1 mt-1"><span class="text-2xl font-extrabold" style="color:var(--text-4);"><span class="currency-prefix">$</span></span><input type="number" id="infCustomAmount" value="0" min="0" step="100" class="amount-hero text-3xl lg:text-4xl bg-transparent border-none outline-none w-full" style="color:var(--text-1);width:auto;min-width:180px;" oninput="syncInflationSliders('input')"></div>
                   </div>
-                  <div class="flex gap-2 shrink-0"><button type="button" onclick="setInflationAmount(1000)" class="chip"><span class="currency-prefix">$</span>1k</button><button type="button" onclick="setInflationAmount(50000)" class="chip"><span class="currency-prefix">$</span>50k</button><button type="button" onclick="setInflationAmount(100000)" class="chip"><span class="currency-prefix">$</span>100k</button><button type="button" onclick="setInflationAmount(1000000)" class="chip"><span class="currency-prefix">$</span>1M</button></div>
+                  <div class="flex gap-2 shrink-0"><button type="button" onclick="setInflationAmount(1000)" class="chip">$1k</button><button type="button" onclick="setInflationAmount(50000)" class="chip">$50k</button><button type="button" onclick="setInflationAmount(100000)" class="chip">$100k</button><button type="button" onclick="setInflationAmount(1000000)" class="chip">$1M</button></div>
                 </div>
                 <input type="range" id="infAmountSlider" min="0" max="2000000" step="500" value="0" class="slider-hero" oninput="document.getElementById('infCustomAmount').value=this.value;syncInflationSliders('slider')">
               </div>
@@ -1825,6 +1844,60 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
       </div>
     </div>
 
+    <!-- ══════════════════════════════════════════════════════════
+         PRICING TAB
+         ══════════════════════════════════════════════════════════ -->
+    <div id="tab-pricing" class="main-tab-content space-y-5 hidden">
+
+      <!-- Demo override panel (only for demo user) -->
+      <div id="pricingDemoPanelWrap" class="hidden"></div>
+
+      <!-- Current status banner -->
+      <div id="pricingStatusBanner"></div>
+
+      <!-- Hero + billing toggle -->
+      <div class="surface p-6 lg:p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(500px 220px at 50% -30%,rgba(139,92,246,.16),transparent 70%),radial-gradient(400px 180px at 100% 120%,rgba(236,72,153,.10),transparent 70%);"></div>
+        <div class="relative">
+          <span class="badge badge-violet">Pricing</span>
+          <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight mt-3" style="color:var(--text-1);">Choose the plan that grows with you</h2>
+          <p class="text-sm mt-2 max-w-2xl mx-auto" style="color:var(--text-3);">Start free. Upgrade when you're ready. Cancel anytime. All paid plans include a 7-day free trial.</p>
+          <div class="inline-flex items-center gap-1 p-1 rounded-full mt-5" style="background:var(--surface-2);border:1px solid var(--border-strong);">
+            <button id="billingMonthlyBtn" onclick="setBillingCycle('monthly')" class="seg-item active">Monthly</button>
+            <button id="billingYearlyBtn" onclick="setBillingCycle('yearly')" class="seg-item">Yearly <span class="badge badge-emerald ml-1">Save ~17%</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tier cards -->
+      <div id="pricingTierCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+
+      <!-- Comparison table -->
+      <div class="surface p-5 lg:p-6">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <div>
+            <h3 class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">Full Feature Comparison</h3>
+            <p class="text-[11px]" style="color:var(--text-4);">Every feature, every tier — no surprises</p>
+          </div>
+          <span class="text-[11px] font-bold" style="color:var(--text-4);">Prices shown in USD</span>
+        </div>
+        <div class="scroll-x sticky-head">
+          <table class="pricing-table" id="pricingComparisonTable"></table>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h3 class="text-sm font-extrabold tracking-tight mb-3" style="color:var(--text-1);">Frequently asked questions</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="pricingFaq"></div>
+      </div>
+
+      <!-- Compare vs. competition strip -->
+      <div class="surface p-5 lg:p-6 text-center">
+        <p class="text-xs" style="color:var(--text-4);">Need a custom enterprise plan or household billing? <button onclick="toast('Enterprise sales will reach out shortly.','info')" class="font-bold underline" style="color:#6D28D9;">Contact us</button></p>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
     <div id="tab-settings" class="main-tab-content space-y-5 hidden">
       <div class="settings-shell">
@@ -1862,10 +1935,6 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
             <i data-lucide="banknote" class="w-4 h-4"></i><span>Income &amp; Salary</span>
             <span class="sn-status">Set</span>
           </button>
-          <button class="settings-nav-item" data-settings-section="currency" onclick="switchSettingsSection('currency')">
-  <i data-lucide="coins" class="w-4 h-4"></i><span>Currency</span>
-  <span class="sn-status" id="navStatusCurrency">USD</span>
-</button>
           <button class="settings-nav-item" data-settings-section="appearance" onclick="switchSettingsSection('appearance')">
             <i data-lucide="palette" class="w-4 h-4"></i><span>Appearance</span>
             <span class="sn-status" id="navStatusTheme">Light</span>
@@ -2016,117 +2085,7 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
               </div>
             </div>
           </div>
-                     <!-- CURRENCY -->
-          <!-- CURRENCY -->
-<div class="settings-pane" data-pane="currency">
-  <div class="settings-hero">
-    <div class="flex items-start gap-4 flex-wrap">
-      <div class="settings-hero-icon"><i data-lucide="coins" class="w-6 h-6"></i></div>
-      <div class="flex-grow min-w-0">
-        <h2>Currency &amp; Formatting</h2>
-        <p>Choose your display currency. Every amount across the app updates instantly.</p>
-      </div>
-    </div>
-  </div>
 
-  <div class="settings-card">
-    <div class="settings-card-header">
-      <div class="settings-card-icon"><i data-lucide="globe-2" style="width:18px;height:18px;"></i></div>
-      <div class="flex-grow min-w-0">
-        <h3>Display Currency</h3>
-        <p>Search, or tap a Quick Pick below</p>
-      </div>
-      <span id="currencyActiveBadge" class="badge badge-violet">USD</span>
-    </div>
-
-    <div class="curr-combobox-wrap">
-      <button type="button" id="currComboTrigger" class="curr-combo-trigger" onclick="toggleCurrencyCombo(event)" aria-haspopup="listbox" aria-expanded="false">
-        <span class="curr-combo-flag" id="currComboFlag">🇺🇸</span>
-        <span class="curr-combo-text">
-          <span class="curr-combo-code" id="currComboCode">USD</span>
-          <span class="curr-combo-name" id="currComboName">US Dollar</span>
-        </span>
-        <span class="curr-combo-symbol" id="currComboSymbol">$</span>
-        <i data-lucide="chevron-down" class="curr-combo-chevron w-4 h-4"></i>
-      </button>
-
-      <div id="currComboPopover" class="curr-combo-popover" role="listbox">
-        <div class="curr-combo-search">
-          <i data-lucide="search"></i>
-          <input type="text" id="currComboSearchInput" placeholder="Search by code, name or symbol…" autocomplete="off" spellcheck="false" oninput="filterCurrencyCombo(this.value)" onkeydown="onCurrencyComboKey(event)">
-          <span class="kbd">ESC</span>
-        </div>
-        <div id="currComboList" class="curr-combo-list scroll"></div>
-      </div>
-    </div>
-
-    <div class="mt-3">
-      <div class="text-[10px] font-extrabold uppercase tracking-widest mb-2" style="color:var(--text-4);">Quick Pick</div>
-      <div id="currQuickChips" class="flex flex-wrap gap-1.5"></div>
-    </div>
-
-    <div class="curr-preview-card">
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-[10px] font-extrabold uppercase tracking-widest" style="color:var(--text-4);">Live Preview</span>
-        <span class="text-[10px] font-bold" id="currPreviewMeta" style="color:var(--text-4);">—</span>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-        <div class="curr-preview-cell"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Balance</div><div id="currPreview1" class="curr-preview-val">—</div></div>
-        <div class="curr-preview-cell"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Portfolio</div><div id="currPreview2" class="curr-preview-val">—</div></div>
-        <div class="curr-preview-cell"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Expense</div><div id="currPreview3" class="curr-preview-val" style="color:#BE123C;">—</div></div>
-        <div class="curr-preview-cell"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Compact</div><div id="currPreview4" class="curr-preview-val">—</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="settings-card">
-    <div class="settings-card-header">
-      <div class="settings-card-icon"><i data-lucide="sliders-horizontal" style="width:18px;height:18px;"></i></div>
-      <div class="flex-grow min-w-0">
-        <h3>Formatting</h3>
-        <p>Fine-tune how numbers appear</p>
-      </div>
-    </div>
-
-    <div class="settings-row">
-      <div><div class="settings-row-label">Decimal Places</div><div class="settings-row-desc">Digits after the decimal separator</div></div>
-      <div class="settings-row-control">
-        <select id="setCurrencyDecimals" class="input !w-auto !py-1.5" onchange="saveCurrencySettings()">
-          <option value="0">0 — whole</option>
-          <option value="2" selected>2 — standard</option>
-          <option value="3">3 — high precision</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="settings-row">
-      <div><div class="settings-row-label">Symbol Position</div><div class="settings-row-desc">Where the currency symbol appears</div></div>
-      <div class="settings-row-control">
-        <select id="setCurrencyPosition" class="input !w-auto !py-1.5" onchange="saveCurrencySettings()">
-          <option value="auto" selected>Auto (locale)</option>
-          <option value="before">Before — $1,234</option>
-          <option value="after">After — 1.234 €</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="settings-row">
-      <div><div class="settings-row-label">Hide Decimals for Whole Amounts</div><div class="settings-row-desc">Show <code>1,234</code> instead of <code>1,234.00</code></div></div>
-      <div class="settings-row-control"><label class="switch"><input type="checkbox" id="setCurrencyHideWholeDecimals" onchange="saveCurrencySettings()"><span class="slider"></span></label></div>
-    </div>
-
-    <div class="settings-row">
-      <div><div class="settings-row-label">Compact Large Numbers</div><div class="settings-row-desc">Show <code>$1.2M</code> in charts and dense tiles</div></div>
-      <div class="settings-row-control"><label class="switch"><input type="checkbox" id="setCurrencyCompact" onchange="saveCurrencySettings()"><span class="slider"></span></label></div>
-    </div>
-
-    <div class="flex justify-end gap-2 pt-4 mt-4" style="border-top:1px solid var(--border);">
-      <button onclick="resetCurrencySettings()" class="btn btn-ghost"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset to USD</button>
-    </div>
-  </div>
-</div>
-
- 
           <!-- APPEARANCE -->
           <div class="settings-pane" data-pane="appearance">
             <div class="settings-hero">
@@ -2461,7 +2420,6 @@ html.dark .curr-quick-chip.active{color:#C4B5FD}
     </button>
   </nav>
 
-  <!-- MOBILE NAV SHEET -->
   <div id="mobileNavSheet" class="mobile-nav-sheet" role="dialog" aria-modal="true" aria-label="All sections">
     <div class="mns-backdrop" onclick="closeMobileNavSheet()"></div>
     <div class="mns-panel">
@@ -2645,6 +2603,705 @@ function canCommitToGitHub(){
       && GITHUB_CONFIG.REPO && !!getFullToken();
 }
 
+/* ═══════════════════════════════════════════════════════════
+   SUBSCRIPTION / PRICING SYSTEM
+   ═══════════════════════════════════════════════════════════ */
+const SUBSCRIPTION_STORAGE_KEY = 'ew_subscription_v1';
+const TRIAL_DAYS = 7;
+
+/* ────────────────────────────────────────────────────────────
+   DEMO USER CONFIG  ·  manually set the plan for the demo user
+   ────────────────────────────────────────────────────────────
+   By default the demo user gets full Pro access. Edit `tier`
+   below to change that default for new sessions, or use the
+   "Demo User · Plan Override" panel that appears on the
+   Pricing page when logged in as the demo user.
+   ──────────────────────────────────────────────────────────── */
+const DEMO_USER_CONFIG = {
+  email:  'demo@execwealth.local',   // email that identifies the demo account
+  handle: 'demo',                    // fallback: handle / username
+  // Default assigned plan for the demo user:
+  //   'free' | 'basic' | 'pro'
+  tier:   'pro',
+  // Optionally simulate an active trial for the demo user:
+  trialActive:   false,
+  trialTier:     'basic',            // used when trialActive = true
+  trialDaysLeft: 5,
+  // Persist manual overrides made through the pricing-page panel
+  persistOverride: true
+};
+const DEMO_OVERRIDE_KEY = 'ew_demo_override_v1';
+
+/* Load persisted demo override (if any) into DEMO_USER_CONFIG */
+function loadDemoOverride(){
+  if(!DEMO_USER_CONFIG.persistOverride) return;
+  try{
+    const r = localStorage.getItem(DEMO_OVERRIDE_KEY);
+    if(!r) return;
+    const p = JSON.parse(r);
+    if(typeof p.tier === 'string')             DEMO_USER_CONFIG.tier = p.tier;
+    if(typeof p.trialActive === 'boolean')     DEMO_USER_CONFIG.trialActive = p.trialActive;
+    if(typeof p.trialTier === 'string')        DEMO_USER_CONFIG.trialTier = p.trialTier;
+    if(typeof p.trialDaysLeft === 'number')    DEMO_USER_CONFIG.trialDaysLeft = p.trialDaysLeft;
+  }catch(_){}
+}
+function persistDemoOverride(){
+  if(!DEMO_USER_CONFIG.persistOverride) return;
+  try{
+    localStorage.setItem(DEMO_OVERRIDE_KEY, JSON.stringify({
+      tier: DEMO_USER_CONFIG.tier,
+      trialActive: DEMO_USER_CONFIG.trialActive,
+      trialTier: DEMO_USER_CONFIG.trialTier,
+      trialDaysLeft: DEMO_USER_CONFIG.trialDaysLeft
+    }));
+  }catch(_){}
+}
+function setDemoTier(tier, trial){
+  if(!['free','basic','pro'].includes(tier)) return;
+  DEMO_USER_CONFIG.tier = tier;
+  if(typeof trial === 'boolean') DEMO_USER_CONFIG.trialActive = trial;
+  persistDemoOverride();
+  updateSidebarSubChip();
+  renderPricingPage();
+  toast(`Demo plan updated → ${tier.toUpperCase()}${DEMO_USER_CONFIG.trialActive?' (trial)':''}`, 'success', 2400);
+}
+function setDemoTrial(v, tier){
+  DEMO_USER_CONFIG.trialActive = !!v;
+  if(tier) DEMO_USER_CONFIG.trialTier = tier;
+  persistDemoOverride();
+  updateSidebarSubChip();
+  renderPricingPage();
+  toast(v ? `Demo trial enabled · ${DEMO_USER_CONFIG.trialTier.toUpperCase()}` : 'Demo trial disabled', 'info', 2200);
+}
+function resetDemoOverride(){
+  DEMO_USER_CONFIG.tier = 'pro';
+  DEMO_USER_CONFIG.trialActive = false;
+  DEMO_USER_CONFIG.trialTier = 'basic';
+  DEMO_USER_CONFIG.trialDaysLeft = 5;
+  try{ localStorage.removeItem(DEMO_OVERRIDE_KEY); }catch(_){}
+  updateSidebarSubChip();
+  renderPricingPage();
+  toast('Demo override reset to Pro.','info');
+}
+
+const TIER_DEFS = {
+  free:  { id:'free',  name:'Free',  monthly:0,  yearly:0,    tagline:'Start tracking today',        icon:'leaf',      color:'#71717A' },
+  basic: { id:'basic', name:'Basic', monthly:9,  yearly:90,   tagline:'For serious savers',          icon:'sparkles',  color:'#3B82F6' },
+  pro:   { id:'pro',   name:'Pro',   monthly:29, yearly:290,  tagline:'Full wealth management',      icon:'crown',     color:'#8B5CF6' }
+};
+
+const FEATURES = {
+  bankConnections:   { name:'Bank Connections',           free:'1 account',      basic:'Unlimited',    pro:'Unlimited + real-time', tier:'basic' },
+  portfolioHistory:  { name:'Portfolio History',          free:'1 year',         basic:'5 years',      pro:'Unlimited',             tier:'basic' },
+  customCategories:  { name:'Custom Categories',          free:'5 max',          basic:'Unlimited',    pro:'Unlimited',             tier:'basic' },
+  savingsGoals:      { name:'Savings Goals',              free:'3 max',          basic:'Unlimited',    pro:'Unlimited',             tier:'basic' },
+  multiCurrency:     { name:'Multi-Currency',             free:false,            basic:true,           pro:true,                    tier:'basic' },
+  advancedAnalytics: { name:'Advanced Analytics',         free:false,            basic:true,           pro:true,                    tier:'basic' },
+  rebalancing:       { name:'Portfolio Rebalancing',      free:false,            basic:true,           pro:true,                    tier:'basic' },
+  taxSavings:        { name:'Tax Savings Tracker',        free:false,            basic:true,           pro:true,                    tier:'basic' },
+  creditHealth:      { name:'Credit Health Monitor',      free:false,            basic:true,           pro:true,                    tier:'basic' },
+  recurringBillAI:   { name:'Recurring Bill Detection',   free:false,            basic:true,           pro:true,                    tier:'basic' },
+  goalTemplates:     { name:'Goal Templates Library',     free:false,            basic:true,           pro:true,                    tier:'basic' },
+  aiInsights:        { name:'AI Smart Insights',          free:false,            basic:false,          pro:true,                    tier:'pro' },
+  humanAdvisory:     { name:'Human Advisory Sessions',    free:false,            basic:false,          pro:'2 / month',             tier:'pro' },
+  advancedTax:       { name:'Advanced Tax Optimization',  free:false,            basic:false,          pro:true,                    tier:'pro' },
+  realtimeSync:      { name:'Real-Time Bank Sync',        free:false,            basic:false,          pro:true,                    tier:'pro' },
+  apiAccess:         { name:'API Access',                 free:false,            basic:false,          pro:true,                    tier:'pro' },
+  prioritySupport:   { name:'Priority Support',           free:'Community',      basic:'Email · 24h',  pro:'Priority · 4h',         tier:'basic' },
+  csvExport:         { name:'CSV / JSON Export',          free:true,             basic:true,           pro:true,                    tier:'free'  },
+  githubSync:        { name:'GitHub Cloud Backup',        free:true,             basic:true,           pro:true,                    tier:'free'  }
+};
+
+const PRICING_FAQ = [
+  { q:'How does the 7-day free trial work?',
+    a:'You get full access to the paid tier you\'re trialing for 7 days. If you don\'t add a payment method before the trial ends, your account quietly returns to Free — nothing is charged.' },
+  { q:'Can I switch plans at any time?',
+    a:'Absolutely. Upgrades take effect immediately and are prorated against the days left in your current period. Downgrades are scheduled for the end of your current billing cycle so you keep what you paid for.' },
+  { q:'What happens if I downgrade to Free?',
+    a:'Your data stays intact — you keep everything you\'ve created. Features that exceed Free limits (extra bank connections, portfolio years beyond 1, goals beyond 3) become read-only until you re-upgrade.' },
+  { q:'Do you offer a household plan?',
+    a:'Yes. One paid subscription covers you and one co-owner on the same household. Both users get full feature access on their respective devices.' },
+  { q:'Is my data safe?',
+    a:'Your financial data never leaves your browser unless you connect a GitHub backup repo of your own. We don\'t run a backend and we can\'t see your numbers.' },
+  { q:'What\'s your refund policy?',
+    a:'If you\'re not satisfied within the first 14 days of a paid subscription, email support and we\'ll refund you in full — no questions asked.' }
+];
+
+let subscriptionState = {
+  tier: 'free',
+  trialActive: false,
+  trialEndsAt: null,
+  trialTier: null,
+  billingCycle: 'monthly',
+  startedAt: null,
+  currentPeriodEnd: null,
+  pendingDowngrade: null
+};
+
+function isDemoUser(){
+  try{
+    const email  = (authState.user?.email || '').toLowerCase();
+    const handle = getUserHandle();
+    return email === String(DEMO_USER_CONFIG.email).toLowerCase()
+        || handle === DEMO_USER_CONFIG.handle;
+  }catch(_){ return false; }
+}
+
+function loadSubscriptionState(){
+  try{
+    const r = localStorage.getItem(SUBSCRIPTION_STORAGE_KEY);
+    if(r){
+      const p = JSON.parse(r);
+      subscriptionState = { ...subscriptionState, ...p };
+    }
+  }catch(_){}
+  loadDemoOverride();
+}
+
+function persistSubscriptionState(){
+  try{ localStorage.setItem(SUBSCRIPTION_STORAGE_KEY, JSON.stringify(subscriptionState)); }catch(_){}
+}
+
+function getEffectiveTier(){
+  if(isDemoUser()){
+    if(DEMO_USER_CONFIG.trialActive) return DEMO_USER_CONFIG.trialTier || 'basic';
+    return DEMO_USER_CONFIG.tier || 'pro';
+  }
+  if(subscriptionState.trialActive && subscriptionState.trialEndsAt){
+    const end = new Date(subscriptionState.trialEndsAt);
+    if(end > new Date()){
+      return subscriptionState.trialTier || 'basic';
+    }
+    // Trial expired — auto-return to underlying tier
+    subscriptionState.trialActive = false;
+    subscriptionState.trialEndsAt = null;
+    subscriptionState.trialTier = null;
+    persistSubscriptionState();
+  }
+  return subscriptionState.tier || 'free';
+}
+
+function canUseFeature(key){
+  if(isDemoUser()) return true;
+  const tier = getEffectiveTier();
+  const f = FEATURES[key];
+  if(!f) return true;
+  if(f.tier === 'free') return true;
+  if(f.tier === 'basic') return tier === 'basic' || tier === 'pro';
+  if(f.tier === 'pro')   return tier === 'pro';
+  return true;
+}
+
+function daysLeftInTrial(){
+  if(isDemoUser() && DEMO_USER_CONFIG.trialActive){
+    return DEMO_USER_CONFIG.trialDaysLeft || TRIAL_DAYS;
+  }
+  if(!subscriptionState.trialActive || !subscriptionState.trialEndsAt) return 0;
+  const end = new Date(subscriptionState.trialEndsAt);
+  const diff = Math.ceil((end - new Date()) / (1000*60*60*24));
+  return Math.max(0, diff);
+}
+
+function formatPrice(n){ return n === 0 ? 'Free' : '$' + n; }
+
+function setBillingCycle(cycle){
+  subscriptionState.billingCycle = cycle === 'yearly' ? 'yearly' : 'monthly';
+  persistSubscriptionState();
+  renderPricingPage();
+}
+
+function startTrial(tierId){
+  if(isDemoUser()){ toast('Use the Demo Override panel to change the demo plan.','info'); return; }
+  if(subscriptionState.tier === tierId){ toast('You already own this plan.','info'); return; }
+  const end = new Date(); end.setDate(end.getDate() + TRIAL_DAYS);
+  subscriptionState.trialActive = true;
+  subscriptionState.trialEndsAt = end.toISOString();
+  subscriptionState.trialTier = tierId;
+  persistSubscriptionState();
+  renderPricingPage();
+  updateSidebarSubChip();
+  toast(`🎉 Your 7-day ${TIER_DEFS[tierId].name} trial has begun. Enjoy!`,'success',4500);
+}
+
+function upgradePlan(tierId){
+  if(isDemoUser()){ setDemoTier(tierId, false); return; }
+  if(subscriptionState.tier === tierId){ toast('You already own this plan.','info'); return; }
+  const end = new Date(); end.setMonth(end.getMonth() + (subscriptionState.billingCycle === 'yearly' ? 12 : 1));
+  subscriptionState.tier = tierId;
+  subscriptionState.startedAt = new Date().toISOString();
+  subscriptionState.currentPeriodEnd = end.toISOString();
+  subscriptionState.trialActive = false;
+  subscriptionState.trialEndsAt = null;
+  subscriptionState.trialTier = null;
+  subscriptionState.pendingDowngrade = null;
+  persistSubscriptionState();
+  renderPricingPage();
+  updateSidebarSubChip();
+  toast(`You're on ${TIER_DEFS[tierId].name}. Billing renews ${end.toLocaleDateString()}.`,'success',5000);
+}
+
+function downgradePlan(tierId){
+  if(isDemoUser()){ setDemoTier(tierId, false); return; }
+  if(tierId === 'free'){
+    if(!confirm('Downgrade to Free at the end of your billing period?\n\nYou\'ll keep your data but lose access to Basic-only features.')) return;
+  }
+  const end = subscriptionState.currentPeriodEnd ? new Date(subscriptionState.currentPeriodEnd) : new Date(Date.now() + 30*24*3600*1000);
+  subscriptionState.pendingDowngrade = { tier: tierId, effectiveAt: end.toISOString() };
+  persistSubscriptionState();
+  renderPricingPage();
+  toast(`Downgrade scheduled for ${end.toLocaleDateString()}. You keep ${TIER_DEFS[subscriptionState.tier].name} until then.`,'info',5000);
+}
+
+function cancelDowngrade(){
+  subscriptionState.pendingDowngrade = null;
+  persistSubscriptionState();
+  renderPricingPage();
+  toast('Scheduled downgrade cancelled.','success');
+}
+
+/* Sidebar chip */
+function updateSidebarSubChip(){
+  const chip = $id('sidebarSubChip');
+  const lbl  = $id('sidebarSubChipLabel');
+  const navBadge = $id('navPlanBadge');
+  if(!chip || !lbl) return;
+  if(isDemoUser()){
+    const eff = getEffectiveTier();
+    if(DEMO_USER_CONFIG.trialActive){
+      chip.dataset.tier = 'trial';
+      lbl.textContent = `DEMO · TRIAL ${(DEMO_USER_CONFIG.trialTier||'').toUpperCase()}`;
+      if(navBadge) navBadge.textContent = 'DEMO';
+      return;
+    }
+    chip.dataset.tier = eff;
+    lbl.textContent = `DEMO · ${eff.toUpperCase()}`;
+    if(navBadge) navBadge.textContent = 'DEMO';
+    return;
+  }
+  if(subscriptionState.trialActive){
+    const d = daysLeftInTrial();
+    chip.dataset.tier = 'trial';
+    lbl.textContent = `TRIAL · ${d}d LEFT`;
+    if(navBadge) navBadge.textContent = 'TRIAL';
+    return;
+  }
+  const tier = subscriptionState.tier || 'free';
+  chip.dataset.tier = tier;
+  lbl.textContent = tier === 'free' ? 'FREE PLAN' : tier.toUpperCase() + ' PLAN';
+  if(navBadge) navBadge.textContent = tier.toUpperCase();
+}
+
+/* Render helpers */
+function renderPricingPage(){
+  renderDemoOverridePanel();
+  renderPricingStatusBanner();
+  renderPricingTierCards();
+  renderPricingComparisonTable();
+  renderPricingFaq();
+  const mBtn = $id('billingMonthlyBtn'), yBtn = $id('billingYearlyBtn');
+  if(mBtn && yBtn){
+    mBtn.classList.toggle('active', subscriptionState.billingCycle !== 'yearly');
+    yBtn.classList.toggle('active', subscriptionState.billingCycle === 'yearly');
+  }
+  if(typeof lucide!=='undefined') lucide.createIcons();
+  applyPrivacyState();
+}
+
+/* ────────────────────────────────────────────────────────────
+   DEMO OVERRIDE PANEL  ·  only visible to the demo user
+   ──────────────────────────────────────────────────────────── */
+function renderDemoOverridePanel(){
+  const host = $id('pricingDemoPanelWrap');
+  if(!host) return;
+
+  if(!isDemoUser()){
+    host.classList.add('hidden');
+    host.innerHTML = '';
+    return;
+  }
+  host.classList.remove('hidden');
+
+  const curTier  = DEMO_USER_CONFIG.tier;
+  const trialOn  = !!DEMO_USER_CONFIG.trialActive;
+  const trialTier= DEMO_USER_CONFIG.trialTier;
+  const effective= getEffectiveTier();
+
+  host.innerHTML = `
+    <div class="surface demo-override-panel p-4 lg:p-5">
+      <div class="flex items-start gap-3 flex-wrap">
+        <span class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
+              style="background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(236,72,153,.10));border:1px solid rgba(139,92,246,.32);color:#6D28D9;">
+          <i data-lucide="flask-conical" class="w-5 h-5"></i>
+        </span>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">Demo User · Plan Override</h3>
+            <span class="badge badge-violet">CONFIG</span>
+          </div>
+          <p class="text-[11px] font-semibold mt-0.5" style="color:var(--text-4);">
+            Manually assign a plan to <code>${DEMO_USER_CONFIG.email}</code>. Changes persist in this browser only and don't affect real accounts.
+          </p>
+        </div>
+        <button onclick="resetDemoOverride()" class="btn btn-ghost !py-2 shrink-0">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+        </button>
+      </div>
+
+      <div class="mt-4 flex items-center gap-2 flex-wrap">
+        <span class="text-[10px] font-extrabold uppercase tracking-widest" style="color:var(--text-4);">Assign plan</span>
+        <div class="seg">
+          ${['free','basic','pro'].map(t=>`
+            <button type="button" class="seg-item ${curTier===t?'active':''}" onclick="setDemoTier('${t}')">
+              ${TIER_DEFS[t].name}
+            </button>`).join('')}
+        </div>
+      </div>
+
+      <div class="mt-3 flex items-center gap-3 flex-wrap">
+        <label class="flex items-center gap-2 cursor-pointer text-[11px] font-semibold" style="color:var(--text-2);">
+          <input type="checkbox" id="demoTrialToggle" ${trialOn?'checked':''} style="accent-color:var(--accent);"
+                 onchange="setDemoTrial(this.checked)">
+          <span>Simulate active trial</span>
+        </label>
+        ${trialOn ? `
+          <select class="input !py-1.5 !w-auto" onchange="setDemoTrial(true, this.value)">
+            <option value="basic" ${trialTier==='basic'?'selected':''}>Trial Basic</option>
+            <option value="pro"   ${trialTier==='pro'?'selected':''}>Trial Pro</option>
+          </select>
+          <span class="badge badge-blue">${DEMO_USER_CONFIG.trialDaysLeft} days left</span>
+        `:''}
+      </div>
+
+      <div class="mt-3 p-2.5 rounded-lg text-[10px] font-semibold"
+           style="background:var(--app-bg);border:1px solid var(--border);color:var(--text-3);">
+        <b>Effective tier:</b>
+        <span style="color:#6D28D9;">${effective.toUpperCase()}</span>
+        ${trialOn ? ` · <span style="color:#1D4ED8;">TRIAL ${(DEMO_USER_CONFIG.trialTier||'').toUpperCase()}</span>`:''}
+        <br>
+        <span style="color:var(--text-4);">
+          Edit <code>DEMO_USER_CONFIG</code> at the top of the script to change defaults for new sessions.
+        </span>
+      </div>
+    </div>`;
+
+  if(typeof lucide!=='undefined') lucide.createIcons();
+}
+
+function renderPricingStatusBanner(){
+  const host = $id('pricingStatusBanner');
+  if(!host) return;
+
+  const tier = subscriptionState.tier;
+  const tierDef = TIER_DEFS[tier] || TIER_DEFS.free;
+
+  if(isDemoUser()){
+    const eff = getEffectiveTier();
+    const effDef = TIER_DEFS[eff] || TIER_DEFS.pro;
+    const trialOn = !!DEMO_USER_CONFIG.trialActive;
+    host.innerHTML = `
+      <div class="sub-status-banner tone-active">
+        <span class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--accent),#EC4899);color:#fff;">
+          <i data-lucide="${effDef.icon}" class="w-5 h-5"></i>
+        </span>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">Demo Mode · ${effDef.name} access</span>
+            <span class="badge badge-violet">${eff.toUpperCase()}</span>
+            ${trialOn ? `<span class="trial-countdown"><i data-lucide="hourglass" class="w-3 h-3"></i>${DEMO_USER_CONFIG.trialDaysLeft} days left</span>`:''}
+          </div>
+          <p class="text-[11px] font-semibold mt-0.5" style="color:var(--text-4);">
+            Use the <b>Plan Override</b> panel above to manually switch the demo plan. All features remain accessible for exploration.
+          </p>
+        </div>
+      </div>`;
+  } else if(subscriptionState.trialActive){
+    const d = daysLeftInTrial();
+    const tt = TIER_DEFS[subscriptionState.trialTier] || TIER_DEFS.basic;
+    host.innerHTML = `
+      <div class="sub-status-banner tone-trial">
+        <span class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;"><i data-lucide="flask-conical" class="w-5 h-5"></i></span>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">You're on a free trial of ${tt.name}</span>
+            <span class="trial-countdown"><i data-lucide="hourglass" class="w-3 h-3"></i>${d} day${d===1?'':'s'} left</span>
+          </div>
+          <p class="text-[11px] font-semibold mt-0.5" style="color:var(--text-4);">Add a payment method before your trial ends to keep these features — otherwise you'll return to Free automatically.</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap shrink-0">
+          <button onclick="upgradePlan('${tt.id}')" class="btn btn-primary !py-2.5"><i data-lucide="zap" class="w-3.5 h-3.5"></i> Continue on ${tt.name}</button>
+          <button onclick="downgradePlan('free')" class="btn btn-ghost !py-2.5">Cancel trial</button>
+        </div>
+      </div>`;
+  } else if(subscriptionState.pendingDowngrade){
+    const pd = subscriptionState.pendingDowngrade;
+    const targetDef = TIER_DEFS[pd.tier] || TIER_DEFS.free;
+    const when = new Date(pd.effectiveAt).toLocaleDateString();
+    host.innerHTML = `
+      <div class="sub-status-banner tone-downgrade">
+        <span class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#F59E0B,#EA580C);color:#fff;"><i data-lucide="calendar-clock" class="w-5 h-5"></i></span>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">Downgrade scheduled</span>
+            <span class="badge badge-amber">${tierDef.name} → ${targetDef.name}</span>
+          </div>
+          <p class="text-[11px] font-semibold mt-0.5" style="color:var(--text-4);">Your ${tierDef.name} features remain active until <b>${when}</b>, then your account switches to ${targetDef.name}.</p>
+        </div>
+        <button onclick="cancelDowngrade()" class="btn btn-ghost !py-2.5 shrink-0"><i data-lucide="undo-2" class="w-3.5 h-3.5"></i> Undo downgrade</button>
+      </div>`;
+  } else if(tier === 'free'){
+    host.innerHTML = `
+      <div class="sub-status-banner tone-free">
+        <span class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:var(--surface-3);color:var(--text-3);"><i data-lucide="leaf" class="w-5 h-5"></i></span>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">You're on the Free plan</span>
+            <span class="badge badge-slate">CURRENT</span>
+          </div>
+          <p class="text-[11px] font-semibold mt-0.5" style="color:var(--text-4);">Unlock unlimited bank sync, advanced analytics, and more — try Basic or Pro free for 7 days.</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap shrink-0">
+          <button onclick="startTrial('basic')" class="btn btn-ghost !py-2.5"><i data-lucide="flask-conical" class="w-3.5 h-3.5"></i> Trial Basic</button>
+          <button onclick="startTrial('pro')" class="btn btn-primary !py-2.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Trial Pro</button>
+        </div>
+      </div>`;
+  } else {
+    const end = subscriptionState.currentPeriodEnd ? new Date(subscriptionState.currentPeriodEnd).toLocaleDateString() : '—';
+    host.innerHTML = `
+      <div class="sub-status-banner tone-active">
+        <span class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--accent),#EC4899);color:#fff;"><i data-lucide="${tierDef.icon}" class="w-5 h-5"></i></span>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">You're on ${tierDef.name}</span>
+            <span class="badge badge-emerald">ACTIVE</span>
+          </div>
+          <p class="text-[11px] font-semibold mt-0.5" style="color:var(--text-4);">Renews ${end} · Billed ${subscriptionState.billingCycle === 'yearly' ? 'annually' : 'monthly'}.</p>
+        </div>
+        ${tier === 'basic' ? `<button onclick="startTrial('pro')" class="btn btn-primary !py-2.5 shrink-0"><i data-lucide="arrow-up-circle" class="w-3.5 h-3.5"></i> Upgrade to Pro</button>` : ''}
+      </div>`;
+  }
+  if(typeof lucide!=='undefined') lucide.createIcons();
+}
+
+function renderPricingTierCards(){
+  const host = $id('pricingTierCards');
+  if(!host) return;
+  const order = ['free','basic','pro'];
+  const isYearly = subscriptionState.billingCycle === 'yearly';
+  const tierRank = { free:0, basic:1, pro:2 };
+
+  const demo = isDemoUser();
+  const eff  = getEffectiveTier();
+  const demoBaseTier = demo ? DEMO_USER_CONFIG.tier : subscriptionState.tier;
+  const demoTrialOn  = demo ? !!DEMO_USER_CONFIG.trialActive : false;
+
+  host.innerHTML = order.map(id => {
+    const t = TIER_DEFS[id];
+    const isFeatured = id === 'basic';
+
+    const isCurrent = demo
+      ? (demoBaseTier === id && !demoTrialOn)
+      : (subscriptionState.tier === id && !subscriptionState.trialActive);
+
+    const isTrial = demo
+      ? (demoTrialOn && DEMO_USER_CONFIG.trialTier === id)
+      : (subscriptionState.trialActive && subscriptionState.trialTier === id);
+
+    const price = isYearly ? t.yearly : t.monthly;
+    const period = isYearly ? '/yr' : '/mo';
+    const savings = isYearly ? Math.round((1 - t.yearly/(t.monthly*12))*100) : 0;
+
+    const featuresList = featuresForTierCard(id);
+
+    let cta = '', ctaClass = 'tier-cta';
+
+    if(demo){
+      if(id === eff){
+        cta = '<i data-lucide="check" class="w-4 h-4"></i> Current (Demo)';
+        ctaClass += ' cta-current';
+      } else if(tierRank[id] > tierRank[eff]){
+        cta = `<i data-lucide="arrow-up-circle" class="w-4 h-4"></i> Set demo to ${t.name}`;
+        ctaClass += ' cta-upgrade';
+      } else {
+        cta = `<i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Set demo to ${t.name}`;
+        ctaClass += ' cta-downgrade';
+      }
+    } else if(isCurrent){
+      cta = '<i data-lucide="check" class="w-4 h-4"></i> Current Plan';
+      ctaClass += ' cta-current';
+    } else if(isTrial){
+      const d = daysLeftInTrial();
+      cta = `<i data-lucide="flask-conical" class="w-4 h-4"></i> Trial · ${d}d left`;
+      ctaClass += ' cta-current';
+    } else if(id === 'free'){
+      cta = subscriptionState.tier === 'free' ? '<i data-lucide="check" class="w-4 h-4"></i> Current Plan' : '<i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Downgrade to Free';
+      ctaClass += subscriptionState.tier === 'free' ? ' cta-current' : ' cta-downgrade';
+    } else {
+      const cur = subscriptionState.tier;
+      if(tierRank[id] > tierRank[cur]){
+        cta = id === 'pro' ? '<i data-lucide="sparkles" class="w-4 h-4"></i> Upgrade to Pro' : '<i data-lucide="flask-conical" class="w-4 h-4"></i> Start 7-Day Free Trial';
+        ctaClass += ' cta-upgrade';
+      } else {
+        cta = `<i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Switch to ${t.name}`;
+        ctaClass += ' cta-downgrade';
+      }
+    }
+
+    return `
+      <div class="tier-card ${isCurrent?'tier-current':''} ${isTrial?'tier-current':''} ${isFeatured?'tier-featured':''}">
+        ${isTrial ? `<span class="tier-ribbon">On Trial · ${daysLeftInTrial()}d left</span>` : (isFeatured && !isCurrent ? `<span class="tier-ribbon">Most Popular</span>` : '')}
+        <div class="flex items-center gap-3">
+          <span class="tier-icon" style="background:${t.color}18;border:1px solid ${t.color}33;color:${t.color};"><i data-lucide="${t.icon}" class="w-6 h-6"></i></span>
+          <div class="min-w-0">
+            <div class="tier-name">${t.name}</div>
+            <div class="tier-tagline">${t.tagline}</div>
+          </div>
+        </div>
+        <div class="tier-price">
+          <span class="amount">${price === 0 ? 'Free' : '$' + price}</span>
+          ${price !== 0 ? `<span class="period">${period}</span>` : ''}
+        </div>
+        ${isYearly && price !== 0 ? `<span class="badge badge-emerald" style="align-self:flex-start;">Save ~${savings}%</span>` : ''}
+        <div class="tier-features">
+          ${featuresList.map(f => `
+            <div class="tier-feature ${f.muted?'muted':''} ${f.locked?'locked':''}">
+              <i data-lucide="${f.locked?'lock':(f.muted?'minus':'check')}" class="w-4 h-4"></i>
+              <span>${f.text}</span>
+            </div>`).join('')}
+        </div>
+        <button class="${ctaClass}" onclick="pricingCtaClick('${id}')">${cta}</button>
+      </div>`;
+  }).join('');
+  if(typeof lucide!=='undefined') lucide.createIcons();
+}
+
+function featuresForTierCard(tierId){
+  if(tierId === 'free') return [
+    { text:'1 bank connection' },
+    { text:'1 year portfolio history' },
+    { text:'Up to 3 savings goals' },
+    { text:'5 custom categories' },
+    { text:'USD currency only', muted:true },
+    { text:'Advanced analytics', locked:true },
+    { text:'AI Smart Insights', locked:true },
+    { text:'Human advisory', locked:true }
+  ];
+  if(tierId === 'basic') return [
+    { text:'Unlimited bank connections' },
+    { text:'5-year portfolio history' },
+    { text:'Unlimited goals & categories' },
+    { text:'Multi-currency (7 currencies)' },
+    { text:'Advanced analytics & rebalancing' },
+    { text:'Tax savings & credit health' },
+    { text:'AI Smart Insights', locked:true },
+    { text:'Human advisory', locked:true }
+  ];
+  return [
+    { text:'Everything in Basic' },
+    { text:'Unlimited portfolio history' },
+    { text:'AI Smart Insights (Texas, Macro)' },
+    { text:'2 human advisory sessions / mo' },
+    { text:'Advanced tax optimization' },
+    { text:'Real-time bank sync' },
+    { text:'API access' },
+    { text:'Priority support · 4h SLA' }
+  ];
+}
+
+function pricingCtaClick(tierId){
+  if(isDemoUser()){
+    setDemoTier(tierId);
+    return;
+  }
+  const eff = getEffectiveTier();
+  const tierRank = { free:0, basic:1, pro:2 };
+  if(subscriptionState.tier === tierId && !subscriptionState.trialActive){ toast('You already have this plan.','info'); return; }
+  if(tierId === 'free'){ downgradePlan('free'); return; }
+  if(tierId === 'pro' && tierRank[eff] < 2){ upgradePlan('pro'); return; }
+  if(tierId === 'basic' && subscriptionState.tier === 'free'){ startTrial('basic'); return; }
+  if(tierId === 'basic' && subscriptionState.tier === 'pro'){ downgradePlan('basic'); return; }
+  upgradePlan(tierId);
+}
+
+function renderPricingComparisonTable(){
+  const t = $id('pricingComparisonTable');
+  if(!t) return;
+
+  const groups = [
+    { label:'Core',      keys:['bankConnections','portfolioHistory','customCategories','savingsGoals','multiCurrency','rebalancing','creditHealth','taxSavings','advancedAnalytics','recurringBillAI','goalTemplates','csvExport','githubSync'] },
+    { label:'Pro Only',  keys:['aiInsights','humanAdvisory','advancedTax','realtimeSync','apiAccess','prioritySupport'] }
+  ];
+
+  const groupRowHtml = label => `<tr class="row-group"><td colspan="4">${label}</td></tr>`;
+  const featureRowHtml = key => {
+    const f = FEATURES[key];
+    const fmt = v => {
+      if(v === true)  return '<i data-lucide="check" class="w-4 h-4 cell-check" style="display:inline;"></i>';
+      if(v === false) return '<i data-lucide="x" class="w-4 h-4 cell-x" style="display:inline;"></i>';
+      return `<span style="font-weight:700;">${String(v)}</span>`;
+    };
+    return `<tr>
+      <td class="cell-feature"><i data-lucide="dot" class="w-3 h-3" style="color:var(--text-4);"></i>${f.name}</td>
+      <td class="cell-tier">${fmt(f.free)}</td>
+      <td class="cell-tier">${fmt(f.basic)}</td>
+      <td class="cell-tier">${fmt(f.pro)}</td>
+    </tr>`;
+  };
+
+  t.innerHTML = `
+    <thead>
+      <tr>
+        <th style="min-width:220px;">Feature</th>
+        <th class="cell-tier header-tier" style="width:140px;">Free</th>
+        <th class="cell-tier header-tier tier-highlight" style="width:140px;">Basic · $9/mo</th>
+        <th class="cell-tier header-tier" style="width:140px;">Pro · $29/mo</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${groups.map(g => groupRowHtml(g.label) + g.keys.map(featureRowHtml).join('')).join('')}
+    </tbody>`;
+  if(typeof lucide!=='undefined') lucide.createIcons();
+}
+
+function renderPricingFaq(){
+  const host = $id('pricingFaq');
+  if(!host) return;
+  host.innerHTML = PRICING_FAQ.map(f => `
+    <div class="pricing-faq-card">
+      <h4>${f.q}</h4>
+      <p>${f.a}</p>
+    </div>`).join('');
+}
+
+/* Feature gate helper — call this from any restricted action */
+function requireFeature(key){
+  if(canUseFeature(key)) return true;
+  const f = FEATURES[key];
+  const needed = f.tier === 'pro' ? 'Pro' : 'Basic';
+  toast(`"${f.name}" requires the ${needed} plan.`, 'warning', 4200);
+  setTimeout(()=>switchMainTab(null,'tab-pricing',true), 250);
+  return false;
+}
+function gatePortal(containerId, key){
+  const c = $id(containerId);
+  if(!c) return;
+  const allowed = canUseFeature(key);
+  const overlay = c.querySelector('.feature-gate');
+  if(allowed){ if(overlay) overlay.remove(); c.style.filter=''; c.style.pointerEvents=''; return; }
+  if(overlay) return;
+  c.style.position = 'relative';
+  const g = document.createElement('div');
+  g.className = 'feature-gate absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4';
+  g.style.background = 'linear-gradient(180deg, transparent, var(--surface) 60%)';
+  g.style.borderRadius = 'var(--radius-lg)';
+  g.innerHTML = `
+    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-2" style="background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.28);color:#6D28D9;"><i data-lucide="lock" class="w-5 h-5"></i></div>
+    <div class="text-xs font-extrabold mb-1" style="color:var(--text-1);">${FEATURES[key].name} is locked</div>
+    <div class="text-[10px] mb-3 max-w-[240px]" style="color:var(--text-4);">Available on ${FEATURES[key].tier === 'pro' ? 'Pro' : 'Basic'} and above.</div>
+    <button onclick="switchMainTab(null,'tab-pricing',true)" class="btn btn-primary !py-2 !text-[11px]"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> See plans</button>`;
+  c.appendChild(g);
+  if(typeof lucide!=='undefined') lucide.createIcons();
+}
+
 const ACCOUNT_GROUPS = [
   { key:'cash', label:'Cash & Banking', emoji:'💵', types:['checking','savings'], liability:false },
   { key:'investments', label:'Investments', emoji:'📈', types:['investment'], liability:false },
@@ -2658,32 +3315,7 @@ const LIAB_CHART_COLORS = ['#FB7185','#F43F5E','#E11D48','#BE123C','#9F1239','#8
 let accountsFilter='all',accountsTypeChartInstance=null,accountsLiabTypeChartInstance=null,txSourceFilter='all';
 const CARD_ISSUER_META={VISA:{short:'VISA'},MASTERCARD:{short:'MC'},AMEX:{short:'AMEX'},DISCOVER:{short:'DISC'},DEBIT:{short:'DBT'}};
 let currentCurrency="USD";
-
-/* ══════════════════════════════════════════════════════════
-   EXPANDED MULTI-CURRENCY SUPPORT
-   - Each entry has: symbol, ISO code, and locale (for Intl formatting)
-   - To add more, just append here — the dropdown and every
-     `.currency-prefix` span updates globally.
-   ══════════════════════════════════════════════════════════ */
-const CURRENCY_CONFIG={
-  USD:{symbol:"$",   code:"USD",locale:"en-US"},
-  EUR:{symbol:"€",   code:"EUR",locale:"de-DE"},
-  GBP:{symbol:"£",   code:"GBP",locale:"en-GB"},
-  INR:{symbol:"₹",   code:"INR",locale:"en-IN"},
-  CAD:{symbol:"C$",  code:"CAD",locale:"en-CA"},
-  AUD:{symbol:"A$",  code:"AUD",locale:"en-AU"},
-  JPY:{symbol:"¥",   code:"JPY",locale:"ja-JP"},
-  CHF:{symbol:"Fr",  code:"CHF",locale:"de-CH"},
-  CNY:{symbol:"¥",   code:"CNY",locale:"zh-CN"},
-  SGD:{symbol:"S$",  code:"SGD",locale:"en-SG"},
-  HKD:{symbol:"HK$", code:"HKD",locale:"en-HK"},
-  NZD:{symbol:"NZ$", code:"NZD",locale:"en-NZ"},
-  BRL:{symbol:"R$",  code:"BRL",locale:"pt-BR"},
-  MXN:{symbol:"MX$", code:"MXN",locale:"es-MX"},
-  ZAR:{symbol:"R",   code:"ZAR",locale:"en-ZA"},
-  AED:{symbol:"د.إ", code:"AED",locale:"ar-AE"},
-  KRW:{symbol:"₩",   code:"KRW",locale:"ko-KR"}
-};
+const CURRENCY_CONFIG={USD:{symbol:"$",code:"USD",locale:"en-US"},EUR:{symbol:"€",code:"EUR",locale:"de-DE"},GBP:{symbol:"£",code:"GBP",locale:"en-GB"},INR:{symbol:"₹",code:"INR",locale:"en-IN"},CAD:{symbol:"C$",code:"CAD",locale:"en-CA"},AUD:{symbol:"A$",code:"AUD",locale:"en-AU"},JPY:{symbol:"¥",code:"JPY",locale:"ja-JP"}};
 let txLocalDateRange={preset:'all',start:null,end:null,label:'Any Date'};
 let expLocalDateRange={preset:'all',start:null,end:null,label:'All Time'};
 
@@ -2691,7 +3323,7 @@ const chartTypeState={growth:'area',category:'doughnut',history:'bar',projection
 const CHART_TYPE_META={line:{icon:'line-chart',label:'Line'},area:{icon:'area-chart',label:'Area'},bar:{icon:'bar-chart-3',label:'Bar'},doughnut:{icon:'pie-chart',label:'Donut'},pie:{icon:'pie-chart',label:'Pie'},polar:{icon:'target',label:'Polar'}};
 function getChartToggleHTML(k,types){const a=chartTypeState[k];return types.map(t=>{const m=CHART_TYPE_META[t]||CHART_TYPE_META.line;const isActive=t===a?'active':'';return `<button class="chart-type-btn ${isActive}" data-chart="${k}" data-type="${t}" onclick="setChartType('${k}','${t}')" title="${m.label}"><i data-lucide="${m.icon}" class="w-3 h-3"></i></button>`}).join('');}
 function renderChartToggles(){
-  const set=(id,h)=>{const el=document.getElementById(id);if(el)el.innerHTML=h;};
+  const set=(id,h)=>{const el=$id(id);if(el)el.innerHTML=h;};
   set('chartToggleGrowth',getChartToggleHTML('growth',['area','line','bar']));
   set('chartToggleCategory',getChartToggleHTML('category',['doughnut','pie','polar']));
   set('chartToggleHistory',getChartToggleHTML('history',['bar','area','line']));
@@ -2714,7 +3346,6 @@ const HOUSEHOLD_STORAGE_KEY='exec_wealth_household_v1';
 let appSettings={
   profile:{name:'Executive User',email:'you@example.com',phone:'',timezone:'UTC',avatar:''},
   income:{type:'annual',annualSalary:0,hourlyWage:0,hoursPerWeek:40,weeksPerYear:52,payFrequency:26,filingStatus:'mfj'},
-  currency:{code:'USD',decimals:2,position:'auto',hideWholeDecimals:false,compact:false},
   appearance:{darkMode:false,accent:'#8B5CF6',sidebarCollapsed:false,compactDensity:false},
   security:{privacyDefault:false,pinEnabled:false,pin:''},
   notifications:{toastDuration:4000,reduceMotion:false,sound:false},
@@ -2725,6 +3356,7 @@ let appSettings={
 let tempSalaryOverride={paycheck:null};
 const ACCENT_PRESETS=[{name:'Violet',color:'#8B5CF6'},{name:'Pink',color:'#EC4899'},{name:'Blue',color:'#3B82F6'},{name:'Emerald',color:'#10B981'},{name:'Amber',color:'#F59E0B'},{name:'Rose',color:'#F43F5E'},{name:'Cyan',color:'#06B6D4'},{name:'Indigo',color:'#6366F1'}];
 
+/* AUTH + HOUSEHOLD */
 let authState = { user:null, session:{ token:null, createdAt:null }, signupRole:'owner' };
 let householdState = { members:[], inviteCode:null };
 
@@ -2858,12 +3490,12 @@ function generateInviteCode(){
 }
 
 function seedDemoAccount(){
-  const user = { id:'u_demo', name:'Demo User', email:'demo@execwealth.local', passwordHash:hashPassword('demo123'), role:'owner', householdId:'hh_demo', createdAt:new Date().toISOString() };
+  const user = { id:'u_demo', name:'Demo User', email:DEMO_USER_CONFIG.email, passwordHash:hashPassword('demo123'), role:'owner', householdId:'hh_demo', createdAt:new Date().toISOString() };
   localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user, session:authState.session }));
   householdState.members = [{ id:user.id, name:user.name, email:user.email, role:'owner', joinedAt:user.createdAt }];
   householdState.inviteCode = householdState.inviteCode || generateInviteCode();
   persistHouseholdState();
-  const ident = $id('authSigninIdentifier'); if(ident) ident.value = 'demo@execwealth.local';
+  const ident = $id('authSigninIdentifier'); if(ident) ident.value = DEMO_USER_CONFIG.email;
   const pw = $id('authSigninPassword'); if(pw) pw.value = 'demo123';
   showAuthMsg('authSigninMsg','Demo credentials filled. Click Sign In.','info');
 }
@@ -2989,9 +3621,7 @@ function removeCoOwner(id){
   toast('Co-owner removed.','info');
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SETTINGS HELPERS
-   ═══════════════════════════════════════════════════════════ */
+/* SETTINGS HELPERS */
 function previewProfileLive() {
   const name  = $id('setName')?.value?.trim() || 'Executive User';
   const email = $id('setEmail')?.value?.trim() || 'you@example.com';
@@ -3077,8 +3707,6 @@ function refreshSettingsNavStatus() {
   const pc = categoriesConfig.length;
   const ec = expenseStore.categories?.length || 0;
   const c = $id('navStatusCats'); if (c) c.textContent = `${pc}/${ec}`;
-  const cc = $id('navStatusCurrency'); if (cc) cc.textContent = currentCurrency;
-
   const p = $id('navStatusPrivacy');
   if (p) {
     const on = appSettings.security.privacyDefault || appSettings.security.pinEnabled;
@@ -3106,7 +3734,6 @@ window.switchSettingsSection = function(id) {
   if (id === 'profile')    previewProfileLive();
   if (id === 'household')  renderHouseholdPane();
   if (id === 'data')       refreshGithubStatus();
-  if (id === 'currency')   loadCurrencyUI();
 };
 document.addEventListener('input', (e) => { if (e.target && e.target.id === 'setPin') handlePinInput(e); });
 document.addEventListener('change', (e) => { if (e.target && e.target.id === 'setPin') handlePinInput(e); });
@@ -3116,9 +3743,7 @@ window.togglePinSetup = function() {
   if (appSettings.security.pinEnabled) setTimeout(initPinPad, 60);
 };
 
-/* ═══════════════════════════════════════════════════════════
-   HELPERS
-   ═══════════════════════════════════════════════════════════ */
+/* HELPERS */
 const $id = id => document.getElementById(id);
 const setText = (id,v) => { const el=$id(id); if(el) el.innerText = v; };
 const setHTML = (id,v) => { const el=$id(id); if(el) el.innerHTML = v; };
@@ -3136,221 +3761,7 @@ function openModal(html){
 const CLOSE_MODAL = "this.closest('.fixed').remove()";
 function formatCurrency(amount,decimals=2){const c=CURRENCY_CONFIG[currentCurrency]||CURRENCY_CONFIG.USD;const n=Number(amount)||0;return new Intl.NumberFormat(c.locale,{style:'currency',currency:c.code,minimumFractionDigits:decimals,maximumFractionDigits:decimals}).format(n);}
 function getCurrencySymbol(){return (CURRENCY_CONFIG[currentCurrency]||CURRENCY_CONFIG.USD).symbol;}
-
-/* ═══════════════════════════════════════════════════════════
-   DYNAMIC CURRENCY LABEL UPDATE
-   Any element marked with class "currency-prefix" gets its
-   text set to the active currency's symbol. Called on load
-   and every time the currency changes — so every label,
-   placeholder chip, and inline badge updates automatically.
-   ═══════════════════════════════════════════════════════════ */
-function updateCurrencyLabels(){
-  const s = getCurrencySymbol();
-  document.querySelectorAll('.currency-prefix').forEach(el=>{ el.innerText = s; });
-  const sel = $id('currencySelector');
-  if(sel) sel.value = currentCurrency;
-}
-/* ═══════════════════════════════════════════════════════════
-   CURRENCY UI  ·  grid renderer + settings persistence
-   ═══════════════════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════════════════
-   CURRENCY UI  ·  Combobox + Quick Picks + Live Preview
-   ═══════════════════════════════════════════════════════════ */
-const CURRENCY_META = {
-  USD:{flag:'🇺🇸',name:'US Dollar'},        EUR:{flag:'🇪🇺',name:'Euro'},
-  GBP:{flag:'🇬🇧',name:'British Pound'},    INR:{flag:'🇮🇳',name:'Indian Rupee'},
-  CAD:{flag:'🇨🇦',name:'Canadian Dollar'},  AUD:{flag:'🇦🇺',name:'Australian Dollar'},
-  JPY:{flag:'🇯🇵',name:'Japanese Yen'},     CHF:{flag:'🇨🇭',name:'Swiss Franc'},
-  CNY:{flag:'🇨🇳',name:'Chinese Yuan'},     SGD:{flag:'🇸🇬',name:'Singapore Dollar'},
-  HKD:{flag:'🇭🇰',name:'Hong Kong Dollar'}, NZD:{flag:'🇳🇿',name:'New Zealand Dollar'},
-  BRL:{flag:'🇧🇷',name:'Brazilian Real'},   MXN:{flag:'🇲🇽',name:'Mexican Peso'},
-  ZAR:{flag:'🇿🇦',name:'South African Rand'}, AED:{flag:'🇦🇪',name:'UAE Dirham'},
-  KRW:{flag:'🇰🇷',name:'South Korean Won'}
-};
-const CURRENCY_POPULAR = ['USD','EUR','GBP','INR','JPY'];
-let _currComboHighlight = 0;
-let _currComboFiltered  = [];
-function _currMeta(code){ return CURRENCY_META[code] || {flag:'🌐',name:code}; }
-
-function toggleCurrencyCombo(ev){
-  if(ev) ev.stopPropagation();
-  const pop = $id('currComboPopover'), trig = $id('currComboTrigger');
-  if(!pop || !trig) return;
-  const open = !pop.classList.contains('open');
-  if(open){
-    pop.classList.add('open');
-    trig.setAttribute('aria-expanded','true');
-    renderCurrencyCombo('');
-    const inp = $id('currComboSearchInput');
-    if(inp){ inp.value=''; setTimeout(()=>inp.focus(),50); }
-  } else closeCurrencyCombo();
-}
-function closeCurrencyCombo(){
-  const pop = $id('currComboPopover'), trig = $id('currComboTrigger');
-  if(pop) pop.classList.remove('open');
-  if(trig) trig.setAttribute('aria-expanded','false');
-}
-
-function renderCurrencyCombo(query){
-  const host = $id('currComboList'); if(!host) return;
-  const q = (query||'').toLowerCase().trim();
-  const active = appSettings.currency?.code || currentCurrency;
-  let items = Object.entries(CURRENCY_CONFIG).map(([code,cfg])=>({ code, symbol:cfg.symbol, locale:cfg.locale, ..._currMeta(code) }));
-  if(q) items = items.filter(it => it.code.toLowerCase().includes(q) || it.name.toLowerCase().includes(q) || it.symbol.toLowerCase().includes(q));
-  _currComboFiltered = items;
-  if(_currComboHighlight >= items.length) _currComboHighlight = 0;
-  if(items.length === 0){
-    host.innerHTML = `<div class="curr-combo-empty">No currency matches "<b>${esc(query||'')}</b>"</div>`;
-    return;
-  }
-  const popular = q ? [] : items.filter(it => CURRENCY_POPULAR.includes(it.code));
-  const others  = q ? items : items.filter(it => !CURRENCY_POPULAR.includes(it.code));
-  const itemHTML = (it, idx) => {
-    const sel = it.code === active ? 'selected' : '';
-    const hl  = idx === _currComboHighlight ? 'highlight' : '';
-    return `<button type="button" role="option" class="curr-combo-item ${sel} ${hl}" data-idx="${idx}" onclick="pickCurrencyCombo('${it.code}')" onmouseenter="_currComboHighlight=${idx}; paintCurrencyHighlight();">
-      <span class="curr-item-flag">${it.flag}</span>
-      <span class="curr-item-body"><span class="curr-item-code">${it.code}</span><span class="curr-item-name">${esc(it.name)}</span></span>
-      <span class="curr-item-symbol">${it.symbol}</span>
-      <i data-lucide="check" class="curr-item-check w-4 h-4"></i>
-    </button>`;
-  };
-  let html = '';
-  if(popular.length){ html += `<div class="curr-combo-group">Popular</div>` + popular.map(it => itemHTML(it, items.indexOf(it))).join(''); }
-  if(others.length){ if(popular.length) html += `<div class="curr-combo-group">All Currencies</div>`; html += others.map(it => itemHTML(it, items.indexOf(it))).join(''); }
-  host.innerHTML = html;
-  if(typeof lucide !== 'undefined') lucide.createIcons();
-}
-function filterCurrencyCombo(v){ _currComboHighlight = 0; renderCurrencyCombo(v); }
-function paintCurrencyHighlight(){
-  const host = $id('currComboList'); if(!host) return;
-  host.querySelectorAll('.curr-combo-item').forEach(el=>{ el.classList.toggle('highlight', Number(el.dataset.idx) === _currComboHighlight); });
-}
-function onCurrencyComboKey(ev){
-  const items = _currComboFiltered;
-  if(ev.key === 'ArrowDown'){ ev.preventDefault(); _currComboHighlight = Math.min(items.length-1, _currComboHighlight+1); paintCurrencyHighlight(); scrollComboHighlightIntoView(); }
-  else if(ev.key === 'ArrowUp'){ ev.preventDefault(); _currComboHighlight = Math.max(0, _currComboHighlight-1); paintCurrencyHighlight(); scrollComboHighlightIntoView(); }
-  else if(ev.key === 'Enter'){ ev.preventDefault(); const it = items[_currComboHighlight]; if(it) pickCurrencyCombo(it.code); }
-  else if(ev.key === 'Escape'){ ev.preventDefault(); closeCurrencyCombo(); }
-}
-function scrollComboHighlightIntoView(){
-  const host = $id('currComboList');
-  const el = host?.querySelector('.curr-combo-item.highlight');
-  if(el) el.scrollIntoView({block:'nearest'});
-}
-
-function pickCurrencyCombo(code){
-  if(!CURRENCY_CONFIG[code]) return;
-  appSettings.currency.code = code;
-  persistAppSettings();
-  changeActiveCurrency(code);
-  closeCurrencyCombo();
-  renderCurrencyQuickChips();
-  renderCurrencyPreview();
-  refreshSettingsNavStatus();
-  const b = $id('currencyActiveBadge');
-  if(b){ b.textContent = code; b.className = 'badge badge-violet'; }
-}
-function pickCurrencyQuick(code){ pickCurrencyCombo(code); }
-function renderCurrencyQuickChips(){
-  const host = $id('currQuickChips'); if(!host) return;
-  const active = appSettings.currency?.code || currentCurrency;
-  host.innerHTML = CURRENCY_POPULAR.map(code=>{
-    const cfg = CURRENCY_CONFIG[code], meta = _currMeta(code);
-    const cls = code === active ? 'active' : '';
-    return `<button type="button" class="curr-quick-chip ${cls}" onclick="pickCurrencyQuick('${code}')"><span>${meta.flag}</span><span>${code}</span><span class="curr-chip-sym">${cfg.symbol}</span></button>`;
-  }).join('');
-}
-
-function renderCurrencyPreview(){
-  const c = appSettings.currency || {};
-  const code     = c.code || currentCurrency;
-  const decimals = Number.isFinite(c.decimals) ? c.decimals : 2;
-  const position = c.position || 'auto';
-  const hideWhole = !!c.hideWholeDecimals;
-  const compact   = !!c.compact;
-  const cfg = CURRENCY_CONFIG[code] || CURRENCY_CONFIG.USD;
-  const fmt = (n, opts={}) => {
-    let useDecimals = opts.decimals ?? decimals;
-    if(hideWhole && Number.isInteger(n)) useDecimals = 0;
-    const o = { style:'currency', currency:cfg.code, minimumFractionDigits: useDecimals, maximumFractionDigits: useDecimals, notation:(compact && opts.compact!==false)?'compact':'standard' };
-    let s = new Intl.NumberFormat(cfg.locale, o).format(n);
-    if(position === 'after' && s.startsWith(cfg.symbol)) s = s.slice(cfg.symbol.length).trim() + ' ' + cfg.symbol;
-    else if(position === 'before'){ const i = s.indexOf(cfg.symbol); if(i > 0) s = cfg.symbol + s.replace(cfg.symbol,'').trim(); }
-    return s;
-  };
-  setText('currPreview1', fmt(1234.56, {compact:false}));
-  setText('currPreview2', fmt(1234567.89, {compact:false}));
-  setText('currPreview3', fmt(-4500, {compact:false}));
-  setText('currPreview4', fmt(1234567.89, {compact:true}));
-  const meta = $id('currPreviewMeta');
-  if(meta) meta.innerHTML = `<span style="color:#6D28D9;">${code}</span> · ${cfg.locale} · ${cfg.symbol}`;
-}
-
-function refreshCurrencyTrigger(){
-  const code = appSettings.currency?.code || currentCurrency;
-  const cfg = CURRENCY_CONFIG[code] || CURRENCY_CONFIG.USD;
-  const meta = _currMeta(code);
-  setText('currComboFlag', meta.flag);
-  setText('currComboCode', code);
-  setText('currComboName', meta.name);
-  setText('currComboSymbol', cfg.symbol);
-  const b = $id('currencyActiveBadge'); if(b) b.textContent = code;
-}
-
-function saveCurrencySettings(explicitSave){
-  const dec = parseInt($id('setCurrencyDecimals')?.value||'2',10);
-  const pos = $id('setCurrencyPosition')?.value||'auto';
-  const hideWhole = !!$id('setCurrencyHideWholeDecimals')?.checked;
-  const compact = !!$id('setCurrencyCompact')?.checked;
-  appSettings.currency.decimals = dec;
-  appSettings.currency.position = pos;
-  appSettings.currency.hideWholeDecimals = hideWhole;
-  appSettings.currency.compact = compact;
-  appSettings.currency.code = currentCurrency;
-  persistAppSettings();
-  renderCurrencyPreview();
-  refreshSettingsNavStatus();
-  updateCurrencyLabels();
-  buildDynamicTableHeaders();
-  updateDashboard();
-  renderPreTaxInputs(); renderPostTaxInputs();
-  if(typeof renderBudgetTab==='function') renderBudgetTab();
-  if(typeof renderAccounts==='function') renderAccounts();
-  if(typeof renderTransactions==='function') renderTransactions();
-  if(typeof dashRender==='function') dashRender();
-  if(typeof renderComparisonTable==='function') renderComparisonTable();
-  if(typeof renderMiniCharts==='function') renderMiniCharts();
-  if(explicitSave === true) toast(`Formatting updated for ${currentCurrency} (${getCurrencySymbol()}).`, 'success');
-}
-
-function resetCurrencySettings(){
-  if(!confirm('Reset currency to USD with standard formatting?')) return;
-  appSettings.currency = { code:'USD', decimals:2, position:'auto', hideWholeDecimals:false, compact:false };
-  persistAppSettings();
-  changeActiveCurrency('USD');
-  loadCurrencyUI();
-  toast('Currency reset to USD.','info');
-}
-
-function loadCurrencyUI(){
-  const c = appSettings.currency || {};
-  const decEl = $id('setCurrencyDecimals');          if(decEl) decEl.value = String(c.decimals ?? 2);
-  const posEl = $id('setCurrencyPosition');          if(posEl) posEl.value = c.position || 'auto';
-  const hwEl  = $id('setCurrencyHideWholeDecimals'); if(hwEl)  hwEl.checked  = !!c.hideWholeDecimals;
-  const cpEl  = $id('setCurrencyCompact');           if(cpEl)  cpEl.checked  = !!c.compact;
-  refreshCurrencyTrigger();
-  renderCurrencyQuickChips();
-  renderCurrencyCombo('');
-  renderCurrencyPreview();
-}
-
-document.addEventListener('click', e=>{
-  const wrap = document.querySelector('.curr-combobox-wrap');
-  if(wrap && !wrap.contains(e.target)) closeCurrencyCombo();
-});
-document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeCurrencyCombo(); });
+function updateCurrencyLabels(){const s=getCurrencySymbol();document.querySelectorAll('.currency-prefix').forEach(el=>{el.innerText=s;});const sel=$id('currencySelector');if(sel)sel.value=currentCurrency;}
 function getChartGridColor(){return getComputedStyle(document.documentElement).getPropertyValue('--chart-grid').trim()||'rgba(15,23,42,0.06)';}
 function getChartBarColor(){return getComputedStyle(document.documentElement).getPropertyValue('--chart-bar').trim()||'#CBD5E1';}
 function getChartSurfaceColor(){return getComputedStyle(document.documentElement).getPropertyValue('--surface').trim()||'#FFFFFF';}
@@ -3399,9 +3810,7 @@ function toggleAllSections(expand=true){document.querySelectorAll('.collapsible-
 function toggleNavSection(headerEl){const s=headerEl.closest('.nav-section');if(!s)return;s.classList.toggle('collapsed');const st=JSON.parse(localStorage.getItem(NAV_SECTIONS_STORAGE_KEY)||'{}');st[s.dataset.section]=s.classList.contains('collapsed');try{localStorage.setItem(NAV_SECTIONS_STORAGE_KEY,JSON.stringify(st));}catch(_){}}
 function restoreNavSections(){try{const st=JSON.parse(localStorage.getItem(NAV_SECTIONS_STORAGE_KEY)||'{}');document.querySelectorAll('.nav-section').forEach(s=>{if(st[s.dataset.section])s.classList.add('collapsed');});}catch(_){}}
 
-/* ═══════════════════════════════════════════════════════════
-   WEALTH BLUEPRINT TOOLS
-   ═══════════════════════════════════════════════════════════ */
+/* WEALTH BLUEPRINT */
 const WB_TOOLS_FLAT=[
   {id:'paycheck',label:'Paycheck',icon:'receipt',desc:'Take-home pay'},
   {id:'projections',label:'Projections',icon:'rocket',desc:'Growth projections'},
@@ -3428,7 +3837,6 @@ const SETTINGS_SECTIONS_META=[
   {id:'profile',label:'Profile',icon:'user-circle-2'},
   {id:'household',label:'Household & Co-Owner',icon:'users'},
   {id:'income',label:'Income & Salary',icon:'banknote'},
-  {id:'currency',label:'Currency & Formatting',icon:'coins'},
   {id:'appearance',label:'Appearance',icon:'palette'},
   {id:'categories',label:'Categories',icon:'tags'},
   {id:'privacy',label:'Privacy',icon:'shield-check'},
@@ -3452,11 +3860,11 @@ function toggleProfileMenu(ev){if(ev)ev.stopPropagation();const p=$id('sidebarPr
 function closeProfileMenu(){$id('sidebarProfilePopover')?.classList.remove('open');$id('profileChevron')?.classList.remove('open');}
 document.addEventListener('click',e=>{const w=$id('sidebarProfileWrap'),p=$id('sidebarProfilePopover');if(p?.classList.contains('open')&&w&&!w.contains(e.target)){p.classList.remove('open');$id('profileChevron')?.classList.remove('open');}});
 function updateSidebarProfile(){const p=appSettings.profile;const init=(p.name||'EW').split(/\s+/).map(s=>s[0]).join('').slice(0,2).toUpperCase();const av=p.avatar?`<img src="${p.avatar}" alt="avatar">`:init;const a1=$id('sidebarProfileAvatar');if(a1)a1.innerHTML=av;const a2=$id('popoverProfileAvatar');if(a2)a2.innerHTML=av;setText('sidebarProfileName',p.name||'Executive User');setText('popoverProfileName',p.name||'Executive User');setText('sidebarProfileEmail',p.email||'you@example.com');setText('popoverProfileEmail',p.email||'you@example.com');}
-function loadAppSettings(){try{const r=localStorage.getItem(SETTINGS_STORAGE_KEY);if(r){const p=JSON.parse(r);appSettings={profile:{...appSettings.profile,...(p.profile||{})},income:{...appSettings.income,...(p.income||{})},currency:{...appSettings.currency,...(p.currency||{})},appearance:{...appSettings.appearance,...(p.appearance||{})},security:{...appSettings.security,...(p.security||{})},notifications:{...appSettings.notifications,...(p.notifications||{})},signIn:{...appSettings.signIn,...(p.signIn||{})},categoryOrder:{portfolio:p.categoryOrder?.portfolio||[],expense:p.categoryOrder?.expense||[]},hiddenCategories:{portfolio:p.hiddenCategories?.portfolio||[],expense:p.hiddenCategories?.expense||[]}};}}catch(e){console.warn(e);}}
+function loadAppSettings(){try{const r=localStorage.getItem(SETTINGS_STORAGE_KEY);if(r){const p=JSON.parse(r);appSettings={profile:{...appSettings.profile,...(p.profile||{})},income:{...appSettings.income,...(p.income||{})},appearance:{...appSettings.appearance,...(p.appearance||{})},security:{...appSettings.security,...(p.security||{})},notifications:{...appSettings.notifications,...(p.notifications||{})},signIn:{...appSettings.signIn,...(p.signIn||{})},categoryOrder:{portfolio:p.categoryOrder?.portfolio||[],expense:p.categoryOrder?.expense||[]},hiddenCategories:{portfolio:p.hiddenCategories?.portfolio||[],expense:p.hiddenCategories?.expense||[]}};}}catch(e){console.warn(e);}}
 function persistAppSettings(){try{localStorage.setItem(SETTINGS_STORAGE_KEY,JSON.stringify(appSettings));}catch(e){}}
-function applyAppSettingsOnLoad(){if(appSettings.appearance.darkMode){document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');}else{document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');}if(appSettings.currency && appSettings.currency.code) currentCurrency = appSettings.currency.code;if(appSettings.appearance.sidebarCollapsed)$id('desktopSidebar')?.classList.add('collapsed');document.body.classList.toggle('compact',!!appSettings.appearance.compactDensity);if(appSettings.security.privacyDefault)isMasterHidden=true;document.body.classList.toggle('reduce-motion',!!appSettings.notifications.reduceMotion);}
+function applyAppSettingsOnLoad(){if(appSettings.appearance.darkMode){document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');}else{document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');}if(appSettings.appearance.accent)applyAccentColor(appSettings.appearance.accent);if(appSettings.appearance.sidebarCollapsed)$id('desktopSidebar')?.classList.add('collapsed');document.body.classList.toggle('compact',!!appSettings.appearance.compactDensity);if(appSettings.security.privacyDefault)isMasterHidden=true;document.body.classList.toggle('reduce-motion',!!appSettings.notifications.reduceMotion);}
 function applyAccentColor(hex){document.documentElement.style.setProperty('--accent',hex);try{const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);document.documentElement.style.setProperty('--accent-rgb',`${r}, ${g}, ${b}`);const l=(0.299*r+0.587*g+0.114*b)/255;document.documentElement.style.setProperty('--accent-text',l>0.6?'#04140E':'#FFFFFF');}catch(_){}}
-function loadSettingsUI(){const p=appSettings.profile;const setV=(id,v)=>{const el=$id(id);if(el)el.value=v??'';};setV('setName',p.name);setV('setEmail',p.email);setV('setPhone',p.phone);setV('setTimezone',p.timezone||'UTC');setV('setUsername',appSettings.signIn.username);setV('setIncomeType',appSettings.income.type);setV('setAnnualSalary',appSettings.income.annualSalary);setV('setHourlyWage',appSettings.income.hourlyWage);setV('setHoursPerWeek',appSettings.income.hoursPerWeek);setV('setWeeksPerYear',appSettings.income.weeksPerYear);setV('setPayFrequency',appSettings.income.payFrequency);setV('setFilingStatus',appSettings.income.filingStatus);toggleIncomeTypeFields();updateIncomePreview();const setC=(id,v)=>{const el=$id(id);if(el)el.checked=!!v;};setC('setDarkMode',document.documentElement.classList.contains('dark'));setC('setSidebarCollapsed',appSettings.appearance.sidebarCollapsed);setC('setCompactDensity',appSettings.appearance.compactDensity);setC('setPrivacyDefault',appSettings.security.privacyDefault);setC('setPinEnabled',appSettings.security.pinEnabled);setV('setPin',appSettings.security.pin);const pr=$id('pinSetupRow');if(pr)pr.classList.toggle('hidden',!appSettings.security.pinEnabled);const ts=$id('setToastDuration');if(ts)ts.value=String(appSettings.notifications.toastDuration);setC('setReduceMotion',appSettings.notifications.reduceMotion);setC('setNotificationSound',appSettings.notifications.sound);setC('setRememberMe',appSettings.signIn.remember);const av=$id('settingsAvatar');if(av){if(p.avatar)av.innerHTML=`<img src="${p.avatar}" alt="avatar">`;else{const init=(p.name||'EW').split(/\s+/).map(s=>s[0]).join('').slice(0,2).toUpperCase();av.textContent=init;}}setText('settingsProfileName',p.name||'Executive User');setText('settingsProfileEmail',p.email||'you@example.com');const sr=$id('accentSwatchRow');if(sr)sr.innerHTML=ACCENT_PRESETS.map(a=>`<button type="button" class="accent-swatch ${a.color.toLowerCase()===(appSettings.appearance.accent||'').toLowerCase()?'active':''}" style="background: ${a.color};" title="${a.name}" onclick="pickAccentColor('${a.color}')"></button>`).join('');updateSidebarProfile();renderSettingsCategoryLists();applyHouseholdUI();refreshGithubStatus();}
+function loadSettingsUI(){const p=appSettings.profile;const setV=(id,v)=>{const el=$id(id);if(el)el.value=v??'';};setV('setName',p.name);setV('setEmail',p.email);setV('setPhone',p.phone);setV('setTimezone',p.timezone||'UTC');setV('setUsername',appSettings.signIn.username);setV('setIncomeType',appSettings.income.type);setV('setAnnualSalary',appSettings.income.annualSalary);setV('setHourlyWage',appSettings.income.hourlyWage);setV('setHoursPerWeek',appSettings.income.hoursPerWeek);setV('setWeeksPerYear',appSettings.income.weeksPerYear);setV('setPayFrequency',appSettings.income.payFrequency);setV('setFilingStatus',appSettings.income.filingStatus);toggleIncomeTypeFields();updateIncomePreview();const setC=(id,v)=>{const el=$id(id);if(el)el.checked=!!v;};setC('setDarkMode',document.documentElement.classList.contains('dark'));setC('setSidebarCollapsed',appSettings.appearance.sidebarCollapsed);setC('setCompactDensity',appSettings.appearance.compactDensity);setC('setPrivacyDefault',appSettings.security.privacyDefault);setC('setPinEnabled',appSettings.security.pinEnabled);setV('setPin',appSettings.security.pin);const pr=$id('pinSetupRow');if(pr)pr.classList.toggle('hidden',!appSettings.security.pinEnabled);const ts=$id('setToastDuration');if(ts)ts.value=String(appSettings.notifications.toastDuration);setC('setReduceMotion',appSettings.notifications.reduceMotion);setC('setNotificationSound',appSettings.notifications.sound);setC('setRememberMe',appSettings.signIn.remember);const av=$id('settingsAvatar');if(av){if(p.avatar)av.innerHTML=`<img src="${p.avatar}" alt="avatar">`;else{const init=(p.name||'EW').split(/\s+/).map(s=>s[0]).join('').slice(0,2).toUpperCase();av.textContent=init;}}setText('settingsProfileName',p.name||'Executive User');setText('settingsProfileEmail',p.email||'you@example.com');const sr=$id('accentSwatchRow');if(sr)sr.innerHTML=ACCENT_PRESETS.map(a=>`<button type="button" class="accent-swatch ${a.color.toLowerCase()===(appSettings.appearance.accent||'').toLowerCase()?'active':''}" style="background: ${a.color};" title="${a.name}" onclick="pickAccentColor('${a.color}')"></button>`).join('');updateSidebarProfile();renderSettingsCategoryLists();applyHouseholdUI();refreshGithubStatus();updateSidebarSubChip();}
 function saveProfileSettings(){appSettings.profile.name=$id('setName')?.value?.trim()||'Executive User';appSettings.profile.email=$id('setEmail')?.value?.trim()||'';appSettings.profile.phone=$id('setPhone')?.value?.trim()||'';appSettings.profile.timezone=$id('setTimezone')?.value||'UTC';persistAppSettings();loadSettingsUI();updateSidebarProfile();toast('Profile saved.','success');}
 function toggleIncomeTypeFields(){const t=$id('setIncomeType')?.value||'annual';$id('annualSalaryField')?.classList.toggle('hidden',t!=='annual');$id('hourlyWageField')?.classList.toggle('hidden',t!=='hourly');$id('hoursPerWeekField')?.classList.toggle('hidden',t!=='hourly');$id('weeksPerYearField')?.classList.toggle('hidden',t!=='hourly');updateIncomePreview();}
 function getEffectiveAnnualIncome(){
@@ -3812,8 +4220,8 @@ function refreshGithubStatus(){
   const inp = $id('ghTokenInput');
   if(inp && !inp.value && getUserToken()) inp.placeholder = '••••••••••• (stored)';
 }
-async function exportAllData(){try{const p={_meta:{version:'4.5.1',exportedAt:new Date().toISOString(),user:authState.user?.email,household:householdState.members.map(m=>({name:m.name,role:m.role,email:m.email}))},settings:appSettings,portfolio:{categories:categoriesConfig,irsBaseLimits,defaultAccountData:portfolioData,currency:currentCurrency},expenses:expenseStore,accounts:accountsStore,dateRange:globalDateRange,txLocalDateRange,expLocalDateRange,goals:DB.goals};const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(p,null,2));const a=document.createElement('a');a.href=d;a.download=`executive-wealth-backup-${new Date().toISOString().split('T')[0]}.json`;document.body.appendChild(a);a.click();a.remove();toast('Full backup downloaded.','success');}catch(e){toast('Export failed.','error');}}
-function importAllData(ev){const f=ev.target.files?.[0];if(!f)return;if(!confirm('Importing will replace current data. Continue?')){ev.target.value='';return;}const r=new FileReader();r.onload=e=>{try{const p=JSON.parse(e.target.result);if(p.settings){appSettings={...appSettings,...p.settings};persistAppSettings();}if(p.portfolio){if(p.portfolio.categories)categoriesConfig=p.portfolio.categories;if(p.portfolio.irsBaseLimits)irsBaseLimits=p.portfolio.irsBaseLimits;if(p.portfolio.defaultAccountData)portfolioData=p.portfolio.defaultAccountData;if(p.portfolio.currency)currentCurrency=p.portfolio.currency;localStorage.setItem('categoryPortfolioData',JSON.stringify(portfolioData));}if(p.expenses){expenseStore={...expenseStore,...p.expenses};localStorage.setItem('expense_tracker_data',JSON.stringify(expenseStore));}if(p.accounts){accountsStore={...accountsStore,...p.accounts};localStorage.setItem('accounts_data',JSON.stringify(accountsStore));}if(p.goals){DB.goals=p.goals;saveGoalsData();}initDashboard();loadSettingsUI();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof renderAccounts==='function')renderAccounts();applyAppSettingsOnLoad();toast('Backup imported successfully.','success');}catch(err){console.error(err);toast('Invalid backup file.','error');}ev.target.value='';};r.readAsText(f);}
+async function exportAllData(){try{const p={_meta:{version:'4.5.1',exportedAt:new Date().toISOString(),user:authState.user?.email,household:householdState.members.map(m=>({name:m.name,role:m.role,email:m.email}))},settings:appSettings,subscription:subscriptionState,demoConfig:DEMO_USER_CONFIG,portfolio:{categories:categoriesConfig,irsBaseLimits,defaultAccountData:portfolioData,currency:currentCurrency},expenses:expenseStore,accounts:accountsStore,dateRange:globalDateRange,txLocalDateRange,expLocalDateRange,goals:DB.goals};const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(p,null,2));const a=document.createElement('a');a.href=d;a.download=`executive-wealth-backup-${new Date().toISOString().split('T')[0]}.json`;document.body.appendChild(a);a.click();a.remove();toast('Full backup downloaded.','success');}catch(e){toast('Export failed.','error');}}
+function importAllData(ev){const f=ev.target.files?.[0];if(!f)return;if(!confirm('Importing will replace current data. Continue?')){ev.target.value='';return;}const r=new FileReader();r.onload=e=>{try{const p=JSON.parse(e.target.result);if(p.settings){appSettings={...appSettings,...p.settings};persistAppSettings();}if(p.subscription){subscriptionState={...subscriptionState,...p.subscription};persistSubscriptionState();}if(p.demoConfig){Object.assign(DEMO_USER_CONFIG,p.demoConfig);persistDemoOverride();}if(p.portfolio){if(p.portfolio.categories)categoriesConfig=p.portfolio.categories;if(p.portfolio.irsBaseLimits)irsBaseLimits=p.portfolio.irsBaseLimits;if(p.portfolio.defaultAccountData)portfolioData=p.portfolio.defaultAccountData;if(p.portfolio.currency)currentCurrency=p.portfolio.currency;localStorage.setItem('categoryPortfolioData',JSON.stringify(portfolioData));}if(p.expenses){expenseStore={...expenseStore,...p.expenses};localStorage.setItem('expense_tracker_data',JSON.stringify(expenseStore));}if(p.accounts){accountsStore={...accountsStore,...p.accounts};localStorage.setItem('accounts_data',JSON.stringify(accountsStore));}if(p.goals){DB.goals=p.goals;saveGoalsData();}initDashboard();loadSettingsUI();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof renderAccounts==='function')renderAccounts();applyAppSettingsOnLoad();updateSidebarSubChip();renderPricingPage();toast('Backup imported successfully.','success');}catch(err){console.error(err);toast('Invalid backup file.','error');}ev.target.value='';};r.readAsText(f);}
 function clearLocalCache(){if(!confirm('Clear all local cache? Server JSON files will remain intact.'))return;try{localStorage.removeItem('categoryPortfolioData');localStorage.removeItem('expense_tracker_data');localStorage.removeItem('accounts_data');localStorage.removeItem(SETTINGS_STORAGE_KEY);localStorage.removeItem('dash_layout_v2');localStorage.removeItem(NAV_SECTIONS_STORAGE_KEY);localStorage.removeItem('savings_goals_v1');toast('Local cache cleared. Reloading…','info');setTimeout(()=>location.reload(),700);}catch(e){toast('Failed to clear cache.','error');}}
 function factoryReset(){if(!confirm('This will erase ALL local data including settings and login. Continue?'))return;if(!confirm('Are you absolutely sure?'))return;try{localStorage.clear();sessionStorage.clear();toast('Factory reset complete. Reloading…','success');setTimeout(()=>location.reload(),800);}catch(e){toast('Reset failed.','error');}}
 
@@ -3827,6 +4235,7 @@ const TAB_TITLES={
   'tab-credit':{title:'Credit Health',sub:'Monitor your score, factors, and simulator',icon:'gauge-circle'},
   'tab-blueprint':{title:'Wealth Blueprint',sub:'Interactive workspace for your financial plan',icon:'compass'},
   'tab-expenses':{title:'Budget',sub:'Plan, pace, and control your monthly spend',icon:'target'},
+  'tab-pricing':{title:'Plans & Pricing',sub:'Choose the plan that grows with you',icon:'sparkles'},
   'tab-settings':{title:'Settings',sub:'Profile, appearance, and preferences',icon:'settings-2'}
 };
 let currentTabId='tab-dashboard';
@@ -3875,6 +4284,7 @@ else if(tabId==='tab-expenses'){
   else renderBudgetTab();
   requestAnimationFrame(()=>{ try{ renderBudgetTab(); }catch(_){} });
 }
+else if(tabId==='tab-pricing'){ renderPricingPage(); }
 else if(tabId==='tab-settings'){ loadSettingsUI(); const ts=_pendingSettingsSection||'profile'; _pendingSettingsSection=null; switchSettingsSection(ts); }
   applyPrivacyState();updateFilterCountBadges();
     updateMobileBottomNav(tabId);
@@ -3894,7 +4304,8 @@ const MOBILE_NAV_SECTIONS = [
     { tab:'tab-credit',       icon:'gauge-circle',      label:'Credit Health' },
     { tab:'tab-blueprint',    icon:'compass',           label:'Blueprint' },
   ]},
-  { label:'Workspace', items:[
+  { label:'Account', items:[
+    { tab:'tab-pricing',      icon:'sparkles',          label:'Plans & Pricing' },
     { tab:'tab-settings',     icon:'settings-2',        label:'Settings' },
   ]},
 ];
@@ -3995,10 +4406,11 @@ function toggleMasterPrivacy(){isMasterHidden=!isMasterHidden;applyPrivacyState(
 function toggleCardPrivacy(id){$id(id)?.classList.toggle('privacy-masked');}
 function applyPrivacyState(){const t=document.querySelectorAll('.privacy-target, td:not(:first-child)');if(isMasterHidden)t.forEach(el=>el.classList.add('privacy-masked'));else t.forEach(el=>el.classList.remove('privacy-masked'));if(typeof lucide!=='undefined')lucide.createIcons();}
 function updateDriftLabel(v){const l=$id('driftToleranceVal');if(l)l.innerText=`${parseFloat(v).toFixed(1)}%`;}
-function toggleThemeMode(){const h=document.documentElement;const d=h.classList.contains('dark');if(d){h.classList.remove('dark');h.classList.add('light');appSettings.appearance.darkMode=false;}else{h.classList.add('dark');h.classList.remove('light');appSettings.appearance.darkMode=true;}persistAppSettings();const s=$id('setDarkMode');if(s)s.checked=h.classList.contains('dark');if(Chart.defaults.scale)Chart.defaults.scale.grid.color=getChartGridColor();if(typeof lucide!=='undefined')lucide.createIcons();updateDashboard();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof renderAccounts==='function')renderAccounts();if(typeof renderTransactions==='function')renderTransactions();if(typeof dashRender==='function')dashRender();if(typeof initCreditTab==='function'&&currentTabId==='tab-credit')initCreditTab();}
+function toggleThemeMode(){const h=document.documentElement;const d=h.classList.contains('dark');if(d){h.classList.remove('dark');h.classList.add('light');appSettings.appearance.darkMode=false;}else{h.classList.add('dark');h.classList.remove('light');appSettings.appearance.darkMode=true;}persistAppSettings();const s=$id('setDarkMode');if(s)s.checked=h.classList.contains('dark');if(Chart.defaults.scale)Chart.defaults.scale.grid.color=getChartGridColor();if(typeof lucide!=='undefined')lucide.createIcons();updateDashboard();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof renderAccounts==='function')renderAccounts();if(typeof renderTransactions==='function')renderTransactions();if(typeof dashRender==='function')dashRender();if(typeof initCreditTab==='function'&&currentTabId==='tab-credit')initCreditTab();if(currentTabId==='tab-pricing')renderPricingPage();}
 
-function renderPreTaxInputs(){const c=$id('preTaxDeductionsList');if(!c)return;c.innerHTML='';preTaxConfig.forEach(item=>{c.innerHTML+=`<div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center p-2.5 rounded-xl" style="background:var(--surface-3);border:1px solid var(--border);"><span class="text-xs font-semibold" style="color:var(--text-2);">${item.label}</span><select id="${item.id}_type" onchange="calculatePaystub()" class="input !py-1.5"><option value="per_paycheck">Per Paycheck</option><option value="onetime">One-Time (Annual)</option></select><select id="${item.id}_method" onchange="calculatePaystub()" class="input !py-1.5"><option value="fixed">${getCurrencySymbol()} Fixed</option><option value="gross_pct">% of Gross</option></select><input type="number" id="${item.id}_val" value="0" oninput="calculatePaystub()" class="input !py-1.5 text-right font-mono" placeholder="0"></div>`;});}
-function renderPostTaxInputs(){const c=$id('postTaxDeductionsList');if(!c)return;c.innerHTML='';customPostTaxDeductions.forEach((item,i)=>{c.innerHTML+=`<div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center p-2.5 rounded-xl" style="background:var(--surface-3);border:1px solid var(--border);"><input type="text" value="${item.label}" oninput="customPostTaxDeductions[${i}].label = this.value; calculatePaystub();" class="input !py-1.5"><select onchange="customPostTaxDeductions[${i}].type = this.value; calculatePaystub();" class="input !py-1.5"><option value="per_paycheck" ${item.type==='per_paycheck'?'selected':''}>Per Paycheck</option><option value="onetime" ${item.type==='onetime'?'selected':''}>One-Time</option></select><select onchange="customPostTaxDeductions[${i}].method = this.value; calculatePaystub();" class="input !py-1.5"><option value="fixed" ${item.method==='fixed'?'selected':''}>${getCurrencySymbol()} Fixed</option><option value="gross_pct" ${item.method==='gross_pct'?'selected':''}>% of Gross</option></select><input type="number" value="${item.amount}" oninput="customPostTaxDeductions[${i}].amount = parseFloat(this.value)||0; calculatePaystub();" class="input !py-1.5 text-right font-mono"></div>`;});}
+/* DATA MODEL */
+function renderPreTaxInputs(){const c=$id('preTaxDeductionsList');if(!c)return;c.innerHTML='';preTaxConfig.forEach(item=>{c.innerHTML+=`<div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center p-2.5 rounded-xl" style="background:var(--surface-3);border:1px solid var(--border);"><span class="text-xs font-semibold" style="color:var(--text-2);">${item.label}</span><select id="${item.id}_type" onchange="calculatePaystub()" class="input !py-1.5"><option value="per_paycheck">Per Paycheck</option><option value="onetime">One-Time (Annual)</option></select><select id="${item.id}_method" onchange="calculatePaystub()" class="input !py-1.5"><option value="fixed">$ Fixed</option><option value="gross_pct">% of Gross</option></select><input type="number" id="${item.id}_val" value="0" oninput="calculatePaystub()" class="input !py-1.5 text-right font-mono" placeholder="0"></div>`;});}
+function renderPostTaxInputs(){const c=$id('postTaxDeductionsList');if(!c)return;c.innerHTML='';customPostTaxDeductions.forEach((item,i)=>{c.innerHTML+=`<div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center p-2.5 rounded-xl" style="background:var(--surface-3);border:1px solid var(--border);"><input type="text" value="${item.label}" oninput="customPostTaxDeductions[${i}].label = this.value; calculatePaystub();" class="input !py-1.5"><select onchange="customPostTaxDeductions[${i}].type = this.value; calculatePaystub();" class="input !py-1.5"><option value="per_paycheck" ${item.type==='per_paycheck'?'selected':''}>Per Paycheck</option><option value="onetime" ${item.type==='onetime'?'selected':''}>One-Time</option></select><select onchange="customPostTaxDeductions[${i}].method = this.value; calculatePaystub();" class="input !py-1.5"><option value="fixed" ${item.method==='fixed'?'selected':''}>$ Fixed</option><option value="gross_pct" ${item.method==='gross_pct'?'selected':''}>% of Gross</option></select><input type="number" value="${item.amount}" oninput="customPostTaxDeductions[${i}].amount = parseFloat(this.value)||0; calculatePaystub();" class="input !py-1.5 text-right font-mono"></div>`;});}
 let categoriesConfig=[];
 let irsBaseLimits={};
 let defaultAccountData=[];
@@ -4012,6 +4424,7 @@ let portfolioData=[],customTargets={},growthChart,categoryChart,historyChart,pro
 let unifiedStore={startingBal:0,monthlyContri:0,annualReturn:0,isUserOverridden:false};
 let globalDateRange={preset:'all',start:null,end:null,label:'All Time'};
 
+/* DATE HELPERS */
 function getDateRangeBounds(){const n=new Date(),y=n.getFullYear(),m=n.getMonth();const s=dt=>new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()),e=dt=>new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),23,59,59,999);switch(globalDateRange.preset){case'ytd':return{start:s(new Date(y,0,1)),end:e(n),label:'YTD '+y};case'mtd':return{start:s(new Date(y,m,1)),end:e(n),label:'MTD '+n.toLocaleString('default',{month:'short'})+' '+y};case'30d':{const x=new Date(n);x.setDate(x.getDate()-29);return{start:s(x),end:e(n),label:'Last 30 Days'};}case'90d':{const x=new Date(n);x.setDate(x.getDate()-89);return{start:s(x),end:e(n),label:'Last 90 Days'};}case'12m':{const x=new Date(n);x.setMonth(x.getMonth()-12);return{start:s(x),end:e(n),label:'Last 12 Months'};}case'ly':return{start:s(new Date(y-1,0,1)),end:e(new Date(y-1,11,31)),label:'Last Year '+(y-1)};case'custom':return{start:globalDateRange.start,end:globalDateRange.end,label:globalDateRange.label};default:return{start:null,end:null,label:'All Time'};}}
 function isDateInRange(ds){if(globalDateRange.preset==='all')return true;const b=getDateRangeBounds();if(!b.start||!b.end)return true;const d=new Date(ds+'T12:00:00');return d>=b.start&&d<=b.end;}
 function setGlobalDateRange(preset,cs,ce){globalDateRange.preset=preset;if(preset==='custom'){globalDateRange.start=cs?new Date(cs+'T00:00:00'):null;globalDateRange.end=ce?new Date(ce+'T23:59:59'):null;if(cs&&ce)globalDateRange.label=`${cs} → ${ce}`;}else{globalDateRange.label=getDateRangeBounds().label;}updateDateRangeUI();closeDatePopover();if(typeof renderTransactions==='function')renderTransactions();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof updateDashboard==='function')updateDashboard();if(typeof dashRender==='function')dashRender();toast(`Date range: ${globalDateRange.label}`,'info',2200);}
@@ -4046,44 +4459,14 @@ document.addEventListener('click',e=>{
   const bp=$id('budgetDatePopover'),bc=$id('budgetDateChip');
   if(bp&&bp.classList.contains('open')&&!bp.contains(e.target)&&bc&&!bc.contains(e.target)){bp.classList.remove('open');_togglePopoverOverflow(bp,false);}
 });
-
-/* ═══════════════════════════════════════════════════════════
-   CURRENCY CHANGE HANDLER
-   - Persists currency in every store
-   - Refreshes global currency labels
-   - Re-renders every surface that shows money
-   - Re-renders the payroll pre-tax/post-tax dropdowns so
-     the "Fixed / % of Gross" option label updates too
-   ═══════════════════════════════════════════════════════════ */
 async function changeActiveCurrency(c){
-  if(!CURRENCY_CONFIG[c]) return;
-  currentCurrency = c;
-  expenseStore.selectedCurrency = currentCurrency;
-  accountsStore.selectedCurrency = currentCurrency;
-
-  updateCurrencyLabels();
-  buildDynamicTableHeaders();
-  updateDashboard();
-  renderPreTaxInputs();
-  renderPostTaxInputs();
-
-  if(typeof renderBudgetTab==='function') renderBudgetTab();
-  if(typeof renderAccounts==='function') renderAccounts();
-  if(typeof renderTransactions==='function') renderTransactions();
-  if(typeof initGoalsTab==='function' && currentTabId==='tab-goals') initGoalsTab();
-  if(typeof calculatePaystub==='function') calculatePaystub();
-  if(typeof dashRender==='function') dashRender();
-  if(typeof renderComparisonTable==='function') renderComparisonTable();
-  if(typeof renderMiniCharts==='function') renderMiniCharts();
-
-  try{
-    await Promise.all([saveData(), saveExpenseStore(), saveAccountsStore()]);
-    toast(`Currency updated to ${c} (${CURRENCY_CONFIG[c].symbol}).`, 'success');
-  }catch(e){
-    console.error(e);
-    toast('Local currency state updated.', 'info');
+  if(!canUseFeature('multiCurrency')){
+    toast('Multi-currency requires the Basic plan.','warning',4000);
+    setTimeout(()=>switchMainTab(null,'tab-pricing',true),250);
+    const sel=$id('currencySelector'); if(sel) sel.value=currentCurrency;
+    return;
   }
-}
+  if(!CURRENCY_CONFIG[c])return;currentCurrency=c;expenseStore.selectedCurrency=currentCurrency;accountsStore.selectedCurrency=currentCurrency;updateCurrencyLabels();buildDynamicTableHeaders();updateDashboard();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof renderAccounts==='function')renderAccounts();if(typeof renderTransactions==='function')renderTransactions();if(typeof initGoalsTab==='function'&&currentTabId==='tab-goals')initGoalsTab();try{await Promise.all([saveData(),saveExpenseStore(),saveAccountsStore()]);toast(`Currency updated to ${c}.`,'success');}catch(e){console.error(e);toast("Local currency state updated.",'info');}}
 
 /* FILTER SHEETS */
 function openFilterSheet(kind){const s=$id('filterSheet'),t=$id('filterSheetTitle'),b=$id('filterSheetBody');if(!s||!b)return;
@@ -4116,6 +4499,7 @@ function buildCommandItems(){const items=[];Object.entries(TAB_TITLES).forEach((
   {id:'act-income-profile',label:'Income & Salary Profile',sub:'Set global salary',icon:'banknote',type:'Actions',action:()=>openSettingsSection('income')},
   {id:'act-household',label:'Household & Co-Owner',sub:'Invite or manage a co-owner',icon:'users',type:'Actions',action:()=>openSettingsSection('household')},
   {id:'act-plaid-sync',label:'Run Plaid Sync',sub:'Simulate a fresh sync',icon:'refresh-cw',type:'Actions',action:()=>runPlaidDemoSync()},
+  {id:'act-pricing',label:'Plans & Pricing',sub:'Upgrade, downgrade, or start a trial',icon:'sparkles',type:'Actions',action:()=>switchMainTab(null,'tab-pricing',true)},
   {id:'act-theme',label:'Toggle Theme',sub:'Switch dark / light',icon:'sun-moon',type:'Actions',action:()=>toggleThemeMode()},
   {id:'act-privacy',label:'Toggle Privacy Mode',sub:'Blur sensitive numbers',icon:'eye-off',type:'Actions',action:()=>toggleMasterPrivacy()},
   {id:'act-sidebar',label:'Toggle Sidebar Collapse',sub:'Expand or collapse navigation',icon:'panel-left',type:'Actions',action:()=>toggleSidebarCollapse()},
@@ -4130,6 +4514,7 @@ $id('cmdInput')?.addEventListener('input',e=>renderCommandList(e.target.value));
 $id('cmdInput')?.addEventListener('keydown',e=>{const f=window._cmdFiltered||[];if(e.key==='ArrowDown'){e.preventDefault();cmdSelectedIdx=Math.min(f.length-1,cmdSelectedIdx+1);renderCommandList(e.target.value);}else if(e.key==='ArrowUp'){e.preventDefault();cmdSelectedIdx=Math.max(0,cmdSelectedIdx-1);renderCommandList(e.target.value);}else if(e.key==='Enter'){e.preventDefault();executeCommand(cmdSelectedIdx);}else if(e.key==='Escape'){closeCommandPalette();}});
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommandPalette();}if(e.key==='Escape'){closeCommandPalette();closeDatePopover();closeTxLocalDatePopover();closeExpLocalDatePopover();closeBudgetDatePopover();closeFilterSheet();closeProfileMenu();closeSettingsSheet();closeMobileNavSheet();closeAllFloatMenus();}if(e.key==='/'&&!e.metaKey&&!e.ctrlKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();openCommandPalette();}});
 
+/* DATA LOADING */
 async function loadDataFromJSON(){
   const handle = getUserHandle();
   if(handle && handle !== 'guest'){
@@ -4168,7 +4553,6 @@ function applyPortfolioPayload(d){
   if(d.irsBaseLimits) irsBaseLimits = d.irsBaseLimits;
   if(Array.isArray(d.defaultAccountData)) portfolioData = JSON.parse(JSON.stringify(d.defaultAccountData));
   localStorage.setItem('categoryPortfolioData', JSON.stringify(portfolioData));
-  updateCurrencyLabels();
 }
 
 function ensureDefaultCategoriesAndLimits(){
@@ -4274,6 +4658,7 @@ function updatePortfolioDataStatus(){
   }
 }
 
+/* SAVE DATA */
 let _saveDebounce = null;
 let _lastSaveAt   = null;
 function scheduleSaveData(delay){
@@ -4368,7 +4753,7 @@ async function saveData(){
 }
 
 function exportJSON(){syncInputsToData();const eo={selectedCurrency:currentCurrency,categories:categoriesConfig,irsBaseLimits:irsBaseLimits,defaultAccountData:portfolioData};const ds="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(eo,null,2));const a=document.createElement('a');a.setAttribute("href",ds);a.setAttribute("download","portfolio-data.json");document.body.appendChild(a);a.click();a.remove();}
-function importJSON(event){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const p=JSON.parse(e.target.result);if(p.selectedCurrency)currentCurrency=p.selectedCurrency;if(p.defaultAccountData)portfolioData=p.defaultAccountData;if(p.categories)categoriesConfig=p.categories;if(p.irsBaseLimits)irsBaseLimits=p.irsBaseLimits;updateCurrencyLabels();initDashboard();scheduleSaveData(400);updatePortfolioDataStatus();}catch(err){toast("Invalid JSON file provided.","error");}};r.readAsText(f);}
+function importJSON(event){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const p=JSON.parse(e.target.result);if(p.selectedCurrency)currentCurrency=p.selectedCurrency;if(p.defaultAccountData)portfolioData=p.defaultAccountData;if(p.categories)categoriesConfig=p.categories;if(p.irsBaseLimits)irsBaseLimits=p.irsBaseLimits;initDashboard();scheduleSaveData(400);updatePortfolioDataStatus();}catch(err){toast("Invalid JSON file provided.","error");}};r.readAsText(f);}
 function initDashboard(){
   updateCurrencyLabels();
   if(typeof lucide!=='undefined') lucide.createIcons();
@@ -4400,6 +4785,7 @@ function initDashboard(){
   pruneDeadCategoryLinks();
   applyCategoryAccountLinks();
   updatePortfolioDataStatus();
+  updateSidebarSubChip();
 }
 function populateYearFilter(){
   const sf=$id('yearFilter');if(!sf)return;
@@ -4525,6 +4911,7 @@ function dashDragLeave(e){e.currentTarget.classList.remove('drag-over');}
 function dashDrop(e){if(!dashCustomizeMode||!_dashDragSrc)return;e.preventDefault();const t=e.currentTarget.dataset.widget;const s=_dashDragSrc;e.currentTarget.classList.remove('drag-over');if(!t||t===s)return;const i=dashLayout.indexOf(s),j=dashLayout.indexOf(t);if(i<0||j<0)return;dashLayout.splice(i,1);dashLayout.splice(j,0,s);dashSaveLayout();dashRender();}
 function dashDragEnd(e){document.querySelectorAll('.dash-widget').forEach(el=>el.classList.remove('dragging','drag-over'));_dashDragSrc=null;}
 
+/* PORTFOLIO ANALYTICS */
 function getTotalBal(data){if(!data||!data.balances)return 0;const h=appSettings.hiddenCategories.portfolio||[];return Object.entries(data.balances).reduce((s,[k,v])=>{if(h.includes(k))return s;return s+(Number(v)||0);},0);}
 function getTotalInvested(data){const h=appSettings.hiddenCategories.portfolio||[];return Object.entries(data.invested||{}).reduce((s,[k,v])=>h.includes(k)?s:s+Number(v),0);}
 function getTotalContri(data){const h=appSettings.hiddenCategories.portfolio||[];return Object.entries(data.contri||{}).reduce((s,[k,v])=>h.includes(k)?s:s+Number(v),0);}
@@ -4741,9 +5128,7 @@ function clearPaycheckOverride(){const t=$id('payOverrideToggle');if(t)t.checked
 function handleTargetInput(k,v){customTargets[k]=parseFloat(v)||0;renderRebalancer();}
 function renderRebalancer(){const tb=$id('rebalanceTableBody');if(!tb)return;const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];if(!d||!d.balances){tb.innerHTML=`<tr><td colspan="8" class="py-6 text-center text-xs" style="color:var(--text-4);">No portfolio data available yet.</td></tr>`;setText('actionPlanSummaryText','Awaiting portfolio data…');return;}const h=appSettings.hiddenCategories.portfolio||[];const c=categoriesConfig.filter(x=>!h.includes(x.key));const t=getTotalBal(d);const dt=parseFloat($id('driftTolerance')?.value||5);const de=Math.round(100/(c.length||1));tb.innerHTML="";const sl=[],bu=[];let od=0;c.forEach(cat=>{const v=d.balances?(d.balances[cat.key]||0):0;const cp=t>0?v/t*100:0;const tp=customTargets[cat.key]!==undefined?customTargets[cat.key]:de;const adp=Math.abs(cp-tp);const isod=adp>dt;if(isod)od++;const tv=t*(tp/100);const df=v-tv;if(df>.01)sl.push({label:cat.label,amount:df});else if(df<-.01)bu.push({label:cat.label,amount:Math.abs(df)});const bh=isod?`<span class="badge badge-rose whitespace-nowrap"><i data-lucide="alert-triangle" class="w-3 h-3"></i> OVER DRIFT</span>`:`<span class="badge badge-emerald whitespace-nowrap"><i data-lucide="check-circle-2" class="w-3 h-3"></i> BALANCED</span>`;tb.innerHTML+=`<tr class="transition-all" style="${isod?'background:rgba(251,113,133,.06);':''}"><td class="py-3 px-4 font-bold" style="color:var(--text-2);" data-label="Asset Class"><span class="inline-flex items-center gap-2"><span>${categoryEmoji(cat)}</span>${cat.label}</span></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Current Value"><span>${formatCurrency(v,0)}</span></td><td class="py-3 px-4 font-semibold text-right font-mono" style="color:var(--text-2);" data-label="Current %"><span>${cp.toFixed(1)}%</span></td><td class="py-3 px-4 text-right" data-label="Target %"><div><input type="number" step="0.1" class="input !w-16 !py-1 text-right font-mono" value="${tp}" oninput="handleTargetInput('${cat.key}', this.value)">%</div></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Target Balance"><span>${formatCurrency(tv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${isod?'#BE123C':'var(--text-3)'};" data-label="Abs. Delta %"><span>${adp.toFixed(1)}%</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${df>=0?'#059669':'#BE123C'};" data-label="Rebalance Delta"><span>${df>=0?'+':''}${formatCurrency(df,0)}</span></td><td class="py-3 px-4" data-label="Drift Status"><div>${bh}</div></td></tr>`;});const se=$id('actionPlanSummaryText');if(se){if(od===0)se.innerText=`[✓] Portfolio is fully balanced within your ${dt.toFixed(1)}% drift tolerance threshold.\nNo cross-account trade execution is necessary at this time.`;else{let sl2=[];sl2.push(`[!] REBALANCING ALERT: ${od} asset layer(s) breach your ${dt.toFixed(1)}% drift tolerance threshold.\n`);sl2.push(`EXECUTION STEPS TO RESTORE TARGETS:`);const mp=Math.min(sl.length,bu.length);for(let i=0;i<mp;i++){const am=Math.min(sl[i].amount,bu[i].amount);sl2.push(`• Sell ${formatCurrency(am,0)} of [${sl[i].label}] and buy ${formatCurrency(am,0)} of [${bu[i].label}] to restore target balance.`);}se.innerText=sl2.join('\n');}}const er=parseFloat($id('rebalExpenseRatio')?.value||0);const ic=parseFloat($id('rebalIdleCash')?.value||0);const ip=Math.max(0,t-ic);const afd=ip*(er/100);setText('annualFeeDragVal',`${formatCurrency(afd,0)} / yr`);if(typeof lucide!=='undefined')lucide.createIcons();}
 
-/* ══════════════════════════════════════════════════════════════════
-   Year-by-Year Performance  ·  Interactive editor
-   ══════════════════════════════════════════════════════════════════ */
+/* YEAR BY YEAR */
 function renderComparisonTable(){
   const table = $id('comparisonTable');
   if(!table) return;
@@ -5046,7 +5431,7 @@ function renderMiniCharts(){const y=$id('yearFilter')?.value;const yi=portfolioD
 /* EXPENSE STORE */
 let expenseStore={selectedCurrency:"USD",monthlyBudget:0,categories:[],cards:[],transactions:[]};
 let expCategoryChartInstance=null,expenseDataSource="none";
-async function loadExpenseDataFromJSON(){let lf="none";try{const cb=`?t=${Date.now()}`;const r=await fetch(`./expense_tracker_data.json${cb}`,{headers:{'Cache-Control':'no-cache'}});if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();expenseStore={selectedCurrency:j.selectedCurrency||"USD",monthlyBudget:j.monthlyBudget||0,categories:j.categories||[],cards:j.cards||[],transactions:j.transactions||[],categoryGroups:j.categoryGroups||[]};if(expenseStore.selectedCurrency)currentCurrency=expenseStore.selectedCurrency;localStorage.setItem('expense_tracker_data',JSON.stringify(expenseStore));lf="json";}catch(e){console.warn("[Expense] JSON fetch failed:",e.message);const s=localStorage.getItem('expense_tracker_data');if(s){try{const p=JSON.parse(s);expenseStore={selectedCurrency:p.selectedCurrency||"USD",monthlyBudget:p.monthlyBudget||0,categories:p.categories||[],cards:p.cards||[],transactions:p.transactions||[],categoryGroups:p.categoryGroups||[]};if(expenseStore.selectedCurrency)currentCurrency=expenseStore.selectedCurrency;lf="localStorage";}catch(_){}}}expenseDataSource=lf;updateCurrencyLabels();const d=$id('txDate');if(d)d.value=new Date().toISOString().split('T')[0];populateFormDropdowns();renderBudgetTab();const o=$id('skeletonOverlay');if(o){o.style.opacity='0';setTimeout(()=>o.remove(),300);}}
+async function loadExpenseDataFromJSON(){let lf="none";try{const cb=`?t=${Date.now()}`;const r=await fetch(`./expense_tracker_data.json${cb}`,{headers:{'Cache-Control':'no-cache'}});if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();expenseStore={selectedCurrency:j.selectedCurrency||"USD",monthlyBudget:j.monthlyBudget||0,categories:j.categories||[],cards:j.cards||[],transactions:j.transactions||[],categoryGroups:j.categoryGroups||[]};if(expenseStore.selectedCurrency)currentCurrency=expenseStore.selectedCurrency;localStorage.setItem('expense_tracker_data',JSON.stringify(expenseStore));lf="json";}catch(e){console.warn("[Expense] JSON fetch failed:",e.message);const s=localStorage.getItem('expense_tracker_data');if(s){try{const p=JSON.parse(s);expenseStore={selectedCurrency:p.selectedCurrency||"USD",monthlyBudget:p.monthlyBudget||0,categories:p.categories||[],cards:p.cards||[],transactions:p.transactions||[],categoryGroups:p.categoryGroups||[]};if(expenseStore.selectedCurrency)currentCurrency=expenseStore.selectedCurrency;lf="localStorage";}catch(_){}}}expenseDataSource=lf;const d=$id('txDate');if(d)d.value=new Date().toISOString().split('T')[0];populateFormDropdowns();renderBudgetTab();const o=$id('skeletonOverlay');if(o){o.style.opacity='0';setTimeout(()=>o.remove(),300);}}
 async function reloadExpenseData(){toast("Reloading expense data...","info",1500);await loadExpenseDataFromJSON();}
 async function saveExpenseStore(){
   expenseStore.selectedCurrency=currentCurrency;
@@ -5146,6 +5531,43 @@ function getBudgetContext(){
   const dailyAvg  = de > 0 ? spent/de : 0;
   return { mode:'month', label: ic ? 'This Month' : t.toLocaleString('default',{month:'long',year:'numeric'}), start:t, end:me, filteredTx:ft, spent, budget:bd, remaining, isCurrentMonth:ic, daysInMonth:dim, daysElapsed:de, daysLeft:dl, paceRatio, expectedSpend:bd*paceRatio, safeToSpend:dl>0?remaining/dl:0, dailyAvg, projected:dim>0?dailyAvg*dim:0, recommended:dl>0?remaining/dl:0 };
 }
+function renderBudgetTrendChart(ctx){
+  const canvas = $id('budgetTrendChart'); if(!canvas) return;
+  const c = ctx || getBudgetContext();
+  const start = c.start ? new Date(c.start) : new Date();
+  const end   = c.end   ? new Date(c.end)   : new Date();
+  start.setHours(0,0,0,0); end.setHours(0,0,0,0);
+  const totalDays = Math.max(1, Math.round((end - start)/86400000) + 1);
+  let gran = budgetTrendGranularity;
+  if(gran === 'auto') gran = totalDays <= 31 ? 'day' : (totalDays <= 210 ? 'week' : 'month');
+  const bucketKey = dt => {
+    if(gran === 'day') return dt.toISOString().slice(0,10);
+    if(gran === 'week'){ const t=new Date(dt); const dow=(t.getDay()+6)%7; t.setDate(t.getDate()-dow); t.setHours(0,0,0,0); return t.toISOString().slice(0,10); }
+    return dt.toISOString().slice(0,7);
+  };
+  const keys = [];
+  const cur = new Date(start); let guard = 0;
+  while(cur <= end && guard < 4000){ const k = bucketKey(cur); if(!keys.includes(k)) keys.push(k); cur.setDate(cur.getDate() + 1); guard++; }
+  const sums = keys.map(() => 0);
+  (c.filteredTx || []).forEach(tx => { const d = new Date((tx._date||'') + 'T12:00:00'); if(isNaN(d)) return; const i = keys.indexOf(bucketKey(d)); if(i >= 0) sums[i] += (tx._amount || 0); });
+  const monthly = parseFloat(expenseStore.monthlyBudget) || 0;
+  const perBucketBudget = keys.map(() => { if(gran === 'day') return monthly / 30.4375; if(gran === 'week') return monthly * 7 / 30.4375; return monthly; });
+  const labels = keys.map(k => { if(gran === 'day'){ const d=new Date(k+'T12:00:00'); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); } if(gran === 'week'){ const d=new Date(k+'T12:00:00'); return 'w/' + d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); } return new Date(k+'-01T12:00:00').toLocaleDateString(undefined,{month:'short',year:'2-digit'}); });
+  const sub = $id('budgetTrendSub');
+  if(sub) sub.innerText = `${gran.charAt(0).toUpperCase()+gran.slice(1)} view · ${c.label} · ${c.filteredTx.length} transactions`;
+  if(budgetTrendChartInstance){ try{ budgetTrendChartInstance.destroy(); }catch(_){} budgetTrendChartInstance = null; }
+  const type = chartTypeState.budgetTrend || 'bar';
+  const ct = (type === 'line' || type === 'area') ? 'line' : 'bar';
+  const isArea = type === 'area';
+  budgetTrendChartInstance = new Chart(canvas, {
+    type: ct,
+    data: { labels, datasets: [
+      { label:'Spend', data: sums, backgroundColor: ct === 'bar' ? sums.map(v => v > 0 ? '#EC4899' : getChartBarColor()) : 'rgba(236,72,153,.16)', borderColor:'#EC4899', borderWidth:2, fill:isArea, tension:.35, pointRadius: ct === 'bar' ? 0 : 3, borderRadius: ct === 'bar' ? 4 : 0, order:2 },
+      { type:'line', label:'Budget pace', data: perBucketBudget, borderColor:'#8B5CF6', backgroundColor:'transparent', borderWidth:2, borderDash:[5,4], pointRadius:0, fill:false, tension:0, order:1 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:true, position:'bottom', labels:{ boxWidth:10, boxHeight:10, usePointStyle:true, pointStyle:'circle', padding:10 } }, tooltip:{ callbacks:{ label:x => `${x.dataset.label}: ${formatCurrency(x.parsed.y,0)}` } } }, scales:{ x:{ grid:{ display:false }, ticks:{ maxRotation:0, autoSkip:true, maxTicksLimit:12 } }, y:{ grid:{ color:getChartGridColor() }, ticks:{ callback:v => getCurrencySymbol() + Math.round(v) } } } }
+  });
+}
 function renderBudgetTab(){
   populateBudgetMonthSelector();
   const c = getBudgetContext();
@@ -5163,6 +5585,7 @@ function renderBudgetTab(){
 function renderBudgetKPIs(c){const p=c.budget>0?c.spent/c.budget*100:0;setText('budgetKpiTotal',formatCurrency(c.budget,0));setText('budgetKpiTotalSub',c.budget>0?`${c.daysInMonth}-day window`:'Set a monthly cap');setText('budgetKpiSpent',formatCurrency(c.spent,0));setText('budgetKpiSpentSub',`${p.toFixed(0)}% of budget · ${c.filteredTx.length} txns`);const re=$id('budgetKpiRemaining');if(re){re.innerText=formatCurrency(c.remaining,0);re.style.color=c.remaining>=0?'#059669':'#BE123C';}setText('budgetKpiRemainingSub',c.spent>c.budget&&c.budget>0?`Over by ${formatCurrency(c.spent-c.budget,0)}`:`${Math.max(0,100-p).toFixed(0)}% left`);setText('budgetKpiSafe',formatCurrency(c.safeToSpend,0));setText('budgetKpiSafeSub',`${c.daysLeft} days left`);}
 function renderBudgetPace(c){const spp=c.budget>0?Math.min(100,c.spent/c.budget*100):0;const mp=Math.min(100,c.paceRatio*100);setText('budgetPaceSpentLabel',formatCurrency(c.spent,0));setText('budgetPaceTotalLabel',formatCurrency(c.budget,0));setStyle('budgetPaceBar','width',`${spp}%`);setStyle('budgetPaceMarker','left',`${mp}%`);setText('budgetPaceDayLabel',`Day ${c.daysElapsed} of ${c.daysInMonth}`);setText('budgetPaceDaysLeftLabel',`${c.daysLeft} days left`);const be=$id('budgetPaceBar');const d=spp-mp;let st,sc,bc;if(c.budget<=0){st='No budget set';sc='badge-slate';bc='var(--text-4)';}else if(spp>=100){st='Over budget';sc='badge-rose';bc='#BE123C';}else if(d>8){st='Ahead of pace';sc='badge-amber';bc='#B45309';}else if(d<-8){st='Under pace';sc='badge-emerald';bc='#059669';}else{st='On track';sc='badge-violet';bc='#6D28D9';}const b=$id('budgetPaceBadge');if(b){b.innerText=st;b.className=`badge ${sc}`;}if(be)be.style.background=`linear-gradient(90deg, ${bc}, ${bc})`;setText('budgetPaceStatusLabel',`${spp.toFixed(0)}% used · pace ${mp.toFixed(0)}%`);setText('budgetProjMonthEnd',formatCurrency(c.projected,0));setText('budgetDailyAvg',formatCurrency(c.dailyAvg,0));setText('budgetRecDaily',formatCurrency(c.recommended,0));const pe=$id('budgetProjMonthEnd');if(pe&&c.budget>0)pe.style.color=c.projected>c.budget?'#BE123C':'#059669';}
 
+/* BUDGET CATEGORY GROUPS */
 function ensureCategoryGroups(){
   if(!expenseStore.categoryGroups) expenseStore.categoryGroups=[];
   let changed=false;
@@ -6024,6 +6447,7 @@ function exportTransactionsCSV(){const tx=getFilteredExpenseTransactions('exp');
 function importExpenseFile(event){const f=event.target.files[0];if(!f)return;const fn=f.name.toLowerCase();const r=new FileReader();r.onload=e=>{try{const c=e.target.result;if(fn.endsWith('.csv'))parseAndImportCSV(c);else{const p=JSON.parse(c);if(p.selectedCurrency)currentCurrency=p.selectedCurrency;if(p.categories)expenseStore.categories=p.categories;if(p.cards)expenseStore.cards=p.cards;if(p.transactions)expenseStore.transactions=p.transactions;if(p.monthlyBudget!==undefined)expenseStore.monthlyBudget=p.monthlyBudget;if(p.categoryGroups)expenseStore.categoryGroups=p.categoryGroups;populateFormDropdowns();saveExpenseStore();updateCurrencyLabels();toast("Imported Expense Tracker JSON successfully!","success");}}catch(err){console.error(err);toast("Failed to parse file. Please check file format.","error");}};r.readAsText(f);}
 function parseAndImportCSV(csvText){const lines=csvText.split(/\r\n|\n/).filter(l=>l.trim()!=='');if(lines.length<2){toast("CSV file is empty or invalid.","error");return;}function pRow(rs){const m=[];let c='';let iq=false;for(let i=0;i<rs.length;i++){const ch=rs[i];if(ch==='"'||ch==="'")iq=!iq;else if(ch===','&&!iq){m.push(c.trim().replace(/^["']|["']$/g,''));c='';}else c+=ch;}m.push(c.trim().replace(/^["']|["']$/g,''));return m;}const hd=pRow(lines[0]).map(h=>h.toLowerCase());const nt=[];for(let i=1;i<lines.length;i++){const row=pRow(lines[i]);if(row.length<2)continue;let tx={id:'tx_'+Date.now()+'_'+i,amount:0,description:'',cardId:expenseStore.cards[0]?.id||'',categoryId:expenseStore.categories[0]?.id||'',date:new Date().toISOString().split('T')[0],isRecurring:false};hd.forEach((h,ci)=>{const v=row[ci]||'';if(h.includes('amount'))tx.amount=parseFloat(v)||0;else if(h.includes('desc')||h.includes('merchant'))tx.description=v;else if(h.includes('date'))tx.date=v;else if(h.includes('recurring'))tx.isRecurring=v.toLowerCase()==='true';else if(h.includes('category')){let ex=expenseStore.categories.find(c=>c.label.toLowerCase()===v.toLowerCase());if(!ex&&v){ex={id:'cat_'+Date.now()+'_'+ci,label:v,color:'#8B5CF6',icon:'tag',limit:0};expenseStore.categories.push(ex);}if(ex)tx.categoryId=ex.id;}else if(h.includes('card')||h.includes('account')){let ex=expenseStore.cards.find(c=>c.name.toLowerCase()===v.toLowerCase());if(!ex&&v){ex={id:'card_'+Date.now()+'_'+ci,name:v,issuer:'VISA',masked:'0000',limit:1000,paid:0,gradient:'from-indigo-600 to-slate-900'};expenseStore.cards.push(ex);}if(ex)tx.cardId=ex.id;}});if(tx.amount>0||tx.description)nt.push(tx);}expenseStore.transactions=[...nt,...expenseStore.transactions];populateFormDropdowns();saveExpenseStore();toast(`Successfully imported ${nt.length} transactions from CSV!`,"success");}
 
+/* PLAID + ACCOUNTS */
 const PLAID_CONFIG={CLIENT_ID:'YOUR_PLAID_CLIENT_ID',SECRET:'YOUR_PLAID_SECRET',ENV:'sandbox',DEMO_MODE:true};
 const ACCOUNT_TYPES=[{value:'checking',label:'Checking',emoji:'🏦',liability:false},{value:'savings',label:'Savings',emoji:'💰',liability:false},{value:'credit',label:'Credit Card',emoji:'💳',liability:true},{value:'investment',label:'Investment',emoji:'📈',liability:false},{value:'retirement',label:'Retirement',emoji:'🎯',liability:false},{value:'hsa',label:'HSA',emoji:'🩺',liability:false},{value:'loan',label:'Loan',emoji:'📉',liability:true},{value:'mortgage',label:'Mortgage',emoji:'🏠',liability:true},{value:'realestate',label:'Real Estate',emoji:'🏡',liability:false},{value:'other',label:'Other',emoji:'📦',liability:false}];
 function accountTypeMeta(t){return ACCOUNT_TYPES.find(x=>x.value===t)||ACCOUNT_TYPES[ACCOUNT_TYPES.length-1];}
@@ -6119,9 +6543,23 @@ function closeAddAccountModal(){$id('addAccountModal').classList.add('hidden');}
 function editAccount(id,src){openAddAccountModal(id,src);}
 function saveManualAccount(e){if(e)e.preventDefault();const eid=$id('acctEditId').value,src=$id('acctEditSource').value||'manual';const n=$id('acctName').value.trim(),inst=$id('acctInstitution').value.trim();const t=$id('acctType').value,mk=$id('acctMask').value.trim();const b=parseFloat($id('acctBalance').value)||0,c=$id('acctColor').value,nt=$id('acctNotes').value.trim();if(!n){toast('Account name is required.','warning');return;}const p={name:n,institution:inst,type:t,mask:mk,balance:b,color:c,notes:nt};if(eid){const i=(accountsStore[src]||[]).findIndex(x=>x.id===eid);if(i!==-1)accountsStore[src][i]={...accountsStore[src][i],...p};}else accountsStore.manual.push({id:'acct_'+Date.now(),...p,source:'manual',createdAt:new Date().toISOString()});saveAccountsStore();applyAccountMappings();closeAddAccountModal();toast(eid?'Account updated.':'Account added manually.','success');}
 function deleteAccount(id,src){if(!confirm('Delete this account?'))return;accountsStore[src]=(accountsStore[src]||[]).filter(a=>a.id!==id);saveAccountsStore();applyAccountMappings();pruneDeadCategoryLinks();toast('Account removed.','info');}
-async function connectViaPlaid(){if(PLAID_CONFIG.DEMO_MODE){await runPlaidDemoSync();return;}if(!PLAID_CONFIG.CLIENT_ID||PLAID_CONFIG.CLIENT_ID==='YOUR_PLAID_CLIENT_ID'){toast('Plaid is not configured.','error');return;}toast('Real Plaid integration pending — backend required.','info');}
+async function connectViaPlaid(){
+  if(!canUseFeature('bankConnections')){
+    toast('Bank sync requires the Basic plan or higher.','warning',4000);
+    setTimeout(()=>switchMainTab(null,'tab-pricing',true),250);
+    return;
+  }
+  if(PLAID_CONFIG.DEMO_MODE){await runPlaidDemoSync();return;}
+  if(!PLAID_CONFIG.CLIENT_ID||PLAID_CONFIG.CLIENT_ID==='YOUR_PLAID_CLIENT_ID'){toast('Plaid is not configured.','error');return;}
+  toast('Real Plaid integration pending — backend required.','info');
+}
 
 async function runPlaidDemoSync(){
+  if(!canUseFeature('bankConnections')){
+    toast('Bank sync requires the Basic plan or higher.','warning',4000);
+    setTimeout(()=>switchMainTab(null,'tab-pricing',true),250);
+    return;
+  }
   toast('Connecting to Plaid sandbox (demo)...','info',1800);
   const demo=await loadPlaidDemoData();
   await new Promise(r=>setTimeout(r,700));
@@ -6199,6 +6637,7 @@ function saveMapping(){const{id,source}=_mappingTarget;if(!id||!source)return;co
 function clearMapping(){const{id,source}=_mappingTarget;if(!id||!source)return;const a=(accountsStore[source]||[]).find(x=>x.id===id);if(!a)return;delete a.mapping;saveAccountsStore();applyAccountMappings();closeMappingModal();toast('Mapping removed.','info');}
 function applyAccountMappings(){const a=allAccounts().filter(x=>x.mapping&&x.mapping.enabled);if(a.length===0){if($id('balancesTable')){buildDynamicTableHeaders();renderTables();}return;}const b={};a.forEach(x=>{const k=x.mapping.portfolioKey;const y=x.mapping.year;if(!k||!y)return;if(!categoriesConfig.some(c=>c.key===k))return;if(!b[k])b[k]={};if(!b[k][y])b[k][y]=0;const m=accountTypeMeta(x.type);const sg=m.liability?-Math.abs(x.balance||0):(x.balance||0);b[k][y]+=sg;});let uc=0;Object.entries(b).forEach(([k,ym])=>{Object.entries(ym).forEach(([y,sb])=>{const row=portfolioData.find(d=>d.year===y);if(!row)return;if(!row.balances)row.balances={};row.balances[k]=Math.round(sb*100)/100;uc++;});});if(uc>0){localStorage.setItem('categoryPortfolioData',JSON.stringify(portfolioData));buildDynamicTableHeaders();renderTables();renderComparisonTable();updateDashboard();scheduleSaveData(600);}}
 
+/* PLAID CATEGORIES */
 const PLAID_CATEGORIES=[{primary:'INCOME',label:'Income',emoji:'💰',categoryLabel:'Income',color:'#10B981'},{primary:'TRANSFER_IN',label:'Transfer In',emoji:'📥',categoryLabel:'Transfers',color:'#06B6D4'},{primary:'TRANSFER_OUT',label:'Transfer Out',emoji:'📤',categoryLabel:'Transfers',color:'#06B6D4'},{primary:'LOAN_PAYMENTS',label:'Loan Payments',emoji:'💳',categoryLabel:'Debt Payments',color:'#FB7185'},{primary:'BANK_FEES',label:'Bank Fees',emoji:'🏦',categoryLabel:'Fees',color:'#71717A'},{primary:'ENTERTAINMENT',label:'Entertainment',emoji:'🎬',categoryLabel:'Entertainment',color:'#8B5CF6'},{primary:'FOOD_AND_DRINK',label:'Food & Drink',emoji:'🍽️',categoryLabel:'Dining Out',color:'#F97316'},{primary:'GENERAL_MERCHANDISE',label:'General Merchandise',emoji:'🛍️',categoryLabel:'Shopping',color:'#EC4899'},{primary:'HOME_IMPROVEMENT',label:'Home Improvement',emoji:'🔨',categoryLabel:'Home',color:'#A855F7'},{primary:'MEDICAL',label:'Medical',emoji:'🩺',categoryLabel:'Health',color:'#06B6D4'},{primary:'PERSONAL_CARE',label:'Personal Care',emoji:'💅',categoryLabel:'Personal Care',color:'#F43F5E'},{primary:'GENERAL_SERVICES',label:'General Services',emoji:'🛠️',categoryLabel:'Services',color:'#14B8A6'},{primary:'GOVERNMENT_AND_NON_PROFIT',label:'Gov & Non-Profit',emoji:'🏛️',categoryLabel:'Government',color:'#71717A'},{primary:'TRANSPORTATION',label:'Transportation',emoji:'🚗',categoryLabel:'Transportation',color:'#3B82F6'},{primary:'TRAVEL',label:'Travel',emoji:'✈️',categoryLabel:'Travel',color:'#0EA5E9'},{primary:'RENT_AND_UTILITIES',label:'Rent & Utilities',emoji:'🏠',categoryLabel:'Housing',color:'#F59E0B'}];
 const PLAID_DETAILED_LABELS={'FOOD_AND_DRINK_COFFEE':'Coffee Shop','FOOD_AND_DRINK_FAST_FOOD':'Fast Food','FOOD_AND_DRINK_GROCERIES':'Groceries','FOOD_AND_DRINK_RESTAURANT':'Restaurant','GENERAL_MERCHANDISE_SUPERSTORES':'Superstore','GENERAL_MERCHANDISE_CLOTHING_AND_ACCESSORIES':'Clothing','GENERAL_MERCHANDISE_ONLINE_MARKETPLACES':'Online Marketplace','GENERAL_MERCHANDISE_ELECTRONICS':'Electronics','TRANSPORTATION_GAS':'Gas Station','TRANSPORTATION_PARKING':'Parking','TRANSPORTATION_PUBLIC_TRANSIT':'Public Transit','TRANSPORTATION_RIDE_SHARE':'Ride Share','TRAVEL_FLIGHTS':'Flight','TRAVEL_LODGING':'Hotel','ENTERTAINMENT_STREAMING':'Streaming','ENTERTAINMENT_MUSIC_AND_AUDIO':'Music','RENT_AND_UTILITIES_INTERNET_AND_CABLE':'Internet','RENT_AND_UTILITIES_ELECTRICITY':'Electricity','RENT_AND_UTILITIES_WATER':'Water','RENT_AND_UTILITIES_RENT':'Rent','LOAN_PAYMENTS_CREDIT_CARD_PAYMENT':'Credit Card Payment','LOAN_PAYMENTS_MORTGAGE_PAYMENT':'Mortgage Payment','PERSONAL_CARE_HAIR_AND_BEAUTY':'Hair & Beauty','MEDICAL_PHARMACIES_AND_SUPPLEMENTS':'Pharmacy','GENERAL_SERVICES_INSURANCE':'Insurance','GENERAL_SERVICES_SUBSCRIPTION':'Subscription','INCOME_WAGES':'Wages','INCOME_DIVIDENDS':'Dividends','INCOME_INTEREST_EARNED':'Interest Earned','TRANSFER_IN_DEPOSIT':'Deposit','TRANSFER_IN_INVESTMENT_AND_RETIREMENT_FUNDS':'Investment Transfer','TRANSFER_OUT_WITHDRAWAL':'Withdrawal','TRANSFER_OUT_INVESTMENT_AND_RETIREMENT_FUNDS':'Investment Transfer','BANK_FEES_ATM_FEES':'ATM Fee','BANK_FEES_OVERDRAFT_FEES':'Overdraft Fee'};
 function plaidCategoryMeta(p){return PLAID_CATEGORIES.find(c=>c.primary===p)||PLAID_CATEGORIES[0];}
@@ -6215,6 +6654,7 @@ function updateTxCategory(tid,src,cid){
 function rememberMerchantRule(tid){const tx=(accountsStore.plaidTransactions||[]).find(t=>t.id===tid);if(!tx)return;const k=(tx.merchantName||tx.name||'').toUpperCase().trim();if(!k){toast('No merchant name to remember.','error');return;}if(!tx.categoryId){toast('Assign a category first.','error');return;}accountsStore.merchantRules[k]=tx.categoryId;let ap=0;(accountsStore.plaidTransactions||[]).forEach(t=>{const kk=(t.merchantName||t.name||'').toUpperCase().trim();if(kk===k&&t.categorySource!=='manual'){t.categoryId=tx.categoryId;t.categorySource='rule';ap++;}});saveAccountsStore();renderTransactions();toast(`Rule saved · ${ap} past transaction${ap===1?'':'s'} updated.`,'success');}
 function forgetMerchantRule(tid){const tx=(accountsStore.plaidTransactions||[]).find(t=>t.id===tid);if(!tx)return;const k=(tx.merchantName||tx.name||'').toUpperCase().trim();if(!accountsStore.merchantRules[k])return;delete accountsStore.merchantRules[k];saveAccountsStore();renderTransactions();toast('Merchant rule removed.','info');}
 
+/* UNIFIED TRANSACTIONS RENDERER */
 function renderTransactions(){
   const tb=$id('plaidTxTableBody'),ee=$id('plaidTxEmpty');
   const sb=$id('txStatsBar'),ls=$id('txLastSync');
@@ -6366,6 +6806,7 @@ function deletePlaidTransaction(tid,fromModal){
   toast('Transaction deleted.','info');
 }
 
+/* GOALS */
 function openEditGoalModal(id){const g=DB.goals.find(x=>x.id===id);if(!g){toast('Goal not found.','error');return;}const co=['Travel','Emergency','Home','Auto','Education','Life Event','Custom'].map(c=>`<option ${c===g.cat?'selected':''}>${c}</option>`).join('');const w=openModal(`<div class="surface p-6 max-w-md w-full space-y-4" style="box-shadow:var(--shadow-lift);"><div class="flex justify-between items-center pb-3" style="border-bottom:1px solid var(--border);"><h3 class="text-sm font-extrabold" style="color:var(--text-1);">Edit Goal</h3><button onclick="${CLOSE_MODAL}" class="btn-icon btn-ghost"><i data-lucide="x" class="w-4 h-4"></i></button></div><div class="space-y-3"><div><label class="field-label">Goal name *</label><input type="text" id="editGoalName" class="input" value="${esc(g.name)}"></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Target amount *</label><input type="number" id="editGoalTarget" class="input font-mono text-right" value="${g.target}" step="500" min="0"></div><div><label class="field-label">Already saved</label><input type="number" id="editGoalSaved" class="input font-mono text-right" value="${g.saved}" step="100" min="0"></div></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Target date *</label><input type="date" id="editGoalDate" class="input" value="${g.date}"></div><div><label class="field-label">Monthly contribution</label><input type="number" id="editGoalMonthly" class="input font-mono text-right" value="${g.monthly||0}" step="50" min="0"></div></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Category</label><select id="editGoalCat" class="input">${co}</select></div><div><label class="field-label">Icon</label><input type="text" id="editGoalIcon" class="input text-center" value="${g.icon||'🎯'}" maxlength="4"></div></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Color</label><input type="color" id="editGoalColor" value="${g.color||'#8B5CF6'}"></div><div class="flex items-end pb-1"><label class="flex items-center gap-2 cursor-pointer text-xs font-semibold" style="color:var(--text-2);"><input type="checkbox" id="editGoalShared" ${g.shared?'checked':''} style="accent-color:var(--accent);"><span>👥 Shared with household</span></label></div></div><div id="editGoalCalc" class="rounded-xl p-3 text-[11px]" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-3);"></div></div><div class="flex justify-between items-center gap-2 pt-3 flex-wrap" style="border-top:1px solid var(--border);"><button onclick="deleteGoal('${g.id}', this)" class="btn btn-danger"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete</button><div class="flex gap-2 ml-auto"><button onclick="${CLOSE_MODAL}" class="btn btn-ghost">Cancel</button><button onclick="saveEditedGoal('${g.id}', this)" class="btn btn-primary"><i data-lucide="check" class="w-3.5 h-3.5"></i> Save Changes</button></div></div></div>`);const recalc=()=>{const t=parseFloat($id('editGoalTarget')?.value)||0;const s=parseFloat($id('editGoalSaved')?.value)||0;const ds=$id('editGoalDate')?.value;const m=Math.max(1,monthsUntil(ds));const r=Math.max(0,t-s);const req=r/m;const el=$id('editGoalCalc');if(el)el.innerHTML=`Remaining: <b style="color:var(--text-1);">${formatCurrency(r,0)}</b> · Time: <b style="color:var(--text-1);">${m} months</b> · Required monthly: <b style="color:#6D28D9;">${formatCurrency(req,0)}</b>`;};['editGoalTarget','editGoalSaved','editGoalDate'].forEach(id=>{const e=$id(id);if(e)e.addEventListener('input',recalc);});recalc();setTimeout(()=>$id('editGoalName')?.focus(),60);}
 function saveEditedGoal(id,te){const g=DB.goals.find(x=>x.id===id);if(!g){toast('Goal not found.','error');return;}const n=$id('editGoalName')?.value?.trim();const t=parseFloat($id('editGoalTarget')?.value)||0;const s=parseFloat($id('editGoalSaved')?.value)||0;const ds=$id('editGoalDate')?.value;const m=parseFloat($id('editGoalMonthly')?.value)||0;const c=$id('editGoalCat')?.value||g.cat;const ic=$id('editGoalIcon')?.value?.trim()||g.icon;const cl=$id('editGoalColor')?.value||g.color;const sh=!!$id('editGoalShared')?.checked;if(!n||t<=0||!ds){toast('Please fill in name, target, and date.','warning');return;}if(s>t){toast('Saved amount cannot exceed the target.','warning');return;}g.name=n;g.target=t;g.saved=Math.min(s,t);g.date=ds;g.monthly=m;g.cat=c;g.icon=ic;g.color=cl;g.shared=sh;saveGoalsData();te?.closest('.fixed')?.remove();initGoalsTab();toast(`Goal "${n}" updated.`,'success');}
 function deleteGoal(id,te){const g=DB.goals.find(x=>x.id===id);if(!g){toast('Goal not found.','error');return;}if(!confirm(`Delete goal "${g.name}"?\n\nThis action cannot be undone.`))return;DB.goals=DB.goals.filter(x=>x.id!==id);saveGoalsData();te?.closest('.fixed')?.remove();initGoalsTab();toast(`Goal "${g.name}" deleted.`,'info');}
@@ -6379,11 +6820,22 @@ function goalRequiredMonthly(g){const m=Math.max(1,monthsUntil(g.date));return M
 function goalProjectedDate(g){const r=Math.max(0,g.target-g.saved);if(g.monthly<=0)return null;const m=Math.ceil(r/g.monthly);const d=new Date();d.setMonth(d.getMonth()+m);return d;}
 function goalPacing(g){const r=goalRequiredMonthly(g);if(g.saved>=g.target)return{label:'Complete',cls:'badge-emerald',color:'#059669'};if(g.monthly>=r*1.05)return{label:'Ahead',cls:'badge-emerald',color:'#059669'};if(g.monthly>=r*.95)return{label:'On Track',cls:'badge-violet',color:'#6D28D9'};return{label:'Behind',cls:'badge-amber',color:'#B45309'};}
 function initGoalsTab(){loadGoalsData();const tt=DB.goals.reduce((s,g)=>s+g.target,0),ts=DB.goals.reduce((s,g)=>s+g.saved,0),tm=DB.goals.reduce((s,g)=>s+(g.monthly||0),0),sc=DB.goals.filter(g=>g.shared).length;setText('goalKpiTarget',formatCurrency(tt,0));setText('goalKpiSaved',formatCurrency(ts,0));setText('goalKpiMonthly',formatCurrency(tm,0));setText('goalKpiShared',sc);const g=$id('goalsGrid');if(g){if(DB.goals.length===0){g.innerHTML=`<div class="col-span-full surface p-10 text-center"><div class="w-14 h-14 mx-auto mb-3 rounded-2xl flex items-center justify-center" style="background:var(--surface-3);"><i data-lucide="target" class="w-7 h-7" style="color:var(--text-4);"></i></div><h4 class="text-sm font-bold mb-1" style="color:var(--text-2);">No goals yet</h4><p class="text-xs mb-4" style="color:var(--text-4);">Create your first savings goal — pick a template below or click Create Goal.</p><button onclick="openNewGoalModal()" class="btn btn-primary"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Create Goal</button></div>`;}else{g.innerHTML=DB.goals.map(x=>{const p=Math.max(0,Math.min(100,x.saved/x.target*100));const req=goalRequiredMonthly(x);const pc=goalPacing(x);const pj=goalProjectedDate(x);const R=24,C=2*Math.PI*R;return `<div class="surface surface-interactive p-4 flex flex-col gap-3"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0" style="background:${x.color}18;border:1px solid ${x.color}33;">${x.icon}</div><div class="flex-grow min-w-0"><div class="text-xs font-extrabold truncate" style="color:var(--text-1);">${esc(x.name)}</div><div class="text-[10px]" style="color:var(--text-4);">${esc(x.cat)}</div></div><div class="relative w-14 h-14 shrink-0"><svg width="56" height="56" style="transform:rotate(-90deg);"><circle cx="28" cy="28" r="${R}" fill="none" stroke="var(--surface-3)" stroke-width="5"/><circle cx="28" cy="28" r="${R}" fill="none" stroke="${x.color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-p/100)}"/></svg><span class="absolute inset-0 grid place-items-center text-[11px] font-extrabold" style="color:var(--text-1);">${p.toFixed(0)}%</span></div></div><div class="flex justify-between items-baseline"><span class="text-lg font-extrabold privacy-target" style="color:var(--text-1);">${formatCurrency(x.saved,0)}</span><span class="text-[11px]" style="color:var(--text-4);">of ${formatCurrency(x.target,0)}</span></div><div class="flex flex-wrap gap-1.5"><span class="badge ${pc.cls}">${pc.label}</span>${x.shared?'<span class="badge badge-violet">👥 Shared</span>':''}</div><div class="grid grid-cols-2 gap-2 text-[11px]"><div class="rounded-lg p-2" style="background:var(--surface-2);"><div class="text-[9px] uppercase tracking-wider font-extrabold" style="color:var(--text-4);">Required/mo</div><div class="font-bold privacy-target" style="color:var(--text-1);">${formatCurrency(req,0)}</div></div><div class="rounded-lg p-2" style="background:var(--surface-2);"><div class="text-[9px] uppercase tracking-wider font-extrabold" style="color:var(--text-4);">Your/mo</div><div class="font-bold privacy-target" style="color:${x.monthly>=req?'#059669':'#B45309'};">${formatCurrency(x.monthly,0)}</div></div></div><div class="text-[10px]" style="color:var(--text-4);">${pj?`Projected complete <b style="color:var(--text-2);">${pj.toLocaleDateString('en-US',{month:'short',year:'numeric'})}</b>`:'Set a monthly contribution to project completion'}</div><div class="flex gap-1.5 pt-1"><button onclick="contributeToGoal('${x.id}')" class="btn btn-primary !py-1.5 !text-[11px] flex-grow"><i data-lucide="plus-circle" class="w-3 h-3"></i> Contribute</button><button onclick="openEditGoalModal('${x.id}')" class="btn btn-ghost !py-1.5 !px-2.5 !text-[11px]" title="Edit goal"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteGoal('${x.id}')" class="btn btn-danger !py-1.5 !px-2.5 !text-[11px]" title="Delete goal"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div>`;}).join('');}}const tg=$id('goalTemplatesGrid');if(tg){tg.innerHTML=DB.goalTemplates.map(t=>{const m=Math.round(t.amount/t.months);return `<div class="rounded-xl p-4 flex items-center gap-3" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-2xl shrink-0">${t.icon}</div><div class="flex-grow min-w-0"><div class="text-xs font-bold truncate" style="color:var(--text-1);">${esc(t.name)}</div><div class="text-[10px]" style="color:var(--text-4);">${formatCurrency(t.amount,0)} over ${t.months} months</div><div class="text-[10px] font-semibold mt-0.5" style="color:#6D28D9;">${formatCurrency(m,0)}/mo</div></div><button onclick="applyGoalTemplate('${esc(t.name).replace(/'/g,"\\'")}')" class="btn btn-ghost !py-1.5 !text-[11px]">Use</button></div>`;}).join('');}if(typeof lucide!=='undefined')lucide.createIcons();applyPrivacyState();}
-function openNewGoalModal(){const w=openModal(`<div class="surface p-6 max-w-md w-full space-y-4" style="box-shadow:var(--shadow-lift);"><div class="flex justify-between items-center pb-3" style="border-bottom:1px solid var(--border);"><h3 class="text-sm font-extrabold" style="color:var(--text-1);">Create a Savings Goal</h3><button onclick="${CLOSE_MODAL}" class="btn-icon btn-ghost"><i data-lucide="x" class="w-4 h-4"></i></button></div><div class="space-y-3"><div><label class="field-label">Goal name *</label><input type="text" id="newGoalName" class="input" placeholder="e.g. Japan Trip"></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Target amount *</label><input type="number" id="newGoalTarget" class="input font-mono text-right" value="0" step="500"></div><div><label class="field-label">Target date *</label><input type="date" id="newGoalDate" class="input"></div></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Category</label><select id="newGoalCat" class="input"><option>Travel</option><option>Emergency</option><option>Home</option><option>Auto</option><option>Education</option><option>Life Event</option><option>Custom</option></select></div><div><label class="field-label">Icon</label><input type="text" id="newGoalIcon" class="input text-center" value="🎯" maxlength="4"></div></div><div id="newGoalCalc" class="rounded-xl p-3 text-[11px]" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-3);"></div><label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold p-2.5 rounded-lg" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);"><input type="checkbox" id="newGoalShared" style="accent-color:var(--accent);"><span>👥 Shared with household</span></label></div><div class="flex justify-end gap-2 pt-3" style="border-top:1px solid var(--border);"><button onclick="${CLOSE_MODAL}" class="btn btn-ghost">Cancel</button><button onclick="saveNewGoal(this)" class="btn btn-primary"><i data-lucide="check" class="w-3.5 h-3.5"></i> Create Goal</button></div></div>`);const d=new Date();d.setMonth(d.getMonth()+18);$id('newGoalDate').value=d.toISOString().slice(0,10);const calc=()=>{const t=parseFloat($id('newGoalTarget')?.value)||0;const ds=$id('newGoalDate')?.value;const m=Math.max(1,monthsUntil(ds));const req=t/m;const ce=$id('newGoalCalc');if(ce)ce.innerHTML=`Time to goal: <b style="color:var(--text-1);">${m} months</b> · Required monthly: <b style="color:#6D28D9;">${formatCurrency(req,0)}</b>`;};['newGoalTarget','newGoalDate'].forEach(id=>{const e=$id(id);if(e)e.addEventListener('input',calc);});calc();}
+function openNewGoalModal(){
+  if(!isDemoUser() && subscriptionState.tier === 'free' && !subscriptionState.trialActive && DB.goals.length >= 3){
+    toast('Free plan supports up to 3 goals. Upgrade to Basic or Pro for unlimited goals.','warning',4500);
+    setTimeout(()=>switchMainTab(null,'tab-pricing',true),250);
+    return;
+  }
+  const w=openModal(`<div class="surface p-6 max-w-md w-full space-y-4" style="box-shadow:var(--shadow-lift);"><div class="flex justify-between items-center pb-3" style="border-bottom:1px solid var(--border);"><h3 class="text-sm font-extrabold" style="color:var(--text-1);">Create a Savings Goal</h3><button onclick="${CLOSE_MODAL}" class="btn-icon btn-ghost"><i data-lucide="x" class="w-4 h-4"></i></button></div><div class="space-y-3"><div><label class="field-label">Goal name *</label><input type="text" id="newGoalName" class="input" placeholder="e.g. Japan Trip"></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Target amount *</label><input type="number" id="newGoalTarget" class="input font-mono text-right" value="0" step="500"></div><div><label class="field-label">Target date *</label><input type="date" id="newGoalDate" class="input"></div></div><div class="grid grid-cols-2 gap-3"><div><label class="field-label">Category</label><select id="newGoalCat" class="input"><option>Travel</option><option>Emergency</option><option>Home</option><option>Auto</option><option>Education</option><option>Life Event</option><option>Custom</option></select></div><div><label class="field-label">Icon</label><input type="text" id="newGoalIcon" class="input text-center" value="🎯" maxlength="4"></div></div><div id="newGoalCalc" class="rounded-xl p-3 text-[11px]" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-3);"></div><label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold p-2.5 rounded-lg" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);"><input type="checkbox" id="newGoalShared" style="accent-color:var(--accent);"><span>👥 Shared with household</span></label></div><div class="flex justify-end gap-2 pt-3" style="border-top:1px solid var(--border);"><button onclick="${CLOSE_MODAL}" class="btn btn-ghost">Cancel</button><button onclick="saveNewGoal(this)" class="btn btn-primary"><i data-lucide="check" class="w-3.5 h-3.5"></i> Create Goal</button></div></div>`);const d=new Date();d.setMonth(d.getMonth()+18);$id('newGoalDate').value=d.toISOString().slice(0,10);const calc=()=>{const t=parseFloat($id('newGoalTarget')?.value)||0;const ds=$id('newGoalDate')?.value;const m=Math.max(1,monthsUntil(ds));const req=t/m;const ce=$id('newGoalCalc');if(ce)ce.innerHTML=`Time to goal: <b style="color:var(--text-1);">${m} months</b> · Required monthly: <b style="color:#6D28D9;">${formatCurrency(req,0)}</b>`;};['newGoalTarget','newGoalDate'].forEach(id=>{const e=$id(id);if(e)e.addEventListener('input',calc);});calc();}
 function saveNewGoal(te){const n=$id('newGoalName')?.value?.trim();const t=parseFloat($id('newGoalTarget')?.value)||0;const ds=$id('newGoalDate')?.value;const c=$id('newGoalCat')?.value||'Custom';const ic=$id('newGoalIcon')?.value?.trim()||'🎯';const sh=!!$id('newGoalShared')?.checked;if(!n||t<=0||!ds){toast('Please fill in name, target, and date.','warning');return;}const m=Math.max(1,monthsUntil(ds));const cl=['#3B82F6','#10B981','#8B5CF6','#F59E0B','#EC4899','#06B6D4','#6366F1'];DB.goals.push({id:'g_'+Date.now(),name:n,icon:ic,target:t,saved:0,date:ds,monthly:Math.round(t/m),color:cl[DB.goals.length%cl.length],cat:c,shared:sh});saveGoalsData();te?.closest('.fixed')?.remove();initGoalsTab();toast(`Goal "${n}" created!`,'success');}
 function contributeToGoal(id){const g=DB.goals.find(x=>x.id===id);if(!g)return;const w=openModal(`<div class="surface p-6 max-w-sm w-full space-y-4" style="box-shadow:var(--shadow-lift);"><div class="flex justify-between items-center pb-3" style="border-bottom:1px solid var(--border);"><h3 class="text-sm font-extrabold" style="color:var(--text-1);">Contribute to ${esc(g.name)}</h3><button onclick="${CLOSE_MODAL}" class="btn-icon btn-ghost"><i data-lucide="x" class="w-4 h-4"></i></button></div><div class="rounded-xl p-3" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-[10px] uppercase font-extrabold tracking-wider" style="color:var(--text-4);">Current progress</div><div class="flex justify-between items-baseline mt-1"><span class="privacy-target font-extrabold text-lg" style="color:var(--text-1);">${formatCurrency(g.saved,0)}</span><span class="text-[11px]" style="color:var(--text-4);">of ${formatCurrency(g.target,0)}</span></div></div><div><label class="field-label">Contribution amount</label><input type="number" id="contribAmount" class="input font-mono text-right" value="500" step="50"></div><div class="flex flex-wrap gap-1.5">${[100,250,500,1000,2500].map(v=>`<button onclick="document.getElementById('contribAmount').value=${v}" class="chip !py-1.5 !text-[11px]">${formatCurrency(v,0)}</button>`).join('')}</div><div class="flex justify-end gap-2 pt-3" style="border-top:1px solid var(--border);"><button onclick="${CLOSE_MODAL}" class="btn btn-ghost">Cancel</button><button onclick="applyGoalContribution('${g.id}', this)" class="btn btn-primary"><i data-lucide="check" class="w-3.5 h-3.5"></i> Add</button></div></div>`);setTimeout(()=>$id('contribAmount')?.focus(),60);}
 function applyGoalContribution(id,te){const g=DB.goals.find(x=>x.id===id);if(!g)return;const am=parseFloat($id('contribAmount')?.value)||0;if(am<=0){toast('Enter a positive amount.','warning');return;}const bf=g.saved/g.target*100;g.saved=Math.min(g.target,g.saved+am);const af=g.saved/g.target*100;saveGoalsData();te?.closest('.fixed')?.remove();initGoalsTab();const cr=[25,50,75,100].find(m=>bf<m&&af>=m);if(cr)toast(`🎉 ${g.name} hit ${cr}%!`,'success');else toast(`${formatCurrency(am,0)} added to ${g.name}`,'success');}
 function applyGoalTemplate(name){
+  if(!canUseFeature('goalTemplates')){
+    toast('Goal templates are a Basic feature.','warning',4200);
+    setTimeout(()=>switchMainTab(null,'tab-pricing',true),250);
+    return;
+  }
   const t=DB.goalTemplates.find(x=>x.name===name);if(!t)return;
   openNewGoalModal();
   const d=new Date();d.setMonth(d.getMonth()+t.months);
@@ -6400,12 +6852,15 @@ function applyGoalTemplate(name){
   }
 }
 
+/* CREDIT */
 let _creditScoreGaugeChart=null,_creditTrendChart=null;
 function initCreditTab(){const c=DB.credit;const v=$id('creditScoreValue');if(v)v.textContent=c.score;const l=$id('creditScoreLabel');if(l){const b=[{max:579,label:'Poor'},{max:669,label:'Fair'},{max:739,label:'Good'},{max:799,label:'Very Good'},{max:850,label:'Exceptional'}];const bd=b.find(x=>c.score<=x.max)||b[b.length-1];l.textContent=`of 850 · ${bd.label}`;}const gc=$id('creditScoreGauge');if(gc){if(_creditScoreGaugeChart){try{_creditScoreGaugeChart.destroy();}catch(_){}}const fr=Math.min(1,Math.max(0,c.score/850));const tc=getComputedStyle(document.documentElement).getPropertyValue('--surface-3').trim()||'#E5E7EB';_creditScoreGaugeChart=new Chart(gc,{type:'doughnut',data:{labels:['Score','Remaining'],datasets:[{data:[fr,1-fr],backgroundColor:['#10B981',tc],borderWidth:0,circumference:180,rotation:270}]},options:{responsive:true,maintainAspectRatio:false,cutout:'76%',plugins:{legend:{display:false},tooltip:{enabled:false}},animation:{animateRotate:true,duration:900}}});}const m=$id('creditScoreMarker');if(m){const p=Math.max(0,Math.min(100,((c.score-300)/(850-300))*100));m.style.left=p+'%';}const tc=$id('creditTrendChart');if(tc){if(_creditTrendChart){try{_creditTrendChart.destroy();}catch(_){}}const lb=c.history12.map((_,i)=>{const d=new Date();d.setMonth(d.getMonth()-(11-i));return d.toLocaleDateString('en-US',{month:'short'});});const gr=tc.getContext('2d').createLinearGradient(0,0,0,220);gr.addColorStop(0,'rgba(139, 92, 246, 0.28)');gr.addColorStop(1,'rgba(139, 92, 246, 0)');_creditTrendChart=new Chart(tc,{type:'line',data:{labels:lb,datasets:[{label:'Credit Score',data:c.history12,borderColor:'#8B5CF6',backgroundColor:gr,fill:true,tension:.35,borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#8B5CF6',pointBorderColor:'#fff',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0B1220',padding:10,cornerRadius:8,displayColors:false,callbacks:{label:ctx=>`${ctx.parsed.y} pts`}}},scales:{x:{grid:{display:false}},y:{grid:{color:getChartGridColor()},suggestedMin:700,suggestedMax:800}}}});}const a=$id('creditAlertsList');if(a){a.innerHTML=c.alerts.map(x=>{const cl=x.type==='success'?'badge-emerald':x.type==='warning'?'badge-amber':'badge-violet';const ic=x.type==='success'?'trending-up':x.type==='warning'?'alert-triangle':'info';return `<div class="flex gap-3 py-2.5" style="border-bottom:1px solid var(--border);"><span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${cl}"><i data-lucide="${ic}" class="w-3.5 h-3.5"></i></span><div class="min-w-0"><div class="text-xs font-bold" style="color:var(--text-1);">${esc(x.t)}</div><div class="text-[10px] mt-0.5" style="color:var(--text-4);">${esc(x.s)} · ${esc(x.when)}</div></div></div>`;}).join('');}const fl=$id('creditFactorsList');if(fl){fl.innerHTML=c.factors.map(f=>{const r=f.name==='Credit utilization'?Math.max(0,100-f.value):Math.min(100,(f.value/(f.name==='Age of credit'?15:f.name==='New inquiries'?5:f.name==='Credit mix'?8:100))*100);const rC=f.rating==='Exceptional'?'badge-emerald':f.rating==='Very Good'?'badge-blue':'badge-amber';const dv=f.name==='Age of credit'?`${f.value} yrs`:f.name==='New inquiries'?f.value:f.name==='Credit mix'?`${f.value} types`:`${f.value}%`;return `<div><div class="flex items-center justify-between mb-1.5"><div class="flex items-center gap-2"><span class="text-xs font-bold" style="color:var(--text-1);">${esc(f.name)}</span><span class="text-[10px] font-bold" style="color:var(--text-4);">${f.weight}% of score</span></div><div class="flex items-center gap-2"><span class="badge ${rC}">${f.rating}</span><span class="text-xs font-extrabold privacy-target" style="color:var(--text-1);">${dv}</span></div></div><div class="progress" style="height:6px;"><div style="width:${r}%;background:${f.color};"></div></div><div class="text-[10px] mt-1.5" style="color:var(--text-4);">${esc(f.detail)}</div></div>`;}).join('');}const tl=$id('creditTipsList');if(tl){tl.innerHTML=c.tips.map(t=>`<div class="rounded-xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="flex items-start gap-3"><span class="text-lg shrink-0">${t.icon}</span><div class="min-w-0"><div class="text-xs font-bold" style="color:var(--text-1);">${esc(t.title)}</div><div class="text-[11px] mt-1 leading-relaxed" style="color:var(--text-4);">${esc(t.desc)}</div></div></div></div>`).join('');}const s=$id('creditSimAction'),aw=$id('creditSimAmtWrap');if(s&&aw&&!s.dataset.bound){s.dataset.bound='1';s.addEventListener('change',()=>{aw.style.display=s.value==='payoff'?'block':'none';});}if(typeof lucide!=='undefined')lucide.createIcons();applyPrivacyState();}
 function runCreditSimulation(){const a=$id('creditSimAction')?.value||'payoff';const am=parseFloat($id('creditSimAmt')?.value)||0;const b=DB.credit.score;let d=0,ex='';if(a==='payoff'){const dp=am/100000*100;d=Math.round(Math.min(22,dp*1.9));ex=`Paying ${formatCurrency(am,0)} toward revolving balances lowers utilization by approximately ${dp.toFixed(1)} percentage points.`;}else if(a==='newcard'){d=-9;ex='A new account adds a hard inquiry and lowers your average account age.';}else if(a==='close'){d=-21;ex='Closing your oldest account reduces average credit age and total available credit.';}else if(a==='inquiry'){d=-7;ex='A mortgage pre-approval triggers one hard inquiry (rate-shopping within 45 days counts once).';}const p=Math.max(300,Math.min(850,b+d));const r=$id('creditSimResult');if(!r)return;const pos=d>=0;r.innerHTML=`<div class="rounded-xl p-4" style="background:${pos?'rgba(5,150,105,.08)':'rgba(190,18,60,.08)'};border:1px solid ${pos?'rgba(5,150,105,.32)':'rgba(190,18,60,.32)'};"><div class="text-center"><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Projected Score</div><div class="text-3xl font-extrabold mt-0.5" style="color:${pos?'#059669':'#BE123C'};">${p}</div><div class="text-xs font-bold" style="color:${pos?'#059669':'#BE123C'};">${pos?'▲':'▼'} ${Math.abs(d)} points</div></div><div class="text-[10px] mt-3 leading-relaxed" style="color:var(--text-3);">${ex}</div></div>`;toast('Score simulation complete','success',1800);}
 
-(function boot(){loadGoalsData();})();
+/* BOOT */
+(function boot(){loadGoalsData();loadSubscriptionState();})();
 function bootApp(){
+  loadSubscriptionState();
   const t = new Date(), m = new Date(); m.setMonth(m.getMonth()-1);
   const cs=$id('customRangeStart'),ce=$id('customRangeEnd');
   const ts=$id('txLocalDateStart'),te2=$id('txLocalDateEnd');
@@ -6422,13 +6877,12 @@ function bootApp(){
   autoCollapseMobileSections();
   updateDateRangeUI();updateTxLocalDateUI();updateExpLocalDateUI();
   restoreNavSections();
+  updateSidebarSubChip();
   setTimeout(()=>{
     switchMainTab(null,'tab-dashboard');
     updateMobileBottomNav('tab-dashboard');
         refreshMobileBottomBadges();
     loadSettingsUI();
-        loadCurrencyUI();
-
     updateSidebarProfile();
     switchSettingsSection('profile');
     updateMobileSettingsTrigger();
@@ -6444,7 +6898,7 @@ function bootApp(){
     refreshGithubStatus();
     renderSaveChip('ready');
     updatePortfolioDataStatus();
-    updateCurrencyLabels();
+    renderPricingPage();
   },120);
   updateFilterCountBadges();
   setBudgetView('month');
@@ -6471,10 +6925,12 @@ window.addEventListener('resize',()=>{
 document.addEventListener('click',function(e){if(e.target.classList&&e.target.classList.contains('fixed')&&e.target.classList.contains('inset-0')){if(e.target.querySelector('#contribAmount')||e.target.querySelector('#newGoalName')||e.target.querySelector('#editGoalName'))e.target.remove();}});
 document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;document.querySelectorAll('.fixed.inset-0').forEach(el=>{if(el.querySelector('#contribAmount')||el.querySelector('#newGoalName')||el.querySelector('#editGoalName'))el.remove();});});
 
+/* INIT */
 function initApp(){
   loadAuthState();
   loadHouseholdState();
   loadAppSettings();
+  loadSubscriptionState();
   applyAppSettingsOnLoad();
   if(authState.user && authState.session && authState.session.token){
     enterApp();
