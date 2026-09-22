@@ -576,6 +576,342 @@ html.dark .sms-option .sms-status { color: #6EE7B7; }
 .density-preview {display:flex;gap:.4rem;margin-top:.5rem;}
 .density-preview .dp-bar {height:4px;border-radius:9999px;background:var(--surface-3);}
 .density-preview.compact .dp-bar { height: 2px; margin: 2px 0; }
+/* ═══════════════════════════════════════════════════════════
+   PAYSTUB · Minimalist redesign
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Hero Strip ── */
+.ps-hero{
+  display:flex;align-items:stretch;gap:1.5rem;flex-wrap:wrap;
+  padding:1.5rem 1.75rem;border-radius:16px;
+  background:var(--surface);border:1px solid var(--border);
+  margin-bottom:1.25rem;position:relative;overflow:hidden;
+}
+.ps-hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(500px 180px at 0% 0%,rgba(16,185,129,.10),transparent 60%),
+             radial-gradient(400px 180px at 100% 100%,rgba(139,92,246,.06),transparent 60%);
+}
+.ps-hero > *{position:relative}
+.ps-hero-main{flex:0 0 auto;min-width:220px;padding-right:1.5rem;border-right:1px solid var(--border)}
+.ps-hero-label{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--text-4)}
+.ps-hero-value{
+  font-size:2.75rem;font-weight:900;letter-spacing:-.04em;line-height:1;
+  color:#059669;font-variant-numeric:tabular-nums;margin-top:.35rem;
+}
+.ps-hero-sub{font-size:.7rem;font-weight:600;color:var(--text-4);margin-top:.4rem}
+.ps-hero-stats{display:flex;flex:1;gap:1.75rem;min-width:0;align-items:center}
+.ps-stat{min-width:0}
+.ps-stat-label{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-4);display:block}
+.ps-stat-value{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--text-1);margin-top:.3rem;font-variant-numeric:tabular-nums}
+.ps-stat-sub{font-size:.65rem;font-weight:600;color:var(--text-4);margin-top:.15rem}
+
+/* ── Layout ── */
+.ps-layout{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:1.25rem;align-items:start}
+@media(max-width:1024px){.ps-layout{grid-template-columns:1fr}}
+
+/* ── Controls card ── */
+.ps-controls{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:1.35rem 1.35rem 1.15rem;
+}
+.ps-block{margin-bottom:1.15rem}
+.ps-block:last-child{margin-bottom:0}
+.ps-block-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.95rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);
+}
+.ps-block-label{font-size:.6rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--text-4)}
+
+/* Fields */
+.ps-field{margin-bottom:1rem}
+.ps-field:last-child{margin-bottom:0}
+.ps-field-label{
+  display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;
+  font-size:.7rem;font-weight:700;color:var(--text-2);margin-bottom:.45rem;
+}
+.ps-field-hint{
+  font-size:.6rem;font-weight:600;color:var(--text-4);text-align:right;
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ps-field-input{display:flex;flex-direction:column;gap:.55rem}
+
+.ps-input{
+  width:100%;background:var(--surface-2);border:1px solid transparent;border-radius:10px;
+  padding:.6rem .8rem;font-size:.85rem;font-weight:700;color:var(--text-1);
+  text-align:right;font-family:'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;outline:none;
+  transition:border-color .15s,background-color .15s,box-shadow .15s;
+  -moz-appearance:textfield;
+}
+.ps-input::-webkit-outer-spin-button,.ps-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.ps-input:hover{border-color:var(--border-strong);background:var(--surface)}
+.ps-input:focus{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(139,92,246,.14)}
+
+.ps-slider{
+  width:100%;height:4px;border-radius:9999px;appearance:none;-webkit-appearance:none;
+  background:var(--surface-3);outline:none;cursor:pointer;touch-action:none;
+}
+.ps-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  cursor:pointer;border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(139,92,246,.45);transition:transform .12s;
+}
+html.dark .ps-slider::-webkit-slider-thumb{border-color:#18181B}
+.ps-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.ps-slider::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  cursor:pointer;border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(139,92,246,.45);
+}
+@media(max-width:768px){.ps-slider{height:6px}.ps-slider::-webkit-slider-thumb{width:20px;height:20px}}
+
+/* Segmented */
+.ps-seg{
+  display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px;
+  padding:3px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;
+}
+.ps-seg-item{
+  padding:.5rem .4rem;font-size:.68rem;font-weight:700;border-radius:7px;
+  background:transparent;border:none;color:var(--text-3);cursor:pointer;
+  transition:all .15s ease;white-space:nowrap;font-family:inherit;
+  -webkit-tap-highlight-color:transparent;overflow:hidden;text-overflow:ellipsis;
+}
+.ps-seg-item:hover{color:var(--text-1)}
+.ps-seg-item.active{
+  background:var(--surface);color:var(--text-1);font-weight:800;
+  box-shadow:0 1px 3px rgba(15,23,42,.10);
+}
+html.dark .ps-seg-item.active{box-shadow:0 1px 3px rgba(0,0,0,.35)}
+
+/* Checkbox */
+.ps-check{display:flex;align-items:center;gap:.55rem;font-size:.72rem;font-weight:600;color:var(--text-2);cursor:pointer;padding:.55rem 0}
+.ps-check input{accent-color:var(--accent);width:14px;height:14px;flex-shrink:0}
+
+/* Banner */
+.ps-banner{
+  display:flex;align-items:flex-start;gap:.55rem;padding:.65rem .75rem;border-radius:10px;
+  background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.32);
+  font-size:.68rem;font-weight:600;color:#B45309;line-height:1.5;
+}
+html.dark .ps-banner{color:#FCD34D}
+.ps-banner>i,.ps-banner>svg{width:13px;height:13px;flex-shrink:0;margin-top:2px}
+
+/* Mini button */
+.ps-mini-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.35rem .6rem;border-radius:7px;font-size:.65rem;font-weight:700;
+  background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text-2);
+  cursor:pointer;transition:all .15s ease;font-family:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+.ps-mini-btn:hover{border-color:var(--border-hover);color:var(--text-1);background:var(--surface-3)}
+.ps-mini-btn>i,.ps-mini-btn>svg{width:11px;height:11px}
+
+/* Advanced details */
+.ps-adv{margin-top:1.15rem;border-top:1px solid var(--border);padding-top:1.15rem}
+.ps-adv-summary{
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  font-size:.7rem;font-weight:700;color:var(--text-2);cursor:pointer;
+  list-style:none;padding:.35rem 0;-webkit-tap-highlight-color:transparent;
+}
+.ps-adv-summary::-webkit-details-marker{display:none}
+.ps-adv-summary:hover{color:var(--text-1)}
+.ps-adv-chevron{transition:transform .25s cubic-bezier(.4,0,.2,1);color:var(--text-4);width:14px;height:14px;flex-shrink:0}
+.ps-adv[open] .ps-adv-chevron{transform:rotate(180deg)}
+.ps-adv-body{margin-top:1rem;display:flex;flex-direction:column;gap:1.15rem}
+
+.ps-sub-block{display:flex;flex-direction:column}
+.ps-sub-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.65rem}
+.ps-sub-hint{font-size:.6rem;font-weight:600;color:var(--text-4);text-align:right}
+
+/* Deduction rows */
+/* Deduction rows */
+.ps-rows{display:flex;flex-direction:column;gap:.55rem}
+
+.ps-row{
+  padding:.7rem .75rem;border-radius:10px;
+  background:var(--surface-2);border:1px solid var(--border);
+  transition:border-color .15s,background-color .15s;
+  min-width:0;
+}
+.ps-row:hover{border-color:var(--border-hover)}
+
+/* Label row — full width, sits above the controls */
+.ps-row-label-row{
+  display:flex;align-items:center;gap:.5rem;
+  margin-bottom:.55rem;min-width:0;
+}
+.ps-row-label{
+  flex:1 1 auto;min-width:0;
+  font-size:.76rem;font-weight:700;color:var(--text-1);
+  letter-spacing:-.005em;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ps-row-label-input{
+  flex:1 1 auto;min-width:0;
+  background:transparent;border:none;outline:none;
+  font-size:.76rem;font-weight:700;color:var(--text-1);
+  padding:2px 0;font-family:inherit;letter-spacing:-.005em;
+  border-bottom:1px dashed transparent;
+  transition:border-color .15s;
+}
+.ps-row-label-input:hover{border-bottom-color:var(--border-strong)}
+.ps-row-label-input:focus{border-bottom-color:var(--accent)}
+.ps-row-label-input::placeholder{color:var(--text-4);font-weight:600}
+.ps-row-label-input:not(:focus){
+  background-image:linear-gradient(to right,rgba(139,92,246,.35),rgba(139,92,246,.35));
+  background-size:0% 1px;
+  background-repeat:no-repeat;
+  background-position:0 100%;
+  transition:background-size .25s ease,border-color .15s;
+}
+.ps-row-label-input:hover{
+  background-size:100% 1px;
+}
+/* Controls row — 3 columns, never overflow */
+.ps-row-controls{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,.95fr);
+  gap:.4rem;min-width:0;
+}
+.ps-row-controls select,
+.ps-row-controls input{
+  width:100%;min-width:0;
+  background:var(--surface);
+  border:1px solid var(--border-strong);
+  border-radius:7px;
+  padding:.45rem 1.4rem .45rem .55rem;
+  font-size:.68rem;font-weight:700;color:var(--text-1);
+  outline:none;font-family:inherit;
+  transition:border-color .15s,box-shadow .15s,background-color .15s;
+  text-overflow:ellipsis;
+  -moz-appearance:textfield;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.ps-row-controls input[type="number"]{
+  padding:.45rem .55rem;
+  text-align:right;
+  font-family:'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+}
+.ps-row-controls input[type="number"]::-webkit-outer-spin-button,
+.ps-row-controls input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0;
+}
+.ps-row-controls select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right .5rem center;
+}
+.ps-row-controls select:hover,
+.ps-row-controls input:hover{border-color:var(--border-hover)}
+.ps-row-controls select:focus,
+.ps-row-controls input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(139,92,246,.14);
+}
+
+@media(max-width:380px){
+  .ps-row-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+  .ps-row-controls input[type="number"]{grid-column:1 / -1;}
+}
+.ps-withhold-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.6rem;
+}
+.ps-field-sm .ps-field-label{font-size:.62rem;margin-bottom:.35rem}
+.ps-field-sm .ps-input{padding:.5rem .65rem;font-size:.78rem}
+
+/* ── Receipt ── */
+.ps-receipt-wrap{position:sticky;top:.5rem}
+.ps-receipt{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;
+}
+.ps-receipt-head{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1.15rem 1.35rem;border-bottom:1px solid var(--border);
+}
+.ps-receipt-eyebrow{
+  font-size:.6rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-4);
+}
+.ps-receipt-title{
+  font-size:.9rem;font-weight:800;color:var(--text-1);margin-top:.2rem;
+  letter-spacing:-.01em;
+}
+.ps-receipt-sep{color:var(--text-4);font-weight:400;margin:0 .35rem}
+.ps-receipt-badge{
+  font-size:.6rem;font-weight:800;padding:.25rem .55rem;border-radius:9999px;
+  background:var(--surface-2);color:var(--text-3);border:1px solid var(--border);
+  white-space:nowrap;flex-shrink:0;
+}
+.ps-receipt-body{padding:.35rem 0 .1rem}
+.ps-receipt-table{width:100%;border-collapse:collapse}
+.ps-receipt-table td{
+  padding:.6rem 1.35rem;
+  font-variant-numeric:tabular-nums;
+  vertical-align:middle;
+}
+.ps-receipt-table tr.ps-receipt-section td{
+  padding-top:1.1rem;padding-bottom:.35rem;
+  font-size:.55rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-4);
+}
+.ps-receipt-table tr.ps-receipt-row td:first-child{
+  font-size:.78rem;font-weight:600;color:var(--text-2);padding-right:.5rem;
+}
+.ps-receipt-table tr.ps-receipt-row td:nth-child(2),
+.ps-receipt-table tr.ps-receipt-row td:last-child{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  font-weight:700;color:var(--text-1);text-align:right;white-space:nowrap;
+}
+.ps-receipt-table tr.ps-receipt-row td:nth-child(2){color:var(--text-3);font-weight:600}
+.ps-receipt-table tr.ps-receipt-row.is-neg td:nth-child(2),
+.ps-receipt-table tr.ps-receipt-row.is-neg td:last-child{color:#BE123C}
+html.dark .ps-receipt-table tr.ps-receipt-row.is-neg td:nth-child(2),
+html.dark .ps-receipt-table tr.ps-receipt-row.is-neg td:last-child{color:#FDA4AF}
+
+.ps-receipt-table tr.ps-receipt-subtotal td{
+  border-top:1px solid var(--border);
+  padding-top:.7rem;padding-bottom:.7rem;
+}
+.ps-receipt-table tr.ps-receipt-subtotal td:first-child{
+  font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-1);
+}
+.ps-receipt-table tr.ps-receipt-subtotal td:nth-child(2),
+.ps-receipt-table tr.ps-receipt-subtotal td:last-child{
+  color:var(--text-1);font-weight:800;
+}
+
+.ps-receipt-table tr.ps-receipt-net{
+  border-top:1px solid var(--border);
+  background:linear-gradient(90deg,rgba(16,185,129,.07),transparent 70%);
+}
+.ps-receipt-table tr.ps-receipt-net td{padding-top:1.05rem;padding-bottom:1.05rem}
+.ps-receipt-table tr.ps-receipt-net td:first-child{
+  font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:#059669;
+}
+.ps-receipt-table tr.ps-receipt-net td:nth-child(2),
+.ps-receipt-table tr.ps-receipt-net td:last-child{
+  font-size:1.05rem;font-weight:900;color:#059669;letter-spacing:-.02em;
+}
+
+@media(max-width:640px){
+  .ps-hero-main{border-right:none;padding-right:0;border-bottom:1px solid var(--border);padding-bottom:1rem;width:100%}
+  .ps-hero-stats{width:100%;flex-wrap:wrap;gap:1rem 1.5rem}
+  .ps-hero-value{font-size:2.25rem}
+  .ps-hero-stats .ps-stat{flex:1 1 calc(50% - .75rem);min-width:0}
+  .ps-receipt-table td{padding:.55rem 1rem}
+  .ps-receipt-head{padding:1rem 1rem}
+  .ps-controls{padding:1.1rem 1.1rem .95rem}
+  .ps-receipt-wrap{position:static}
+}
 #authOverlay{z-index:5000;}
 .auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border-strong);border-radius:20px;padding:2rem;box-shadow:0 40px 80px -20px rgba(15,23,42,.35);position:relative;}
 .auth-brand{display:flex;flex-direction:column;align-items:center;margin-bottom:1.5rem;text-align:center;}
@@ -1571,99 +1907,175 @@ html.dark .btn-active{color:#6EE7B7;}
 
     <div class="wb-content">
       <!-- ═══ PAYCHECK ═══ -->
+            <!-- ═══ PAYCHECK ═══ -->
       <div class="wb-pane active" data-wb-pane="paycheck">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <div class="lg:col-span-2 space-y-5">
-            <div class="surface p-5 lg:p-6 space-y-4">
-              <div class="flex items-center justify-between gap-3 flex-wrap">
-                <div class="flex items-center gap-3">
-                  <span class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.22);"><i data-lucide="receipt" class="w-4 h-4" style="color:#6D28D9;"></i></span>
-                  <div>
-                    <h3 class="text-sm font-extrabold" style="color:var(--text-1);">Paycheck Simulator</h3>
-                    <p id="paySalarySource" class="text-[10px] font-semibold" style="color:var(--text-4);">Source: Income Profile</p>
-                  </div>
-                </div>
-                <label class="flex items-center gap-2 cursor-pointer text-[11px] font-bold" style="color:var(--text-2);">
-                  <input type="checkbox" id="payOverrideToggle" onchange="togglePaycheckOverride()" style="accent-color:var(--accent);"> Simulate override
-                </label>
-              </div>
-              <div id="simSalaryBannerPaycheck" class="hidden rounded-xl p-3 text-[11px] font-bold flex items-center gap-2 flex-wrap" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:#B45309;">
-                <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
-                <span>Simulation mode — changes here don't affect your global Income Profile.</span>
-                <button onclick="clearPaycheckOverride()" class="ml-auto btn btn-ghost !py-1 !text-[10px]">Clear</button>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div>
-                  <label class="field-label">Annual Salary (<span class="currency-prefix">$</span>)</label>
-                  <input type="number" id="payCustomSalary" class="input font-mono text-right" value="0" step="1000"
-                    oninput="syncSliderToInput('payCustomSalarySlider','payCustomSalary'); if(document.getElementById('payOverrideToggle')?.checked){ tempSalaryOverride.paycheck=parseFloat(this.value)||0; } calculatePaystub();">
-                  <input type="range" id="payCustomSalarySlider" min="0" max="500000" step="1000" value="0" class="slider-hero w-full mt-2"
-                    oninput="syncInputToSlider('payCustomSalarySlider','payCustomSalary'); if(document.getElementById('payOverrideToggle')?.checked){ tempSalaryOverride.paycheck=parseFloat(this.value)||0; } calculatePaystub();">
-                </div>
-                <div><label class="field-label">Pay Frequency</label>
-                  <select id="payFrequency" class="input" onchange="calculatePaystub()">
-                    <option value="26" selected>Bi-Weekly (26)</option>
-                    <option value="24">Semi-Monthly (24)</option>
-                    <option value="12">Monthly (12)</option>
-                    <option value="52">Weekly (52)</option>
-                  </select>
-                </div>
-                <div><label class="field-label">Filing Status</label>
-                  <select id="paystubFilingStatus" class="input" onchange="calculatePaystub()">
-                    <option value="single">Single</option>
-                    <option value="mfj" selected>Married Filing Jointly</option>
-                  </select>
-                </div>
-              </div>
-            </div>
 
-            <div class="surface p-5 lg:p-6 space-y-4">
-              <div class="flex items-center gap-2">
-                <i data-lucide="layers" class="w-4 h-4" style="color:#6D28D9;"></i>
-                <h4 class="text-xs font-extrabold" style="color:var(--text-1);">Pre-Tax Deductions</h4>
-                <span class="text-[10px] font-semibold ml-auto" style="color:var(--text-4);">Applied before federal tax</span>
-              </div>
-              <div id="preTaxDeductionsList" class="space-y-2"></div>
+        <!-- Hero Strip -->
+        <div class="ps-hero">
+          <div class="ps-hero-main">
+            <span class="ps-hero-label">Net Take-Home</span>
+            <div class="ps-hero-value" id="psNetPeriod">$0</div>
+            <div class="ps-hero-sub" id="psNetPeriodSub">per paycheck</div>
+          </div>
+          <div class="ps-hero-stats">
+            <div class="ps-stat">
+              <span class="ps-stat-label">Gross</span>
+              <div class="ps-stat-value" id="psGrossPeriod">$0</div>
+              <div class="ps-stat-sub">per period</div>
             </div>
-
-            <div class="surface p-5 lg:p-6 space-y-4">
-              <div class="flex items-center gap-2">
-                <i data-lucide="layers" class="w-4 h-4" style="color:#BE185D;"></i>
-                <h4 class="text-xs font-extrabold" style="color:var(--text-1);">Post-Tax Deductions</h4>
-                <button onclick="customPostTaxDeductions.push({id:'post_'+Date.now(),label:'Custom Deduction',method:'fixed',type:'per_paycheck',amount:0}); renderPostTaxInputs(); calculatePaystub();" class="btn btn-ghost !py-1 !text-[10px] ml-auto"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
-              </div>
-              <div id="postTaxDeductionsList" class="space-y-2"></div>
+            <div class="ps-stat">
+              <span class="ps-stat-label">Effective Tax</span>
+              <div class="ps-stat-value" id="psEffTax">0%</div>
+              <div class="ps-stat-sub">of gross</div>
             </div>
-
-            <div class="surface p-5 lg:p-6 space-y-4">
-              <div class="flex items-center gap-2">
-                <i data-lucide="landmark" class="w-4 h-4" style="color:#6D28D9;"></i>
-                <h4 class="text-xs font-extrabold" style="color:var(--text-1);">Tax & Withholding Adjustments</h4>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div><label class="field-label">Extra Fed Withhold / Period</label><input type="number" id="addWithholdFed" class="input font-mono text-right" value="0" step="10" oninput="calculatePaystub()"></div>
-                <div><label class="field-label">State Withhold / Period</label><input type="number" id="addWithholdState" class="input font-mono text-right" value="0" step="10" oninput="calculatePaystub()"></div>
-                <div><label class="field-label">Local Withhold / Period</label><input type="number" id="addWithholdLocal" class="input font-mono text-right" value="0" step="10" oninput="calculatePaystub()"></div>
-                <div><label class="field-label">State Tax Rate (%)</label><input type="number" id="manualStateTaxRate" class="input font-mono text-right" value="0" step="0.1" oninput="calculatePaystub()"></div>
-                <div><label class="field-label">Local Tax Rate (%)</label><input type="number" id="manualLocalTaxRate" class="input font-mono text-right" value="0" step="0.1" oninput="calculatePaystub()"></div>
-              </div>
+            <div class="ps-stat">
+              <span class="ps-stat-label">Annual Net</span>
+              <div class="ps-stat-value" id="psAnnualNet">$0</div>
+              <div class="ps-stat-sub" id="psAnnualNetSub">26 periods / yr</div>
             </div>
           </div>
+        </div>
 
-          <div class="space-y-5">
-            <div class="surface p-5 lg:p-6">
-              <div class="flex items-center gap-2 mb-3 pb-3" style="border-bottom:1px solid var(--border);">
-                <i data-lucide="file-text" class="w-4 h-4" style="color:#6D28D9;"></i>
-                <h4 class="text-xs font-extrabold" style="color:var(--text-1);">Paystub Breakdown</h4>
+        <div class="ps-layout">
+
+          <!-- ═══ Controls ═══ -->
+          <div class="ps-controls">
+
+            <div class="ps-block">
+              <div class="ps-block-head">
+                <span class="ps-block-label">Compensation</span>
+                <button type="button" onclick="clearPaycheckOverride()" class="ps-mini-btn hidden" id="psClearOverride">Reset</button>
               </div>
-              <div class="scroll-x">
-                <table class="w-full text-xs">
-                  <thead><tr style="border-bottom:1px solid var(--border);"><th class="py-2 px-3 text-left">Item</th><th class="py-2 px-3 text-right">Annual</th><th class="py-2 px-3 text-right">Per Period</th></tr></thead>
-                  <tbody id="paystubReceiptBody" class="divide-y" style="border-color:var(--border);"></tbody>
+
+              <div class="ps-field">
+                <label class="ps-field-label">
+                  <span>Annual Salary</span>
+                  <span class="ps-field-hint" id="paySalarySource">Source: Income Profile</span>
+                </label>
+                <div class="ps-field-input">
+                  <input type="number" id="payCustomSalary" class="ps-input" value="0" step="1000"
+                    oninput="syncSliderToInput('payCustomSalarySlider','payCustomSalary'); if(document.getElementById('payOverrideToggle')?.checked){ tempSalaryOverride.paycheck=parseFloat(this.value)||0; } calculatePaystub();">
+                  <input type="range" id="payCustomSalarySlider" min="0" max="500000" step="1000" value="0" class="ps-slider"
+                    oninput="syncInputToSlider('payCustomSalarySlider','payCustomSalary'); if(document.getElementById('payOverrideToggle')?.checked){ tempSalaryOverride.paycheck=parseFloat(this.value)||0; } calculatePaystub();">
+                </div>
+              </div>
+
+              <div class="ps-field">
+                <label class="ps-field-label"><span>Pay Frequency</span></label>
+                <div class="ps-seg" id="psFreqSeg">
+                  <button type="button" class="ps-seg-item" data-freq="52" onclick="psPickFreq('52')">Weekly</button>
+                  <button type="button" class="ps-seg-item" data-freq="26" onclick="psPickFreq('26')">Bi-Weekly</button>
+                  <button type="button" class="ps-seg-item" data-freq="24" onclick="psPickFreq('24')">Semi-Mo</button>
+                  <button type="button" class="ps-seg-item" data-freq="12" onclick="psPickFreq('12')">Monthly</button>
+                </div>
+                <select id="payFrequency" class="hidden" onchange="calculatePaystub()">
+                  <option value="26" selected>Bi-Weekly (26)</option>
+                  <option value="24">Semi-Monthly (24)</option>
+                  <option value="12">Monthly (12)</option>
+                  <option value="52">Weekly (52)</option>
+                </select>
+              </div>
+
+              <div class="ps-field">
+                <label class="ps-field-label"><span>Filing Status</span></label>
+                <div class="ps-seg" id="psFilingSeg">
+                  <button type="button" class="ps-seg-item" data-filing="single" onclick="psPickFiling('single')">Single</button>
+                  <button type="button" class="ps-seg-item" data-filing="mfj" onclick="psPickFiling('mfj')">Married Filing Jointly</button>
+                </div>
+                <select id="paystubFilingStatus" class="hidden" onchange="calculatePaystub()">
+                  <option value="single">Single</option>
+                  <option value="mfj" selected>Married Filing Jointly</option>
+                </select>
+              </div>
+
+              <label class="ps-check">
+                <input type="checkbox" id="payOverrideToggle" onchange="togglePaycheckOverride()">
+                <span>Simulate override</span>
+              </label>
+
+              <div id="simSalaryBannerPaycheck" class="hidden ps-banner">
+                <i data-lucide="flask-conical"></i>
+                <span>Simulation mode — changes here don't affect your global Income Profile.</span>
+              </div>
+            </div>
+
+            <!-- Advanced -->
+            <details class="ps-adv" id="psAdvanced">
+              <summary class="ps-adv-summary">
+                <span>Advanced Deductions &amp; Withholding</span>
+                <i data-lucide="chevron-down" class="ps-adv-chevron"></i>
+              </summary>
+              <div class="ps-adv-body">
+
+                <div class="ps-sub-block">
+                  <div class="ps-sub-head">
+                    <span class="ps-block-label">Pre-Tax</span>
+                    <span class="ps-sub-hint">Applied before federal tax</span>
+                  </div>
+                  <div id="preTaxDeductionsList" class="ps-rows"></div>
+                </div>
+
+                <div class="ps-sub-block">
+                  <div class="ps-sub-head">
+                    <span class="ps-block-label">Post-Tax</span>
+                    <button type="button" onclick="customPostTaxDeductions.push({id:'post_'+Date.now(),label:'Custom Deduction',method:'fixed',type:'per_paycheck',amount:0}); renderPostTaxInputs(); calculatePaystub();" class="ps-mini-btn">
+                      <i data-lucide="plus"></i> Add
+                    </button>
+                  </div>
+                  <div id="postTaxDeductionsList" class="ps-rows"></div>
+                </div>
+
+                <div class="ps-sub-block">
+                  <div class="ps-sub-head">
+                    <span class="ps-block-label">Withholding &amp; Rates</span>
+                  </div>
+                  <div class="ps-withhold-grid">
+                    <div class="ps-field ps-field-sm">
+                      <label class="ps-field-label"><span>Extra Fed / Period</span></label>
+                      <input type="number" id="addWithholdFed" class="ps-input" value="0" step="10" oninput="calculatePaystub()">
+                    </div>
+                    <div class="ps-field ps-field-sm">
+                      <label class="ps-field-label"><span>State / Period</span></label>
+                      <input type="number" id="addWithholdState" class="ps-input" value="0" step="10" oninput="calculatePaystub()">
+                    </div>
+                    <div class="ps-field ps-field-sm">
+                      <label class="ps-field-label"><span>Local / Period</span></label>
+                      <input type="number" id="addWithholdLocal" class="ps-input" value="0" step="10" oninput="calculatePaystub()">
+                    </div>
+                    <div class="ps-field ps-field-sm">
+                      <label class="ps-field-label"><span>State Tax %</span></label>
+                      <input type="number" id="manualStateTaxRate" class="ps-input" value="0" step="0.1" oninput="calculatePaystub()">
+                    </div>
+                    <div class="ps-field ps-field-sm">
+                      <label class="ps-field-label"><span>Local Tax %</span></label>
+                      <input type="number" id="manualLocalTaxRate" class="ps-input" value="0" step="0.1" oninput="calculatePaystub()">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </details>
+
+          </div>
+
+          <!-- ═══ Receipt ═══ -->
+          <div class="ps-receipt-wrap">
+            <div class="ps-receipt">
+              <div class="ps-receipt-head">
+                <div>
+                  <div class="ps-receipt-eyebrow">Paystub Breakdown</div>
+                  <div class="ps-receipt-title">Per Period<span class="ps-receipt-sep">·</span>Annual</div>
+                </div>
+                <span class="ps-receipt-badge" id="psReceiptBadge">26 periods / yr</span>
+              </div>
+              <div class="ps-receipt-body">
+                <table class="ps-receipt-table">
+                  <tbody id="paystubReceiptBody"></tbody>
                 </table>
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -5125,7 +5537,8 @@ pane.style.minHeight = '520px';
   if(toolId === 'inflation'){ syncInflationSliders('input'); propagateUnifiedDataStore(); }
   if(toolId === 'fire') calculateFIRE();
   if(toolId === 'emergency') calculateEmergencyFund();
-  if(toolId === 'paycheck') calculatePaystub();
+  if(toolId === 'paycheck'){ psSyncSegs(); calculatePaystub(); }
+  
   if(toolId === 'insights') renderStrategicHub();
   if(typeof lucide !== 'undefined') lucide.createIcons();
   renderChartToggles();
@@ -5139,6 +5552,27 @@ function pickWbTool(id){switchWbTool(id);closeWbSheet();}
 function updateWbTrigger(){const m=WB_TOOLS_FLAT.find(t=>t.id===currentWbTool)||WB_TOOLS_FLAT[0];const v=$id('wbTriggerValue'),i=$id('wbTriggerIcon');if(v)v.textContent=m.label;if(i)i.innerHTML=`<i data-lucide="${m.icon}" class="w-4 h-4"></i>`;if(typeof lucide!=='undefined')lucide.createIcons();}
 function syncSliderToInput(sid,iid){const s=$id(sid),i=$id(iid);if(!s||!i)return;i.value=s.value;}
 function syncInputToSlider(sid,iid){const s=$id(sid),i=$id(iid);if(!s||!i)return;s.value=parseFloat(i.value)||0;}
+/* ═══ Paystub segmented controls ═══ */
+function psSyncSegs(){
+  const f  = $id('payFrequency')?.value || '26';
+  document.querySelectorAll('#psFreqSeg .ps-seg-item').forEach(b =>
+    b.classList.toggle('active', b.dataset.freq === f)
+  );
+  const fs = $id('paystubFilingStatus')?.value || 'mfj';
+  document.querySelectorAll('#psFilingSeg .ps-seg-item').forEach(b =>
+    b.classList.toggle('active', b.dataset.filing === fs)
+  );
+}
+function psPickFreq(v){
+  const el = $id('payFrequency');
+  if(el){ el.value = v; el.dispatchEvent(new Event('change')); }
+  psSyncSegs();
+}
+function psPickFiling(v){
+  const el = $id('paystubFilingStatus');
+  if(el){ el.value = v; el.dispatchEvent(new Event('change')); }
+  psSyncSegs();
+}
 function initAllToolSliders(){[['payCustomSalarySlider','payCustomSalary'],['fireAnnualExpensesSlider','fireAnnualExpenses'],['fireWithdrawalRateSlider','fireWithdrawalRate'],['efMonthlyExpSlider','efMonthlyExp']].forEach(([s,i])=>{const sl=$id(s),inp=$id(i);if(sl&&inp)sl.value=parseFloat(inp.value)||0;});}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWbSheet();});
 
@@ -5588,8 +6022,54 @@ function applyPrivacyState(){const t=document.querySelectorAll('.privacy-target,
 function updateDriftLabel(v){const l=$id('driftToleranceVal');if(l)l.innerText=`${parseFloat(v).toFixed(1)}%`;}
 function toggleThemeMode(){const h=document.documentElement;const d=h.classList.contains('dark');if(d){h.classList.remove('dark');h.classList.add('light');appSettings.appearance.darkMode=false;}else{h.classList.add('dark');h.classList.remove('light');appSettings.appearance.darkMode=true;}persistAppSettings();const s=$id('setDarkMode');if(s)s.checked=h.classList.contains('dark');if(Chart.defaults.scale)Chart.defaults.scale.grid.color=getChartGridColor();if(typeof lucide!=='undefined')lucide.createIcons();updateDashboard();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof renderAccounts==='function')renderAccounts();if(typeof renderTransactions==='function')renderTransactions();if(typeof dashRender==='function')dashRender();if(typeof initCreditTab==='function'&&currentTabId==='tab-credit')initCreditTab();}
 
-function renderPreTaxInputs(){const c=$id('preTaxDeductionsList');if(!c)return;c.innerHTML='';preTaxConfig.forEach(item=>{c.innerHTML+=`<div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center p-2.5 rounded-xl" style="background:var(--surface-3);border:1px solid var(--border);"><span class="text-xs font-semibold" style="color:var(--text-2);">${item.label}</span><select id="${item.id}_type" onchange="calculatePaystub()" class="input !py-1.5"><option value="per_paycheck">Per Paycheck</option><option value="onetime">One-Time (Annual)</option></select><select id="${item.id}_method" onchange="calculatePaystub()" class="input !py-1.5"><option value="fixed">${getCurrencySymbol()} Fixed</option><option value="gross_pct">% of Gross</option></select><input type="number" id="${item.id}_val" value="0" oninput="calculatePaystub()" class="input !py-1.5 text-right font-mono" placeholder="0"></div>`;});}
-function renderPostTaxInputs(){const c=$id('postTaxDeductionsList');if(!c)return;c.innerHTML='';customPostTaxDeductions.forEach((item,i)=>{c.innerHTML+=`<div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center p-2.5 rounded-xl" style="background:var(--surface-3);border:1px solid var(--border);"><input type="text" value="${item.label}" oninput="customPostTaxDeductions[${i}].label = this.value; calculatePaystub();" class="input !py-1.5"><select onchange="customPostTaxDeductions[${i}].type = this.value; calculatePaystub();" class="input !py-1.5"><option value="per_paycheck" ${item.type==='per_paycheck'?'selected':''}>Per Paycheck</option><option value="onetime" ${item.type==='onetime'?'selected':''}>One-Time</option></select><select onchange="customPostTaxDeductions[${i}].method = this.value; calculatePaystub();" class="input !py-1.5"><option value="fixed" ${item.method==='fixed'?'selected':''}>${getCurrencySymbol()} Fixed</option><option value="gross_pct" ${item.method==='gross_pct'?'selected':''}>% of Gross</option></select><input type="number" value="${item.amount}" oninput="customPostTaxDeductions[${i}].amount = parseFloat(this.value)||0; calculatePaystub();" class="input !py-1.5 text-right font-mono"></div>`;});}
+function renderPreTaxInputs(){
+  const c = $id('preTaxDeductionsList'); if(!c) return;
+  c.innerHTML = '';
+  preTaxConfig.forEach(item => {
+    c.innerHTML += `<div class="ps-row">
+      <div class="ps-row-label-row">
+        <span class="ps-row-label">${esc(item.label)}</span>
+      </div>
+      <div class="ps-row-controls">
+        <select id="${item.id}_type" onchange="calculatePaystub()">
+          <option value="per_paycheck">Per paycheck</option>
+          <option value="onetime">One-time</option>
+        </select>
+        <select id="${item.id}_method" onchange="calculatePaystub()">
+          <option value="fixed">${getCurrencySymbol()} fixed</option>
+          <option value="gross_pct">% of gross</option>
+        </select>
+        <input type="number" id="${item.id}_val" value="0"
+               oninput="calculatePaystub()" placeholder="0">
+      </div>
+    </div>`;
+  });
+}
+function renderPostTaxInputs(){
+  const c = $id('postTaxDeductionsList'); if(!c) return;
+  c.innerHTML = '';
+  customPostTaxDeductions.forEach((item, i) => {
+    c.innerHTML += `<div class="ps-row">
+      <div class="ps-row-label-row">
+        <input type="text" class="ps-row-label-input" value="${esc(item.label)}"
+               oninput="customPostTaxDeductions[${i}].label = this.value; calculatePaystub();"
+               placeholder="Deduction name">
+      </div>
+      <div class="ps-row-controls">
+        <select onchange="customPostTaxDeductions[${i}].type = this.value; calculatePaystub();">
+          <option value="per_paycheck" ${item.type==='per_paycheck'?'selected':''}>Per paycheck</option>
+          <option value="onetime" ${item.type==='onetime'?'selected':''}>One-time</option>
+        </select>
+        <select onchange="customPostTaxDeductions[${i}].method = this.value; calculatePaystub();">
+          <option value="fixed" ${item.method==='fixed'?'selected':''}>${getCurrencySymbol()} fixed</option>
+          <option value="gross_pct" ${item.method==='gross_pct'?'selected':''}>% of gross</option>
+        </select>
+        <input type="number" value="${item.amount}"
+               oninput="customPostTaxDeductions[${i}].amount = parseFloat(this.value)||0; calculatePaystub();">
+      </div>
+    </div>`;
+  });
+}
 let categoriesConfig=[];
 let irsBaseLimits={};
 let defaultAccountData=[];
@@ -6070,7 +6550,161 @@ function setInflationAmount(v){const ai=$id('infCustomAmount'),as=$id('infAmount
 function renderTaxBuckets(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];if(!d||!d.balances)return;const h=appSettings.hiddenCategories.portfolio||[];const c=categoriesConfig.filter(x=>!h.includes(x.key));const t=getTotalBal(d);let ex=0,df=0,tx=0,sp=0;c.forEach(cat=>{const v=d.balances[cat.key]||0;if(cat.type==='exempt')ex+=v;else if(cat.type==='deferred')df+=v;else if(cat.type==='special')sp+=v;else tx+=v;});setHTML('taxBucketContainer',`<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">🌱</span> Tax-Exempt (Roth)</div><div class="privacy-target text-base font-extrabold" style="color:#BE185D;">${formatCurrency(ex,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(ex/(t||1)*100).toFixed(1)}% of portfolio</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">📊</span> Tax-Deferred</div><div class="privacy-target text-base font-extrabold" style="color:#6D28D9;">${formatCurrency(df,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(df/(t||1)*100).toFixed(1)}% of portfolio</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">💵</span> Taxable Brokerage</div><div class="privacy-target text-base font-extrabold" style="color:#B45309;">${formatCurrency(tx,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(tx/(t||1)*100).toFixed(1)}% of portfolio</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">🩺</span> Special Purpose</div><div class="privacy-target text-base font-extrabold" style="color:#1D4ED8;">${formatCurrency(sp,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(sp/(t||1)*100).toFixed(1)}% of portfolio</div></div>`);}
 function renderStrategicHub(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];const s=d?(d.salary||0):0;const tp=getTotalBal(d);const es=Math.round(s*.05);const eb=d?(d.balances?.espp||0):0;const cb=d?(d.balances?.cd||0):0;setHTML('texasAcceleratorContainer',`<div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Baseline Annual Income</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:var(--text-1);">${formatCurrency(s,0)}</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#059669;">Est. 0% State Tax Arbitrage</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:#059669;">+${formatCurrency(es,0)} / yr</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#B45309;">Property Tax Buffer Target</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:#B45309;">${formatCurrency(Math.round(s*.025),0)} / yr</div></div></div>`);setHTML('macroMatrixContainer',`<h4 class="text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-2 mb-3" style="color:#6D28D9;"><i data-lucide="compass" class="w-4 h-4"></i> Module B1 · Tactical Macro Matrix</h4><div class="scroll-x"><table class="w-full text-left text-xs"><thead><tr style="border-bottom:1px solid var(--border);"><th class="py-3 px-4">Tactical Pillar</th><th class="py-3 px-4">Current Baseline</th><th class="py-3 px-4">Macro Rationale</th><th class="py-3 px-4">Execution Path</th></tr></thead><tbody class="divide-y" style="border-color:var(--border);"><tr><td class="py-3.5 px-4 font-bold" style="color:var(--text-1);">💵 Cash-Drag Optimization</td><td class="py-3.5 px-4 privacy-target" style="color:var(--text-2);">${formatCurrency(cb,0)} in Cash/CD</td><td class="py-3.5 px-4" style="color:var(--text-4);">Elevated Treasury yields optimise liquid cash sweeps.</td><td class="py-3.5 px-4 font-semibold" style="color:#6D28D9;">Transition into short-term laddered CDs/Treasuries.</td></tr><tr><td class="py-3.5 px-4 font-bold" style="color:var(--text-1);">📈 ESPP Concentration</td><td class="py-3.5 px-4 privacy-target" style="color:var(--text-2);">${formatCurrency(eb,0)} (${tp>0?(eb/tp*100).toFixed(1):0}%)</td><td class="py-3.5 px-4" style="color:var(--text-4);">Concentration breaches safety thresholds.</td><td class="py-3.5 px-4 font-semibold" style="color:#059669;">Stagger-sell ESPP surplus into 401(k)/Roth.</td></tr></tbody></table></div>`);if(typeof lucide!=='undefined')lucide.createIcons();}
 
-function calculatePaystub(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];const fc=parseInt($id('payFrequency')?.value)||26;const fs=$id('paystubFilingStatus')?.value||'single';const msi=parseFloat($id('payCustomSalary')?.value);let as;if(tempSalaryOverride.paycheck!==null)as=tempSalaryOverride.paycheck;else if(!isNaN(msi)&&msi>0)as=msi;else as=getEffectiveAnnualIncome()||0;const gp=as/fc;let tpt=0;const ptri=[];preTaxConfig.forEach(item=>{const ty=$id(`${item.id}_type`)?.value||'per_paycheck';const me=$id(`${item.id}_method`)?.value||'fixed';const v=parseFloat($id(`${item.id}_val`)?.value)||0;let pa=0;if(me==='fixed')pa=ty==='per_paycheck'?v:(v/fc);else if(me==='gross_pct')pa=gp*(v/100);const rg=Math.max(0,gp-tpt);let ap=Math.min(pa,rg);tpt+=ap;if(ap>0)ptri.push({label:`[-] Pre-Tax ${item.label}`,periodAmt:ap,annualAmt:ap*fc});});const tgp=Math.max(0,gp-tpt);const tga=tgp*fc;const ssc=y==="2025"?176100:184500;const csa=Math.min(as,ssc);const sstA=csa*.062;const sstP=sstA/fc;const mtA=as*.0145;const mtP=mtA/fc;const af=parseFloat($id('addWithholdFed')?.value)||0;const asw=parseFloat($id('addWithholdState')?.value)||0;const al=parseFloat($id('addWithholdLocal')?.value)||0;const yb=TaxBrackets[y]||TaxBrackets["2026"];const bl=yb[fs]||yb.single;let fta=0,pl=0;for(let i=0;i<bl.length;i++){const{limit,rate}=bl[i];if(tga>limit){fta+=(limit-pl)*rate;pl=limit;}else{fta+=(tga-pl)*rate;break;}}const ftp=(fta/fc)+af;const str=parseFloat($id('manualStateTaxRate')?.value)||0;const ltr=parseFloat($id('manualLocalTaxRate')?.value)||0;const stp=(tgp*(str/100))+asw;const ltp=(tgp*(ltr/100))+al;const ttp=ftp+stp+ltp+sstP+mtP;const pnp=Math.max(0,tgp-ttp);let tpost=0;const postri=[];customPostTaxDeductions.forEach(item=>{let pa=0;if(item.method==='fixed')pa=item.type==='per_paycheck'?item.amount:(item.amount/fc);else if(item.method==='gross_pct')pa=gp*(item.amount/100);const rn=Math.max(0,pnp-tpost);let ap=Math.min(pa,rn);tpost+=ap;if(ap>0)postri.push({label:`[-] Post-Tax ${item.label}`,periodAmt:ap,annualAmt:ap*fc});});const nth=Math.max(0,pnp-tpost);const ntha=nth*fc;const rb=$id('paystubReceiptBody');if(rb){let h=`<tr class="font-bold" style="color:#059669;"><td class="py-3 px-4" data-label="Payroll Item">[+] Gross Salary Earnings</td><td class="py-3 px-4 privacy-target text-right font-mono" data-label="Annual"><span>${formatCurrency(gp*fc)}</span></td><td class="py-3 px-4 privacy-target text-right font-mono" data-label="Per Period"><span>${formatCurrency(gp)}</span></td></tr>`;ptri.forEach(it=>{h+=`<tr><td class="py-2.5 px-4" style="color:#6D28D9;" data-label="Payroll Item">${it.label}</td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Annual"><span>${formatCurrency(it.annualAmt)}</span></td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Per Period"><span>${formatCurrency(it.periodAmt)}</span></td></tr>`;});h+=`<tr style="background:var(--surface-3);" class="font-bold"><td class="py-3 px-4" style="color:var(--text-2);" data-label="Payroll Item">[=] Taxable Federal Gross</td><td class="py-3 px-4 privacy-target text-right font-mono" data-label="Annual"><span>${formatCurrency(tgp*fc)}</span></td><td class="py-3 px-4 privacy-target text-right font-mono" data-label="Per Period"><span>${formatCurrency(tgp)}</span></td></tr><tr><td class="py-2.5 px-4" style="color:#BE123C;" data-label="Payroll Item">[-] Federal Income Tax</td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Annual"><span>${formatCurrency(ftp*fc)}</span></td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Per Period"><span>${formatCurrency(ftp)}</span></td></tr><tr><td class="py-2.5 px-4" style="color:#BE123C;" data-label="Payroll Item">[-] FICA (SS + Medicare)</td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Annual"><span>${formatCurrency((sstP+mtP)*fc)}</span></td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Per Period"><span>${formatCurrency(sstP+mtP)}</span></td></tr>`;postri.forEach(it=>{h+=`<tr><td class="py-2.5 px-4" style="color:#BE185D;" data-label="Payroll Item">${it.label}</td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Annual"><span>${formatCurrency(it.annualAmt)}</span></td><td class="py-2.5 px-4 privacy-target text-right font-mono" data-label="Per Period"><span>${formatCurrency(it.periodAmt)}</span></td></tr>`;});h+=`<tr style="background:rgba(52,211,153,.10);"><td class="py-4 px-4 font-extrabold text-sm" style="color:#059669;" data-label="Payroll Item">[=] Net Take-Home Pay</td><td class="py-4 px-4 privacy-target font-extrabold text-sm text-right font-mono" style="color:#059669;" data-label="Annual"><span>${formatCurrency(ntha)}</span></td><td class="py-4 px-4 privacy-target font-extrabold text-base text-right font-mono" style="color:#059669;" data-label="Per Period"><span>${formatCurrency(nth)}</span></td></tr>`;rb.innerHTML=h;}}
+function calculatePaystub(){
+  const y  = $id('yearFilter')?.value;
+  const d  = portfolioData.find(x=>x.year===y) || portfolioData[portfolioData.length-1];
+  const fc = parseInt($id('payFrequency')?.value) || 26;
+  const fs = $id('paystubFilingStatus')?.value || 'single';
+
+  // ── Annual salary resolution ──
+  const msi = parseFloat($id('payCustomSalary')?.value);
+  let as;
+  if(tempSalaryOverride.paycheck !== null)      as = tempSalaryOverride.paycheck;
+  else if(!isNaN(msi) && msi > 0)               as = msi;
+  else                                          as = getEffectiveAnnualIncome() || 0;
+
+  const gp = as / fc; // gross per period
+
+  // ── Pre-tax deductions ──
+  let tpt = 0;
+  const ptri = [];
+  preTaxConfig.forEach(item => {
+    const ty = $id(`${item.id}_type`)?.value   || 'per_paycheck';
+    const me = $id(`${item.id}_method`)?.value || 'fixed';
+    const v  = parseFloat($id(`${item.id}_val`)?.value) || 0;
+    let pa = 0;
+    if(me === 'fixed')       pa = ty === 'per_paycheck' ? v : (v / fc);
+    else if(me === 'gross_pct') pa = gp * (v / 100);
+    const rg = Math.max(0, gp - tpt);
+    const ap = Math.min(pa, rg);
+    tpt += ap;
+    if(ap > 0) ptri.push({ label: `[-] Pre-Tax ${item.label}`, periodAmt: ap, annualAmt: ap * fc });
+  });
+
+  const tgp = Math.max(0, gp - tpt); // taxable gross per period
+  const tga = tgp * fc;               // taxable gross annual
+
+  // ── FICA ──
+  const ssc  = (y === "2025") ? 176100 : 184500;
+  const csa  = Math.min(as, ssc);
+  const sstA = csa * .062;
+  const sstP = sstA / fc;
+  const mtA  = as * .0145;
+  const mtP  = mtA / fc;
+
+  // ── Withholding adjustments ──
+  const af  = parseFloat($id('addWithholdFed')?.value)   || 0;
+  const asw = parseFloat($id('addWithholdState')?.value) || 0;
+  const al  = parseFloat($id('addWithholdLocal')?.value) || 0;
+
+  // ── Federal income tax ──
+  const yb  = TaxBrackets[y] || TaxBrackets["2026"];
+  const bl  = yb[fs] || yb.single;
+  let fta = 0, pl = 0;
+  for(let i = 0; i < bl.length; i++){
+    const { limit, rate } = bl[i];
+    if(tga > limit){ fta += (limit - pl) * rate; pl = limit; }
+    else           { fta += (tga - pl) * rate; break; }
+  }
+  const ftp = (fta / fc) + af;
+
+  // ── State / local ──
+  const str = parseFloat($id('manualStateTaxRate')?.value) || 0;
+  const ltr = parseFloat($id('manualLocalTaxRate')?.value) || 0;
+  const stp = (tgp * (str / 100)) + asw;
+  const ltp = (tgp * (ltr / 100)) + al;
+
+  // ── Total tax per period ──
+  const ttp = ftp + stp + ltp + sstP + mtP;
+
+  // ── Post-tax deductions ──
+  const pnp = Math.max(0, tgp - ttp); // pre-post-tax net
+  let tpost = 0;
+  const postri = [];
+  customPostTaxDeductions.forEach(item => {
+    let pa = 0;
+    if(item.method === 'fixed')        pa = item.type === 'per_paycheck' ? item.amount : (item.amount / fc);
+    else if(item.method === 'gross_pct') pa = gp * (item.amount / 100);
+    const rn = Math.max(0, pnp - tpost);
+    const ap = Math.min(pa, rn);
+    tpost += ap;
+    if(ap > 0) postri.push({ label: `[-] Post-Tax ${item.label}`, periodAmt: ap, annualAmt: ap * fc });
+  });
+
+  // ── Net ──
+  const nth  = Math.max(0, pnp - tpost);
+  const ntha = nth * fc;
+
+  /* ═══════════════════════════════════════════════════════════
+     HERO STATS
+     ═══════════════════════════════════════════════════════════ */
+  const effTax = gp > 0 ? (ttp / gp) * 100 : 0;
+
+  setText('psNetPeriod',    formatCurrency(nth, 2));
+  setText('psGrossPeriod',  formatCurrency(gp, 2));
+  setText('psEffTax',       effTax.toFixed(1) + '%');
+  setText('psAnnualNet',    formatCurrency(ntha, 0));
+
+  const periodWord = fc === 52 ? 'per week'
+                    : fc === 26 ? 'per paycheck · bi-weekly'
+                    : fc === 24 ? 'per paycheck · semi-monthly'
+                    : 'per month';
+  setText('psNetPeriodSub', periodWord);
+  setText('psAnnualNetSub', `${fc} periods / yr`);
+
+  const rcptBadge = $id('psReceiptBadge');
+  if(rcptBadge) rcptBadge.textContent = `${fc} periods / yr`;
+
+  /* ═══════════════════════════════════════════════════════════
+     RECEIPT
+     ═══════════════════════════════════════════════════════════ */
+  const rb = $id('paystubReceiptBody');
+  if(rb){
+    const fmt       = v => formatCurrency(v, 2);
+    const cleanPre  = s => String(s).replace(/^\[\-\]\s*Pre-Tax\s*/,  '');
+    const cleanPost = s => String(s).replace(/^\[\-\]\s*Post-Tax\s*/, '');
+
+    let h = '';
+
+    // ── Earnings ──
+    h += `<tr class="ps-receipt-section"><td colspan="3">Earnings</td></tr>`;
+    h += `<tr class="ps-receipt-row"><td>Gross Salary</td><td>${fmt(gp)}</td><td>${fmt(gp * fc)}</td></tr>`;
+
+    // ── Pre-tax ──
+    if(ptri.length > 0){
+      h += `<tr class="ps-receipt-section"><td colspan="3">Pre-Tax Deductions</td></tr>`;
+      ptri.forEach(it => {
+        h += `<tr class="ps-receipt-row is-neg"><td>${esc(cleanPre(it.label))}</td><td>−${fmt(it.periodAmt)}</td><td>−${fmt(it.annualAmt)}</td></tr>`;
+      });
+    }
+
+    // ── Taxable gross subtotal ──
+    h += `<tr class="ps-receipt-row ps-receipt-subtotal"><td>Taxable Gross</td><td>${fmt(tgp)}</td><td>${fmt(tga)}</td></tr>`;
+
+    // ── Taxes ──
+    h += `<tr class="ps-receipt-section"><td colspan="3">Taxes &amp; Withholding</td></tr>`;
+    h += `<tr class="ps-receipt-row is-neg"><td>Federal Income Tax</td><td>−${fmt(ftp)}</td><td>−${fmt(ftp * fc)}</td></tr>`;
+    h += `<tr class="ps-receipt-row is-neg"><td>FICA (SS + Medicare)</td><td>−${fmt(sstP + mtP)}</td><td>−${fmt((sstP + mtP) * fc)}</td></tr>`;
+    if(stp > 0) h += `<tr class="ps-receipt-row is-neg"><td>State Tax</td><td>−${fmt(stp)}</td><td>−${fmt(stp * fc)}</td></tr>`;
+    if(ltp > 0) h += `<tr class="ps-receipt-row is-neg"><td>Local Tax</td><td>−${fmt(ltp)}</td><td>−${fmt(ltp * fc)}</td></tr>`;
+
+    // ── Post-tax ──
+    if(postri.length > 0){
+      h += `<tr class="ps-receipt-section"><td colspan="3">Post-Tax Deductions</td></tr>`;
+      postri.forEach(it => {
+        h += `<tr class="ps-receipt-row is-neg"><td>${esc(cleanPost(it.label))}</td><td>−${fmt(it.periodAmt)}</td><td>−${fmt(it.annualAmt)}</td></tr>`;
+      });
+    }
+
+    // ── Net ──
+    h += `<tr class="ps-receipt-net"><td>Net Take-Home</td><td>${fmt(nth)}</td><td>${fmt(ntha)}</td></tr>`;
+
+    rb.innerHTML = h;
+  }
+
+  // Keep segmented controls in sync
+  if(typeof psSyncSegs === 'function') psSyncSegs();
+}
 function togglePaycheckOverride(){const e=!!$id('payOverrideToggle')?.checked;const b=$id('simSalaryBannerPaycheck'),i=$id('payCustomSalary');if(e){b?.classList.remove('hidden');const c=parseFloat(i?.value)||0;tempSalaryOverride.paycheck=c>0?c:(getEffectiveAnnualIncome()||0);if(i)i.value=tempSalaryOverride.paycheck;toast('Simulation active — changes do not affect global profile.','warning',3000);}else{b?.classList.add('hidden');tempSalaryOverride.paycheck=null;const gi=getEffectiveAnnualIncome();if(i)i.value=gi;}updateSalarySourceLabel();syncInputToSlider('payCustomSalarySlider','payCustomSalary');calculatePaystub();}
 function clearPaycheckOverride(){const t=$id('payOverrideToggle');if(t)t.checked=false;tempSalaryOverride.paycheck=null;const i=$id('payCustomSalary');if(i)i.value=getEffectiveAnnualIncome();$id('simSalaryBannerPaycheck')?.classList.add('hidden');updateSalarySourceLabel();syncInputToSlider('payCustomSalarySlider','payCustomSalary');calculatePaystub();}
 
