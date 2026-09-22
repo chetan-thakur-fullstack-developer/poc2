@@ -1148,6 +1148,25 @@ html.dark .btn-active{color:#6EE7B7;}
     bottom:calc(4rem + env(safe-area-inset-bottom,0px) + 1.25rem) !important;
   }
 }
+/* ═══════════════════════════════════════════════════════════
+   ONBOARDING CHECKLIST + NOTIFICATION CENTER
+   ═══════════════════════════════════════════════════════════ */
+#notifBellWrap .notif-dot{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;line-height:15px;padding:0 4px;font-size:9.5px;font-weight:800;border-radius:9999px;background:#EC4899;color:#fff;text-align:center;box-shadow:0 2px 5px rgba(236,72,153,.45);}
+#notifPopover{min-width:340px;max-width:calc(100vw - 24px);}
+@media(max-width:640px){#notifPopover{position:fixed;top:3.75rem;left:1rem;right:1rem;min-width:0;max-width:none;}}
+.notif-item{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .75rem;border-radius:10px;transition:background-color .15s ease;cursor:default;}
+.notif-item:hover{background:var(--surface-2);}
+.notif-item.unread{background:rgba(139,92,246,.05);}
+.notif-empty{padding:2.25rem 1rem;text-align:center;}
+
+.onboard-step{display:flex;align-items:center;gap:.75rem;padding:.7rem .8rem;border-radius:11px;background:var(--surface-2);border:1px solid var(--border-strong);cursor:pointer;text-align:left;transition:all .18s ease;font-family:inherit;width:100%;}
+.onboard-step:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-lift);}
+.onboard-step:active{transform:scale(.99);}
+.onboard-step.done{cursor:default;background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.26);opacity:.78;}
+.onboard-step.done:hover{border-color:rgba(16,185,129,.4);transform:none;box-shadow:none;}
+
+.onboard-progress{height:6px;border-radius:9999px;background:var(--surface-3);overflow:hidden;}
+.onboard-progress>div{height:100%;border-radius:9999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .5s cubic-bezier(.4,0,.2,1);}
 </style>
 </head>
 <body>
@@ -1328,6 +1347,24 @@ html.dark .btn-active{color:#6EE7B7;}
           </div>
 
           <div class="flex items-center gap-1.5 lg:gap-2 shrink-0">
+            <!-- ── NOTIFICATION BELL ── -->
+<div class="relative" id="notifBellWrap">
+  <button id="notifBellBtn" onclick="toggleNotifPopover(event)" class="chip !py-2 !px-3" style="height:32px;position:relative;" title="Notifications" aria-label="Notifications">
+    <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+    <span id="notifBadge" class="notif-dot hidden">0</span>
+  </button>
+  <div id="notifPopover" class="popover" style="padding:0;">
+    <div class="px-3 py-2.5 flex items-center justify-between" style="border-bottom:1px solid var(--border);">
+      <div class="flex items-center gap-2">
+        <i data-lucide="bell" class="w-3.5 h-3.5" style="color:#6D28D9;"></i>
+        <span class="text-xs font-extrabold" style="color:var(--text-1);">Notifications</span>
+        <span id="notifCountChip" class="badge badge-violet" style="font-size:.55rem;">0</span>
+      </div>
+      <button onclick="clearAllNotifications()" class="text-[10px] font-bold hover:underline" style="color:var(--text-3);">Clear all</button>
+    </div>
+    <div id="notifList" class="max-h-[26rem] overflow-y-auto scroll" style="padding:6px;"></div>
+  </div>
+</div>
             <button class="plan-chip free" id="headerPlanChip" onclick="switchMainTab(null,'tab-pricing',true)" title="View plans & pricing">
               <i data-lucide="sprout" style="width:11px;height:11px;"></i><span id="headerPlanChipText">FREE</span>
             </button>
@@ -1405,7 +1442,10 @@ html.dark .btn-active{color:#6EE7B7;}
 
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="main-tab-content space-y-5">
-          <div class="surface p-3 lg:p-4 flex flex-wrap items-center gap-3">
+  <!-- ── GETTING STARTED CHECKLIST ── -->
+  <div id="gettingStartedWrap" class="surface p-5 lg:p-6" style="display:none;"></div>
+
+  <div class="surface p-3 lg:p-4 flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-3 min-w-0 flex-grow">
               <span class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.22);"><i data-lucide="layout-grid" class="w-4 h-4" style="color:#6D28D9;"></i></span>
               <div class="min-w-0"><h3 class="text-sm font-extrabold tracking-tight truncate" style="color:var(--text-1);">Your Dashboard</h3><p class="text-[11px] font-semibold truncate" style="color:var(--text-4);">Reorder, hide, and add widgets · drag cards to rearrange</p></div>
@@ -2697,6 +2737,20 @@ html.dark .btn-active{color:#6EE7B7;}
                 </div>
               </div>
 
+              <div class="settings-card" style="grid-column: 1 / -1;">
+  <div class="settings-card-header">
+    <div class="settings-card-icon"><i data-lucide="list-checks" style="width:18px;height:18px;"></i></div>
+    <div class="flex-grow min-w-0">
+      <h3>Getting Started Checklist</h3>
+      <p>Guided setup steps shown on your dashboard until complete</p>
+    </div>
+    <span id="onboardingStatusChip" class="badge badge-slate">Hidden</span>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-label">Show onboarding checklist</div><div class="settings-row-desc">Re‑enable the guided setup list on your dashboard. Useful after a factory reset or for a new household member.</div></div>
+    <div class="settings-row-control"><button onclick="resetGettingStarted()" class="btn btn-ghost !py-1.5 !text-[11px]"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i> Show again</button></div>
+  </div>
+</div>
               <!-- SUBSCRIPTION & PLAN (NEW) -->
               <div class="settings-pane" data-pane="subscription">
                 <div class="settings-hero">
@@ -3654,6 +3708,12 @@ function subApplyUpgrade(planId, source){
 
   persistAppSettings();
   toast(`Upgraded to ${SUB_PLANS[planId].name}. Access is live immediately.${credit > 0 ? ` $${credit.toFixed(2)} credit applied.` : ''}`, 'success', 5000);
+  pushNotification({
+    title: `Upgraded to ${SUB_PLANS[planId].name}`,
+    message: credit > 0 ? `$${credit.toFixed(2)} prorated credit applied.` : 'Your new tier is live.',
+    type: 'success',
+    action: { label: 'View plans', handler: "switchMainTab(null,'tab-pricing',true)" }
+  });
   renderSubscriptionUI();
   refreshAllGatedUI();
   return true;
@@ -5094,7 +5154,7 @@ window.switchSettingsSection = function(id) {
   if (id === 'privacy')    initPinPad();
   if (id === 'profile')    previewProfileLive();
   if (id === 'household')  renderHouseholdPane();
-  if (id === 'data')       refreshGithubStatus();
+  if (id === 'data'){      refreshGithubStatus(); refreshOnboardingStatusChip(); }
   if (id === 'currency')   loadCurrencyUI();
   if (id === 'subscription') renderSubscriptionSettingsPane();
 };
@@ -5938,7 +5998,7 @@ function switchMainTab(event,tabId,scrollTop=false){
   if(event&&event.currentTarget&&event.currentTarget.classList.contains('nav-item'))event.currentTarget.classList.add('active');
   const a=document.querySelector('aside.desktop-sidebar');if(a&&a.classList.contains('mobile-open'))toggleMobileMenu();
   const m=$id('mainScroll');if(m)m.scrollTop=0;
-  if(tabId==='tab-dashboard') dashRender();
+  if(tabId==='tab-dashboard'){ dashRender(); refreshOnboarding(); }
   else if(tabId==='tab-overview'){
     setTimeout(()=>{document.querySelectorAll('#tab-overview canvas').forEach(cv=>{try{ const inst = (typeof Chart!=='undefined' && Chart.getChart) ? Chart.getChart(cv) : null; if(inst) inst.resize(); }catch(_){}});}, 480);
     requestAnimationFrame(()=>{try{const y = $id('yearFilter')?.value || currentYear();const d = portfolioData.find(x=>x.year===y) || portfolioData[portfolioData.length-1];if(d) renderCharts(d);renderComparisonTable();renderMiniCharts();renderRebalancer();updatePortfolioDataStatus();}catch(_){}});
@@ -6275,6 +6335,12 @@ async function importDefaultPortfolioData(btn){
       }catch(e){ console.error(e); }
     });
     toast(`Imported ${portfolioData.length} year(s) and ${categoriesConfig.length} categories from portfolio-data.json.`,'success',4500);
+    pushNotification({
+      title: 'Portfolio data imported',
+      message: `${portfolioData.length} year(s) · ${categoriesConfig.length} categories loaded from portfolio-data.json.`,
+      type: 'success',
+      action: { label: 'View portfolio', handler: "switchMainTab(null,'tab-overview',true)" }
+    });
   }catch(e){
     console.error('[importDefaultPortfolioData]', e);
     toast(`Import failed: ${e.message}`,'error',6000);
@@ -6334,15 +6400,44 @@ async function saveData(){
   const path = getUserDataPath('portfolio-data.json');
   const url = `${apiBase}/${path}`;
   const headers = {'Accept':'application/vnd.github+json','Authorization':`Bearer ${getFullToken()}`,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};
+
   try{
     let sha = null;
     const gr = await fetch(url, {method:'GET', headers});
     if(gr.ok){ const ex = await gr.json(); sha = ex.sha; }
-    const body = { message:`chore(${getUserHandle()}): sync portfolio ${new Date().toISOString().slice(0,10)}`, content:b64, ...(sha ? {sha} : {}) };
+
+    const body = {
+      message: `chore(${getUserHandle()}): sync portfolio ${new Date().toISOString().slice(0,10)}`,
+      content: b64,
+      ...(sha ? {sha} : {})
+    };
     const pr = await fetch(url, {method:'PUT', headers, body: JSON.stringify(body)});
-    if(pr.ok){ renderSaveChip('saved'); toast(sha ? 'Portfolio updated on GitHub.' : `Created data/${getUserHandle()}/portfolio-data.json on GitHub.`, 'success', 2600); }
-    else { const err = await pr.json().catch(()=>({})); renderSaveChip('pending'); toast(`GitHub error: ${err.message || pr.statusText}`, 'error', 5000); }
-  }catch(e){ renderSaveChip('pending'); toast(`Sync failed: ${e.message}. Local copy kept.`, 'error', 5000); }
+
+    if(pr.ok){
+      renderSaveChip('saved');
+      toast(sha ? 'Portfolio updated on GitHub.' : `Created data/${getUserHandle()}/portfolio-data.json on GitHub.`, 'success', 2600);
+    } else {
+      const err = await pr.json().catch(()=>({}));
+      renderSaveChip('pending');
+      const msg = err.message || pr.statusText || 'Unknown GitHub error';
+      toast(`GitHub error: ${msg}`, 'error', 5000);
+      pushNotification({
+        title: 'GitHub sync failed',
+        message: `${msg}. Your data is safe locally — try again from Settings → Data.`,
+        type: 'error',
+        action: { label: 'Open Data settings', handler: "openSettingsSection('data')" }
+      });
+    }
+  } catch(e){
+    renderSaveChip('pending');
+    toast(`Sync failed: ${e.message}. Local copy kept.`, 'error', 5000);
+    pushNotification({
+      title: 'GitHub sync failed',
+      message: `${e.message}. Your data is safe locally — retry from Settings → Data.`,
+      type: 'error',
+      action: { label: 'Open Data settings', handler: "openSettingsSection('data')" }
+    });
+  }
 }
 function exportJSON(){syncInputsToData();const eo={selectedCurrency:currentCurrency,categories:categoriesConfig,irsBaseLimits:irsBaseLimits,defaultAccountData:portfolioData};const ds="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(eo,null,2));const a=document.createElement('a');a.setAttribute("href",ds);a.setAttribute("download","portfolio-data.json");document.body.appendChild(a);a.click();a.remove();}
 function importJSON(event){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const p=JSON.parse(e.target.result);if(p.selectedCurrency)currentCurrency=p.selectedCurrency;if(p.defaultAccountData)portfolioData=p.defaultAccountData;if(p.categories)categoriesConfig=p.categories;if(p.irsBaseLimits)irsBaseLimits=p.irsBaseLimits;updateCurrencyLabels();initDashboard();scheduleSaveData(400);updatePortfolioDataStatus();}catch(err){toast("Invalid JSON file provided.","error");}};r.readAsText(f);}
@@ -6377,6 +6472,7 @@ function initDashboard(){
   updatePortfolioDataStatus();
   renderSubscriptionUI();
   updateFeatureLocksInApp();
+  refreshOnboarding();          // ← ADD THIS
 
 }
 function populateYearFilter(){
@@ -7389,6 +7485,12 @@ async function runPlaidDemoSync(){
   if(typeof dashRender==='function') dashRender();
   updateNavBadges();
   toast(`Plaid sync complete — ${nl.length} accounts · ${added} new transactions.`,'success');
+  pushNotification({
+    title: 'Plaid sync complete',
+    message: `${nl.length} account(s) refreshed · ${added} new transaction(s).`,
+    type: 'success',
+    action: { label: 'Review transactions', handler: "switchMainTab(null,'tab-transactions',true)" }
+  });
 }
 let _mappingTarget={id:null,source:null};
 function openMappingModal(id,src){const a=(accountsStore[src]||[]).find(x=>x.id===id);if(!a)return;_mappingTarget={id,source:src};const ks=$id('mapPortfolioKey');ks.innerHTML=categoriesConfig.map(c=>`<option value="${c.key}">${categoryEmoji(c)} ${c.label}</option>`).join('');const ys=$id('mapYear');const ys2=[...portfolioData].map(d=>d.year).sort((a,b)=>parseInt(b)-parseInt(a));ys.innerHTML=ys2.map(y=>`<option value="${y}">${y}</option>`).join('');const mp=a.mapping||{};if(mp.portfolioKey&&categoriesConfig.some(c=>c.key===mp.portfolioKey))ks.value=mp.portfolioKey;if(mp.year&&ys2.includes(mp.year))ys.value=mp.year;else if(ys2.length)ys.value=ys2[0];$id('mapEnabled').checked=!!mp.enabled;const m=accountTypeMeta(a.type);const il=!!m.liability;setHTML('mappingAccountInfo',`<div class="flex items-center justify-between gap-3"><div class="flex items-center gap-2.5 min-w-0"><span class="w-9 h-9 rounded-xl flex items-center justify-center text-base shrink-0" style="background-color:${a.color||'#8B5CF6'}18;border:1px solid ${a.color||'#8B5CF6'}33;">${m.emoji}</span><div class="min-w-0"><div class="font-bold truncate text-xs" style="color:var(--text-1);">${esc(a.name)}</div><div class="text-[10px] truncate" style="color:var(--text-4);">${esc(a.institution||'—')}</div></div></div><div class="text-right shrink-0"><div class="text-[9px] font-bold uppercase tracking-wider" style="color:var(--text-4);">Balance</div><div class="privacy-target text-sm font-extrabold font-mono" style="color:${il?'#BE123C':'#059669'};">${formatCurrency(a.balance||0,0)}</div></div></div>`);$id('mappingModal').classList.remove('hidden');if(typeof lucide!=='undefined')lucide.createIcons();}
@@ -7561,8 +7663,45 @@ function openNewGoalModal(){
 }
 function saveNewGoal(te){const n=$id('newGoalName')?.value?.trim();const t=parseFloat($id('newGoalTarget')?.value)||0;const ds=$id('newGoalDate')?.value;const c=$id('newGoalCat')?.value||'Custom';const ic=$id('newGoalIcon')?.value?.trim()||'🎯';const sh=!!$id('newGoalShared')?.checked;if(!n||t<=0||!ds){toast('Please fill in name, target, and date.','warning');return;}const m=Math.max(1,monthsUntil(ds));const cl=['#3B82F6','#10B981','#8B5CF6','#F59E0B','#EC4899','#06B6D4','#6366F1'];DB.goals.push({id:'g_'+Date.now(),name:n,icon:ic,target:t,saved:0,date:ds,monthly:Math.round(t/m),color:cl[DB.goals.length%cl.length],cat:c,shared:sh});saveGoalsData();te?.closest('.fixed')?.remove();initGoalsTab();toast(`Goal "${n}" created!`,'success');}
 function contributeToGoal(id){const g=DB.goals.find(x=>x.id===id);if(!g)return;const w=openModal(`<div class="surface p-6 max-w-sm w-full space-y-4" style="box-shadow:var(--shadow-lift);"><div class="flex justify-between items-center pb-3" style="border-bottom:1px solid var(--border);"><h3 class="text-sm font-extrabold" style="color:var(--text-1);">Contribute to ${esc(g.name)}</h3><button onclick="${CLOSE_MODAL}" class="btn-icon btn-ghost"><i data-lucide="x" class="w-4 h-4"></i></button></div><div class="rounded-xl p-3" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-[10px] uppercase font-extrabold tracking-wider" style="color:var(--text-4);">Current progress</div><div class="flex justify-between items-baseline mt-1"><span class="privacy-target font-extrabold text-lg" style="color:var(--text-1);">${formatCurrency(g.saved,0)}</span><span class="text-[11px]" style="color:var(--text-4);">of ${formatCurrency(g.target,0)}</span></div></div><div><label class="field-label">Contribution amount</label><input type="number" id="contribAmount" class="input font-mono text-right" value="500" step="50"></div><div class="flex flex-wrap gap-1.5">${[100,250,500,1000,2500].map(v=>`<button onclick="document.getElementById('contribAmount').value=${v}" class="chip !py-1.5 !text-[11px]">${formatCurrency(v,0)}</button>`).join('')}</div><div class="flex justify-end gap-2 pt-3" style="border-top:1px solid var(--border);"><button onclick="${CLOSE_MODAL}" class="btn btn-ghost">Cancel</button><button onclick="applyGoalContribution('${g.id}', this)" class="btn btn-primary"><i data-lucide="check" class="w-3.5 h-3.5"></i> Add</button></div></div>`);setTimeout(()=>$id('contribAmount')?.focus(),60);}
-function applyGoalContribution(id,te){const g=DB.goals.find(x=>x.id===id);if(!g)return;const am=parseFloat($id('contribAmount')?.value)||0;if(am<=0){toast('Enter a positive amount.','warning');return;}const bf=g.saved/g.target*100;g.saved=Math.min(g.target,g.saved+am);const af=g.saved/g.target*100;saveGoalsData();te?.closest('.fixed')?.remove();initGoalsTab();const cr=[25,50,75,100].find(m=>bf<m&&af>=m);if(cr)toast(`🎉 ${g.name} hit ${cr}%!`,'success');else toast(`${formatCurrency(am,0)} added to ${g.name}`,'success');}
-function applyGoalTemplate(name){const t=DB.goalTemplates.find(x=>x.name===name);if(!t)return;openNewGoalModal();const d=new Date();d.setMonth(d.getMonth()+t.months);const setV=(id,v)=>{const el=$id(id);if(el)el.value=v;};setV('newGoalName', t.name);setV('newGoalTarget', t.amount);setV('newGoalDate', d.toISOString().slice(0,10));setV('newGoalIcon', t.icon);const catEl=$id('newGoalCat'); if(catEl) catEl.value = t.cat;const calcEl=$id('newGoalCalc');if(calcEl){const months=Math.max(1,monthsUntil(d.toISOString().slice(0,10)));calcEl.innerHTML=`Time to goal: <b style="color:var(--text-1);">${months} months</b> · Required monthly: <b style="color:#6D28D9;">${formatCurrency(t.amount/months,0)}</b>`;}}
+function applyGoalContribution(id,te){
+  const g=DB.goals.find(x=>x.id===id);
+  if(!g)return;
+  const am=parseFloat($id('contribAmount')?.value)||0;
+  if(am<=0){ toast('Enter a positive amount.','warning'); return; }
+  const bf=g.saved/g.target*100;
+  g.saved=Math.min(g.target,g.saved+am);
+  const af=g.saved/g.target*100;
+  saveGoalsData();
+  te?.closest('.fixed')?.remove();
+  initGoalsTab();
+
+  // ── Milestone detection ──
+  const cr=[25,50,75,100].find(m=>bf<m&&af>=m);
+
+  // ── Toast + persistent notification ──
+  if(cr === 100){
+    toast(`🎉 ${g.name} hit 100%!`,'success');
+    pushNotification({
+      title: `🎉 Goal complete: ${g.name}`,
+      message: `You've reached your ${formatCurrency(g.target,0)} target — nice work!`,
+      type: 'success',
+      action: { label: 'Open goals', handler: "switchMainTab(null,'tab-goals',true)" }
+    });
+  } else if(cr){
+    toast(`🎉 ${g.name} hit ${cr}%!`,'success');
+    pushNotification({
+      title: `${g.icon || '🎯'} ${g.name} hit ${cr}%`,
+      message: `${formatCurrency(g.saved,0)} of ${formatCurrency(g.target,0)} saved. Keep going!`,
+      type: 'info',
+      action: { label: 'Open goals', handler: "switchMainTab(null,'tab-goals',true)" }
+    });
+  } else {
+    toast(`${formatCurrency(am,0)} added to ${g.name}`,'success');
+  }
+
+  // ── Keep onboarding + bell in sync ──
+  try{ refreshOnboarding(); }catch(_){}
+}function applyGoalTemplate(name){const t=DB.goalTemplates.find(x=>x.name===name);if(!t)return;openNewGoalModal();const d=new Date();d.setMonth(d.getMonth()+t.months);const setV=(id,v)=>{const el=$id(id);if(el)el.value=v;};setV('newGoalName', t.name);setV('newGoalTarget', t.amount);setV('newGoalDate', d.toISOString().slice(0,10));setV('newGoalIcon', t.icon);const catEl=$id('newGoalCat'); if(catEl) catEl.value = t.cat;const calcEl=$id('newGoalCalc');if(calcEl){const months=Math.max(1,monthsUntil(d.toISOString().slice(0,10)));calcEl.innerHTML=`Time to goal: <b style="color:var(--text-1);">${months} months</b> · Required monthly: <b style="color:#6D28D9;">${formatCurrency(t.amount/months,0)}</b>`;}}
 let _creditScoreGaugeChart=null,_creditTrendChart=null;
 function initCreditTab(){
   if(!hasFeature('credit_health')) return;
@@ -7640,6 +7779,23 @@ function bootApp(){
   updateBudgetDateUI();
   const cb=$id('sidebarCollapseBtn');
   if(cb)cb.classList.toggle('hidden',window.innerWidth<1024);
+
+  // ── Notification center: initial render + first-visit welcome ──
+  renderNotifBell();
+  const WELCOME_KEY = 'ew_welcomed_v1';
+  try{
+    if(!localStorage.getItem(WELCOME_KEY)){
+      pushNotification({
+        title: 'Welcome to Executive Wealth 👋',
+        message: 'Use the dashboard checklist to set up your workspace. Tap the bell anytime to see important alerts.',
+        type: 'info'
+      });
+      localStorage.setItem(WELCOME_KEY, '1');
+    }
+  }catch(_){}
+
+  // ── Onboarding checklist ──
+  setTimeout(refreshOnboarding, 250);
 }
 let _lastIsMobile = window.innerWidth <= 768;
 window.addEventListener('resize',()=>{
@@ -7676,8 +7832,337 @@ document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;docum
     };
   });
 })();
+/* ═══════════════════════════════════════════════════════════
+   NOTIFICATION CENTER  ·  persisted, dismissible, per‑user
+   ═══════════════════════════════════════════════════════════ */
+const NOTIF_STORAGE_KEY = 'ew_notifications_v1';
+let notificationsStore = [];
+
+function loadNotifications(){
+  try{ const r = localStorage.getItem(NOTIF_STORAGE_KEY); notificationsStore = r ? JSON.parse(r) : []; }
+  catch(_){ notificationsStore = []; }
+  if(!Array.isArray(notificationsStore)) notificationsStore = [];
+}
+function persistNotifications(){
+  try{ localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(notificationsStore.slice(0, 100))); }catch(_){}
+}
+function pushNotification(opts){
+  opts = opts || {};
+  const n = {
+    id: 'n_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    title: opts.title || 'Notification',
+    message: opts.message || '',
+    type: opts.type || 'info',
+    action: opts.action || null,
+    at: new Date().toISOString(),
+    read: false
+  };
+  notificationsStore.unshift(n);
+  if(notificationsStore.length > 100) notificationsStore = notificationsStore.slice(0, 100);
+  persistNotifications();
+  renderNotifBell();
+  const pop = document.getElementById('notifPopover');
+  if(pop && pop.classList.contains('open')) renderNotifList();
+  return n;
+}
+function dismissNotification(id){
+  notificationsStore = notificationsStore.filter(n => n.id !== id);
+  persistNotifications();
+  renderNotifBell();
+  renderNotifList();
+}
+function clearAllNotifications(){
+  if(!notificationsStore.length) return;
+  if(!confirm('Clear all notifications?\n\nThis cannot be undone.')) return;
+  notificationsStore = [];
+  persistNotifications();
+  renderNotifBell();
+  renderNotifList();
+  toast('All notifications cleared.', 'info');
+}
+function markAllNotificationsRead(){
+  let changed = false;
+  notificationsStore.forEach(n => { if(!n.read){ n.read = true; changed = true; } });
+  if(changed){ persistNotifications(); renderNotifBell(); }
+}
+function toggleNotifPopover(ev){
+  if(ev) ev.stopPropagation();
+  const p = document.getElementById('notifPopover');
+  if(!p) return;
+  const open = !p.classList.contains('open');
+  p.classList.toggle('open', open);
+  if(open){
+    renderNotifList();
+    setTimeout(markAllNotificationsRead, 700);
+  }
+}
+function renderNotifBell(){
+  const badge = document.getElementById('notifBadge');
+  const chip  = document.getElementById('notifCountChip');
+  const unread = notificationsStore.filter(n => !n.read).length;
+  const total  = notificationsStore.length;
+  if(badge){
+    if(unread > 0){ badge.classList.remove('hidden'); badge.textContent = unread > 99 ? '99+' : unread; }
+    else badge.classList.add('hidden');
+  }
+  if(chip) chip.textContent = total > 99 ? '99+' : total;
+}
+function renderNotifList(){
+  const host = document.getElementById('notifList');
+  if(!host) return;
+  if(!notificationsStore.length){
+    host.innerHTML = `<div class="notif-empty">
+      <div class="w-12 h-12 mx-auto mb-2 rounded-2xl flex items-center justify-center" style="background:var(--surface-2);">
+        <i data-lucide="bell-off" class="w-5 h-5" style="color:var(--text-4);"></i>
+      </div>
+      <div class="text-[11px] font-bold mb-0.5" style="color:var(--text-3);">All caught up</div>
+      <div class="text-[10px]" style="color:var(--text-4);">Important alerts and reminders will appear here.</div>
+    </div>`;
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+    return;
+  }
+  const toneMap = {
+    success:{bg:'rgba(16,185,129,.12)',color:'#059669',icon:'check-circle-2'},
+    warning:{bg:'rgba(245,158,11,.12)',color:'#B45309',icon:'alert-triangle'},
+    error:{bg:'rgba(251,113,133,.12)',color:'#BE123C',icon:'alert-circle'},
+    info:{bg:'rgba(139,92,246,.12)',color:'#6D28D9',icon:'info'}
+  };
+  host.innerHTML = notificationsStore.map(n => {
+    const t = toneMap[n.type] || toneMap.info;
+    const when = notifTimeAgo(n.at);
+    return `<div class="notif-item ${n.read ? '' : 'unread'}">
+      <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style="background:${t.bg};color:${t.color};">
+        <i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i>
+      </span>
+      <div class="min-w-0 flex-grow">
+        <div class="flex items-start justify-between gap-2">
+          <div class="text-[11.5px] font-extrabold leading-snug pr-1" style="color:var(--text-1);">${esc(n.title)}</div>
+          <button onclick="event.stopPropagation(); dismissNotification('${n.id}')" class="shrink-0 p-0.5 rounded hover:bg-[var(--surface-3)]" style="color:var(--text-4);" title="Dismiss">
+            <i data-lucide="x" class="w-3 h-3"></i>
+          </button>
+        </div>
+        ${n.message ? `<div class="text-[10.5px] mt-0.5 leading-relaxed" style="color:var(--text-3);">${esc(n.message)}</div>` : ''}
+        <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+          <span class="text-[9px] font-semibold" style="color:var(--text-4);">${when}</span>
+          ${n.action ? `<button onclick='handleNotifAction(${JSON.stringify(n.id)})' class="text-[10px] font-bold hover:underline" style="color:#6D28D9;">${esc(n.action.label)}</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+function handleNotifAction(id){
+  const n = notificationsStore.find(x => x.id === id);
+  if(!n || !n.action) return;
+  try{ if(typeof n.action.handler === 'string') new Function(n.action.handler)(); }
+  catch(e){ console.error('[notif action]', e); }
+  const p = document.getElementById('notifPopover');
+  if(p) p.classList.remove('open');
+}
+function notifTimeAgo(iso){
+  const d = new Date(iso), now = new Date();
+  const s = Math.floor((now - d) / 1000);
+  if(s < 60) return 'just now';
+  if(s < 3600) return Math.floor(s / 60) + 'm ago';
+  if(s < 86400) return Math.floor(s / 3600) + 'h ago';
+  if(s < 604800) return Math.floor(s / 86400) + 'd ago';
+  return d.toLocaleDateString();
+}
+function refreshNotifUI(){ renderNotifBell(); const p = document.getElementById('notifPopover'); if(p && p.classList.contains('open')) renderNotifList(); }
+document.addEventListener('click', (e) => {
+  const p = document.getElementById('notifPopover');
+  const b = document.getElementById('notifBellBtn');
+  if(p && p.classList.contains('open') && !p.contains(e.target) && b && !b.contains(e.target)){
+    p.classList.remove('open');
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   GETTING STARTED ONBOARDING CHECKLIST
+   ═══════════════════════════════════════════════════════════ */
+const ONBOARD_STORAGE_KEY = 'ew_onboarding_v1';
+let onboardingState = { dismissed: false, dismissedAt: null };
+
+function loadOnboardingState(){
+  try{
+    const r = localStorage.getItem(ONBOARD_STORAGE_KEY);
+    if(r) onboardingState = { ...onboardingState, ...JSON.parse(r) };
+  }catch(_){}
+}
+function persistOnboardingState(){
+  try{ localStorage.setItem(ONBOARD_STORAGE_KEY, JSON.stringify(onboardingState)); }catch(_){}
+}
+
+function getOnboardingSteps(){
+  const p   = appSettings.profile || {};
+  const inc = appSettings.income  || {};
+
+  const hasProfile = !!(
+    p.name && p.name.trim() &&
+    p.name !== 'Executive User' &&
+    p.email && p.email.trim() &&
+    p.email !== 'you@example.com'
+  );
+  const hasIncome =
+    (parseFloat(inc.annualSalary) || 0) > 0 ||
+    (parseFloat(inc.hourlyWage) || 0) > 0;
+
+  const hasPortfolio = Array.isArray(portfolioData) && portfolioData.some(r =>
+    Object.values(r.balances || {}).some(v => Number(v) !== 0) ||
+    Object.values(r.invested || {}).some(v => Number(v) !== 0) ||
+    Object.values(r.contri   || {}).some(v => Number(v) !== 0)
+  );
+
+  const hasAccounts = typeof allAccounts === 'function' && allAccounts().length > 0;
+  const hasBudget   = (parseFloat(expenseStore.monthlyBudget) || 0) > 0;
+  const hasTx       = ((accountsStore.plaidTransactions || []).length + (expenseStore.transactions || []).length) > 0;
+  const hasGoal     = (DB.goals || []).length > 0;
+
+  return [
+    { key:'profile',   icon:'user-circle-2',    label:'Complete your profile',   desc:'Name, email, timezone & avatar',                   done: hasProfile,   action: "openSettingsSection('profile')" },
+    { key:'income',    icon:'banknote',         label:'Set your income',         desc:'Powers paycheck, tax & projection tools',          done: hasIncome,    action: "openSettingsSection('income')" },
+    { key:'portfolio', icon:'layout-dashboard', label:'Add portfolio data',      desc:'Import default data, or add years manually',        done: hasPortfolio, action: "switchMainTab(null,'tab-overview',true)" },
+    { key:'accounts',  icon:'wallet',           label:'Add your accounts',       desc:'Link a bank via Plaid, or add manually',            done: hasAccounts,  action: "switchMainTab(null,'tab-accounts',true)" },
+    { key:'budget',    icon:'target',           label:'Set a monthly budget',    desc:'Cap your spending and track pace',                  done: hasBudget,    action: "switchMainTab(null,'tab-expenses',true)" },
+    { key:'tx',        icon:'arrow-left-right', label:'Log or sync transactions',desc:'Get a full ledger of money in and out',            done: hasTx,        action: "switchMainTab(null,'tab-transactions',true)" },
+    { key:'goal',      icon:'flag',             label:'Create a savings goal',   desc:'Give your savings a name and a deadline',           done: hasGoal,      action: "switchMainTab(null,'tab-goals',true)" }
+  ];
+}
+
+function renderGettingStarted(){
+  const wrap = document.getElementById('gettingStartedWrap');
+  if(!wrap) return;
+
+  // Hide if dismissed by the user
+  if(onboardingState.dismissed){ wrap.style.display = 'none'; refreshOnboardingStatusChip(); return; }
+
+  const steps     = getOnboardingSteps();
+  const doneCount = steps.filter(s => s.done).length;
+  const total     = steps.length;
+  const allDone   = doneCount === total;
+  const pct       = total ? (doneCount / total) * 100 : 0;
+
+  wrap.style.display = '';
+  wrap.innerHTML = `
+    <div class="flex items-start justify-between gap-3 flex-wrap mb-4">
+      <div class="flex items-start gap-3 min-w-0 flex-grow">
+        <span class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(236,72,153,.10));border:1px solid rgba(139,92,246,.32);">
+          <i data-lucide="${allDone ? 'party-popper' : 'sparkles'}" class="w-5 h-5" style="color:#6D28D9;"></i>
+        </span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-sm lg:text-base font-extrabold tracking-tight" style="color:var(--text-1);">
+              ${allDone ? "You're all set!" : 'Get started with Executive Wealth'}
+            </h3>
+            <span class="badge ${allDone ? 'badge-emerald' : 'badge-violet'}">${doneCount} / ${total}</span>
+          </div>
+          <p class="text-[11px] lg:text-xs font-semibold mt-0.5" style="color:var(--text-4);">
+            ${allDone
+              ? 'Every setup step is complete. Dismiss this card anytime — you can bring it back from Settings → Data.'
+              : 'A quick checklist to unlock the full power of your workspace.'}
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        ${allDone
+          ? `<button onclick="dismissGettingStarted()" class="btn btn-primary"><i data-lucide="check" class="w-3.5 h-3.5"></i> Dismiss</button>`
+          : `<button onclick="dismissGettingStarted()" class="btn btn-ghost" title="Hide checklist"><i data-lucide="x" class="w-3.5 h-3.5"></i> Hide</button>`}
+      </div>
+    </div>
+
+    <div class="onboard-progress mb-4"><div style="width:${pct}%"></div></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+      ${steps.map(s => renderOnboardStep(s)).join('')}
+    </div>`;
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+  refreshOnboardingStatusChip();
+}
+
+function renderOnboardStep(s){
+  if(s.done){
+    return `<div class="onboard-step done">
+      <span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(16,185,129,.16);color:#059669;">
+        <i data-lucide="check" class="w-4 h-4"></i>
+      </span>
+      <div class="min-w-0 flex-grow">
+        <div class="text-xs font-bold" style="color:var(--text-2);text-decoration:line-through;text-decoration-color:rgba(148,163,184,.5);">${esc(s.label)}</div>
+        <div class="text-[10px]" style="color:var(--text-4);">${esc(s.desc)}</div>
+      </div>
+    </div>`;
+  }
+  return `<button onclick="runOnboardStep('${s.key}')" class="onboard-step">
+    <span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(139,92,246,.12);color:#6D28D9;border:1px solid rgba(139,92,246,.24);">
+      <i data-lucide="${s.icon}" class="w-4 h-4"></i>
+    </span>
+    <div class="min-w-0 flex-grow">
+      <div class="text-xs font-bold truncate" style="color:var(--text-1);">${esc(s.label)}</div>
+      <div class="text-[10px] truncate" style="color:var(--text-4);">${esc(s.desc)}</div>
+    </div>
+    <i data-lucide="arrow-right" class="w-3.5 h-3.5 shrink-0" style="color:var(--text-4);"></i>
+  </button>`;
+}
+
+function runOnboardStep(key){
+  const step = getOnboardingSteps().find(s => s.key === key);
+  if(!step || !step.action) return;
+  try{
+    new Function(step.action)();
+    setTimeout(renderGettingStarted, 500);
+  }catch(e){ console.error('[onboard step]', e); }
+}
+
+function dismissGettingStarted(){
+  onboardingState.dismissed = true;
+  onboardingState.dismissedAt = new Date().toISOString();
+  persistOnboardingState();
+  renderGettingStarted();
+  pushNotification({
+    title: 'Getting-started checklist hidden',
+    message: 'You can bring it back anytime from Settings → Data.',
+    type: 'info'
+  });
+  toast('Checklist hidden. Reset it in Settings → Data.', 'info');
+}
+
+function resetGettingStarted(){
+  onboardingState = { dismissed: false, dismissedAt: null };
+  persistOnboardingState();
+  renderGettingStarted();
+  // If we're not on the dashboard tab, jump there so the user sees the result
+  if(typeof currentTabId !== 'undefined' && currentTabId !== 'tab-dashboard'){
+    try{ switchMainTab(null, 'tab-dashboard', true); }catch(_){}
+  }
+  toast('Onboarding checklist restored.', 'success');
+}
+
+function refreshOnboardingStatusChip(){
+  const chip = document.getElementById('onboardingStatusChip');
+  if(!chip) return;
+  const steps = getOnboardingSteps();
+  const done = steps.filter(s => s.done).length;
+  const total = steps.length;
+  if(onboardingState.dismissed){
+    chip.textContent = 'Hidden';
+    chip.className = 'badge badge-slate';
+  } else if(done === total){
+    chip.textContent = 'Complete';
+    chip.className = 'badge badge-emerald';
+  } else {
+    chip.textContent = `${done} / ${total}`;
+    chip.className = 'badge badge-violet';
+  }
+}
+
+/* ── Auto-render the checklist whenever data is (re)loaded ── */
+function refreshOnboarding(){
+  try{ renderGettingStarted(); }catch(e){ console.error(e); }
+}
 function initApp(){
   loadAuthState();
+  loadNotifications();          // ← ADD THIS
+  loadOnboardingState();
   loadHouseholdState();
   loadAppSettings();
   applyAppSettingsOnLoad();
