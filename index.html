@@ -1347,28 +1347,7 @@ html.dark .btn-active{color:#6EE7B7;}
           </div>
 
           <div class="flex items-center gap-1.5 lg:gap-2 shrink-0">
-            <!-- ── NOTIFICATION BELL ── -->
-<div class="relative" id="notifBellWrap">
-  <button id="notifBellBtn" onclick="toggleNotifPopover(event)" class="chip !py-2 !px-3" style="height:32px;position:relative;" title="Notifications" aria-label="Notifications">
-    <i data-lucide="bell" class="w-3.5 h-3.5"></i>
-    <span id="notifBadge" class="notif-dot hidden">0</span>
-  </button>
-  <div id="notifPopover" class="popover" style="padding:0;">
-    <div class="px-3 py-2.5 flex items-center justify-between" style="border-bottom:1px solid var(--border);">
-      <div class="flex items-center gap-2">
-        <i data-lucide="bell" class="w-3.5 h-3.5" style="color:#6D28D9;"></i>
-        <span class="text-xs font-extrabold" style="color:var(--text-1);">Notifications</span>
-        <span id="notifCountChip" class="badge badge-violet" style="font-size:.55rem;">0</span>
-      </div>
-      <button onclick="clearAllNotifications()" class="text-[10px] font-bold hover:underline" style="color:var(--text-3);">Clear all</button>
-    </div>
-    <div id="notifList" class="max-h-[26rem] overflow-y-auto scroll" style="padding:6px;"></div>
-  </div>
-</div>
-            <button class="plan-chip free" id="headerPlanChip" onclick="switchMainTab(null,'tab-pricing',true)" title="View plans & pricing">
-              <i data-lucide="sprout" style="width:11px;height:11px;"></i><span id="headerPlanChipText">FREE</span>
-            </button>
-
+            
             <div class="relative hidden sm:block">
               <button onclick="toggleDatePopover(event)" class="chip !py-2 !px-3" id="dateRangeChip" style="height:32px;">
                 <i data-lucide="calendar-range" class="w-3.5 h-3.5"></i>
@@ -1394,8 +1373,7 @@ html.dark .btn-active{color:#6EE7B7;}
                 </div>
               </div>
             </div>
-
-            <div class="hidden md:flex items-center gap-1.5" id="currencySelectorWrap">
+<div class="hidden md:flex items-center gap-1.5" id="currencySelectorWrap">
               <select id="currencySelector" onchange="changeActiveCurrency(this.value)" class="input !py-2 !w-auto !text-xs !font-bold" style="min-width:96px;">
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
@@ -1421,6 +1399,28 @@ html.dark .btn-active{color:#6EE7B7;}
               <select id="yearFilter" onchange="updateDashboard()" class="input !py-2 !w-auto !text-xs !font-bold" style="min-width:84px;">
               </select>
             </div>
+            <button class="plan-chip free" id="headerPlanChip" onclick="switchMainTab(null,'tab-pricing',true)" title="View plans & pricing">
+              <i data-lucide="sprout" style="width:11px;height:11px;"></i><span id="headerPlanChipText">FREE</span>
+            </button>
+<!-- ── NOTIFICATION BELL ── -->
+            <div class="relative" id="notifBellWrap">
+              <button id="notifBellBtn" onclick="toggleNotifPopover(event)" class="chip !py-2 !px-3" style="height:32px;position:relative;" title="Notifications" aria-label="Notifications">
+                <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+                <span id="notifBadge" class="notif-dot hidden">0</span>
+              </button>
+              <div id="notifPopover" class="popover" style="padding:0;">
+                <div class="px-3 py-2.5 flex items-center justify-between" style="border-bottom:1px solid var(--border);">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="bell" class="w-3.5 h-3.5" style="color:#6D28D9;"></i>
+                    <span class="text-xs font-extrabold" style="color:var(--text-1);">Notifications</span>
+                    <span id="notifCountChip" class="badge badge-violet" style="font-size:.55rem;">0</span>
+                  </div>
+                  <button onclick="clearAllNotifications()" class="text-[10px] font-bold hover:underline" style="color:var(--text-3);">Clear all</button>
+                </div>
+                <div id="notifList" class="max-h-[26rem] overflow-y-auto scroll" style="padding:6px;"></div>
+              </div>
+            </div>
+            
 
             <div class="hidden xl:flex items-center gap-1">
               <button onclick="toggleAllSections(true)" class="btn-icon btn-ghost" title="Expand all"><i data-lucide="chevrons-down-up" class="w-4 h-4"></i></button>
