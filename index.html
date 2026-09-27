@@ -8445,6 +8445,34 @@ function refreshOnboardingStatusChip(){
     chip.className = 'badge badge-violet';
   }
 }
+/* ═══════════════════════════════════════════════════════════
+   FLOAT MENU AUTO-CLOSE
+   Context menus are appended to <body> with position:fixed so
+   they can escape table wrappers with `overflow:auto`. That
+   means they don't follow the page when the user scrolls — so
+   we close them, like every modern app does.
+   ═══════════════════════════════════════════════════════════ */
+(function floatMenuAutoClose(){
+  function closeFloatMenus(){
+    const menus = document.querySelectorAll('.ew-float-menu');
+    if(menus.length) menus.forEach(m => m.remove());
+  }
+
+  // capture:true so we catch scrolls inside nested scroll containers
+  // (#mainScroll, table wrappers, modal bodies, etc.)
+  window.addEventListener('scroll', closeFloatMenus, { passive: true, capture: true });
+
+  // Re-layout events
+  window.addEventListener('resize', closeFloatMenus);
+  window.addEventListener('orientationchange', closeFloatMenus);
+
+  // Mobile: touchmove fires before scroll, closes instantly with no visual lag
+  document.addEventListener('touchmove', closeFloatMenus, { passive: true, capture: true });
+
+  // Desktop: trackpad/wheel — belt-and-braces for browsers that
+  // coalesce scroll events aggressively
+  document.addEventListener('wheel', closeFloatMenus, { passive: true, capture: true });
+})();
 
 /* ── Auto-render the checklist whenever data is (re)loaded ── */
 function refreshOnboarding(){
