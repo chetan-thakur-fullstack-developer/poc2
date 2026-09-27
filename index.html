@@ -318,7 +318,12 @@ html.dark .settings-nav-item.active{color:#C4B5FD}
 .settings-nav-item.active .sn-chevron{opacity:1}
 .settings-content{flex-grow:1;min-width:0}
 .settings-pane{display:none}
-.settings-pane.active{display:block;animation:fadeInUp .25s cubic-bezier(.4,0,.2,1) both}
+.settings-pane.active{
+  display:flex;
+  flex-direction:column;
+  gap:1.25rem;
+  animation:fadeInUp .25s cubic-bezier(.4,0,.2,1) both;
+}
 .settings-mobile-selector{display:none}
 @media(max-width:900px){
   .settings-shell{flex-direction:column;align-items:stretch;gap:.85rem;width:100%}
@@ -442,7 +447,7 @@ html.dark .wb-opt-check{color:#C4B5FD}
 .wb-slider-val-input::-webkit-outer-spin-button,.wb-slider-val-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 @media(max-width:768px){.wb-slider-val-input{font-size:16px;padding:6px 10px;width:11ch}}
 .settings-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1rem}
-.settings-card{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.35rem;transition:border-color .2s ease}
+.settings-card{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.35rem;transition:border-color .2s ease; margin-bottom: 1.25rem}
 .settings-card:hover{border-color:var(--border-strong)}
 .settings-card-header{display:flex;align-items:center;gap:.65rem;margin-bottom:1rem;padding-bottom:.85rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .settings-card-header .settings-card-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.22);color:#6D28D9;flex-shrink:0}
@@ -499,7 +504,7 @@ html.dark .cat-item .cat-action-btn.danger:hover{color:#FDA4AF}
 .reduce-motion *,.reduce-motion *::before,.reduce-motion *::after{transition-duration:.01ms !important;animation-duration:.01ms !important;animation-iteration-count:1 !important}
 .budget-recent-row:hover{background-color:rgba(139,92,246,.045)}
 html.dark .budget-recent-row:hover{background-color:rgba(139,92,246,.10)}
-.settings-hero {position:relative;overflow:hidden;padding:1.5rem 1.5rem 1.35rem;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);margin-bottom:1rem;}
+.settings-hero {position:relative;overflow:hidden;padding:1.5rem 1.5rem 1.35rem;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);}
 .settings-hero::before {content:'';position:absolute;inset:0;background:radial-gradient(500px 200px at 0% 0%, rgba(139,92,246,.10), transparent 60%),radial-gradient(400px 160px at 100% 100%, rgba(236,72,153,.06), transparent 60%);pointer-events:none;}
 .settings-hero > * { position: relative; }
 .settings-hero-icon {width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(139,92,246,.16), rgba(236,72,153,.10));border:1px solid rgba(139,92,246,.28);color:#6D28D9;flex-shrink:0;}
@@ -1167,6 +1172,27 @@ html.dark .btn-active{color:#6EE7B7;}
 
 .onboard-progress{height:6px;border-radius:9999px;background:var(--surface-3);overflow:hidden;}
 .onboard-progress>div{height:100%;border-radius:9999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .5s cubic-bezier(.4,0,.2,1);}
+/* ═══ Invite Co-Owner Modal ═══ */
+.invite-code-box{display:flex;align-items:center;gap:.5rem;padding:1rem;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,.06),rgba(236,72,153,.04)),var(--surface-2);border:1.5px dashed var(--border-hover);margin-top:.5rem;}
+.invite-code-value{font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:900;letter-spacing:.22em;color:var(--text-1);flex-grow:1;text-align:center;}
+.invite-share-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-top:.85rem;}
+@media(min-width:480px){.invite-share-grid{grid-template-columns:repeat(3,1fr);}}
+.invite-share-btn{display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:1rem .5rem;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);cursor:pointer;transition:all .18s ease;font-family:inherit;color:var(--text-2);font-size:.68rem;font-weight:700;-webkit-tap-highlight-color:transparent;text-align:center;line-height:1.15;}
+.invite-share-btn:hover{border-color:var(--border-hover);background:var(--surface-3);color:var(--text-1);transform:translateY(-1px);box-shadow:var(--shadow-lift);}
+.invite-share-btn:active{transform:scale(.97);}
+.invite-share-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border-strong);flex-shrink:0;}
+.invite-share-btn[data-method="email"] .invite-share-icon{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.28);color:#2563EB;}
+html.dark .invite-share-btn[data-method="email"] .invite-share-icon{color:#93C5FD;}
+.invite-share-btn[data-method="sms"] .invite-share-icon{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.28);color:#047857;}
+html.dark .invite-share-btn[data-method="sms"] .invite-share-icon{color:#6EE7B7;}
+.invite-share-btn[data-method="whatsapp"] .invite-share-icon{background:rgba(37,211,102,.14);border-color:rgba(37,211,102,.32);color:#128C4A;}
+html.dark .invite-share-btn[data-method="whatsapp"] .invite-share-icon{color:#4ADE80;}
+.invite-share-btn[data-method="telegram"] .invite-share-icon{background:rgba(0,136,204,.12);border-color:rgba(0,136,204,.28);color:#0369A1;}
+html.dark .invite-share-btn[data-method="telegram"] .invite-share-icon{color:#7DD3FC;}
+.invite-share-btn[data-method="native"] .invite-share-icon{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.28);color:#6D28D9;}
+html.dark .invite-share-btn[data-method="native"] .invite-share-icon{color:#C4B5FD;}
+.invite-share-btn[data-method="copy"] .invite-share-icon{background:rgba(148,163,184,.14);border-color:rgba(148,163,184,.28);color:#475569;}
+html.dark .invite-share-btn[data-method="copy"] .invite-share-icon{color:#CBD5E1;}
 </style>
 </head>
 <body>
@@ -2345,8 +2371,7 @@ html.dark .btn-active{color:#6EE7B7;}
                   </div>
                 </div>
               </div>
-              <button onclick="gateFeature('unlimited_budget_cats', ()=>openEditBudgetModal())" class="btn btn-primary"><i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Manage Budget</button>
-            </div>
+<button onclick="openEditBudgetModal()" class="btn btn-primary"><i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Manage Budget</button>            </div>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -2354,6 +2379,13 @@ html.dark .btn-active{color:#6EE7B7;}
             <div class="surface p-4"><div class="flex items-center gap-1.5 mb-2"><span class="text-base leading-none">🛒</span><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Spent</span></div><div id="budgetKpiSpent" class="privacy-target text-lg lg:text-xl font-extrabold" style="color:#BE123C;">$0</div><div id="budgetKpiSpentSub" class="text-[10px] font-semibold mt-1" style="color:var(--text-4);">—</div></div>
             <div class="surface p-4"><div class="flex items-center gap-1.5 mb-2"><span class="text-base leading-none">💰</span><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Remaining</span></div><div id="budgetKpiRemaining" class="privacy-target text-lg lg:text-xl font-extrabold" style="color:#059669;">$0</div><div id="budgetKpiRemainingSub" class="text-[10px] font-semibold mt-1" style="color:var(--text-4);">—</div></div>
             <div class="surface p-4"><div class="flex items-center gap-1.5 mb-2"><span class="text-base leading-none">📅</span><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Safe-to-Spend</span></div><div id="budgetKpiSafe" class="privacy-target text-lg lg:text-xl font-extrabold" style="color:#6D28D9;">$0</div><div id="budgetKpiSafeSub" class="text-[10px] font-semibold mt-1" style="color:var(--text-4);">—</div></div>
+          </div>
+<div class="surface p-5 lg:p-6 space-y-4">
+            <div class="flex items-center gap-3 pb-3" style="border-bottom:1px solid var(--border);">
+              <span class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-sm" style="background:rgba(59,130,246,.10);color:#1D4ED8;border:1px solid rgba(59,130,246,.20);">💡</span>
+              <div><h3 class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">Budget Insights</h3><p class="text-[11px] font-semibold" style="color:var(--text-4);">Smart alerts and recommendations based on your range so far</p></div>
+            </div>
+            <div id="budgetInsightsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
           </div>
 
           <div class="surface p-5 lg:p-6">
@@ -2453,14 +2485,7 @@ html.dark .btn-active{color:#6EE7B7;}
             </div>
           </div>
 
-          <div class="surface p-5 lg:p-6 space-y-4">
-            <div class="flex items-center gap-3 pb-3" style="border-bottom:1px solid var(--border);">
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-sm" style="background:rgba(59,130,246,.10);color:#1D4ED8;border:1px solid rgba(59,130,246,.20);">💡</span>
-              <div><h3 class="text-sm font-extrabold tracking-tight" style="color:var(--text-1);">Budget Insights</h3><p class="text-[11px] font-semibold" style="color:var(--text-4);">Smart alerts and recommendations based on your range so far</p></div>
-            </div>
-            <div id="budgetInsightsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-          </div>
-
+          
           <div class="surface p-5 lg:p-6 space-y-4">
             <div class="flex items-center justify-between gap-3 pb-3 flex-wrap" style="border-bottom:1px solid var(--border);">
               <div class="flex items-center gap-3 min-w-0">
@@ -2738,19 +2763,19 @@ html.dark .btn-active{color:#6EE7B7;}
               </div>
 
               <div class="settings-card" style="grid-column: 1 / -1;">
-  <div class="settings-card-header">
-    <div class="settings-card-icon"><i data-lucide="list-checks" style="width:18px;height:18px;"></i></div>
-    <div class="flex-grow min-w-0">
-      <h3>Getting Started Checklist</h3>
-      <p>Guided setup steps shown on your dashboard until complete</p>
-    </div>
-    <span id="onboardingStatusChip" class="badge badge-slate">Hidden</span>
-  </div>
-  <div class="settings-row">
-    <div><div class="settings-row-label">Show onboarding checklist</div><div class="settings-row-desc">Re‑enable the guided setup list on your dashboard. Useful after a factory reset or for a new household member.</div></div>
-    <div class="settings-row-control"><button onclick="resetGettingStarted()" class="btn btn-ghost !py-1.5 !text-[11px]"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i> Show again</button></div>
-  </div>
-</div>
+                <div class="settings-card-header">
+                  <div class="settings-card-icon"><i data-lucide="list-checks" style="width:18px;height:18px;"></i></div>
+                  <div class="flex-grow min-w-0">
+                    <h3>Getting Started Checklist</h3>
+                    <p>Guided setup steps shown on your dashboard until complete</p>
+                  </div>
+                  <span id="onboardingStatusChip" class="badge badge-slate">Hidden</span>
+                </div>
+                <div class="settings-row">
+                  <div><div class="settings-row-label">Show onboarding checklist</div><div class="settings-row-desc">Re‑enable the guided setup list on your dashboard. Useful after a factory reset or for a new household member.</div></div>
+                  <div class="settings-row-control"><button onclick="resetGettingStarted()" class="btn btn-ghost !py-1.5 !text-[11px]"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i> Show again</button></div>
+                </div>
+              </div>
               <!-- SUBSCRIPTION & PLAN (NEW) -->
               <div class="settings-pane" data-pane="subscription">
                 <div class="settings-hero">
@@ -3546,7 +3571,7 @@ const SUB_FEATURE_MATRIX = [
     { label: 'Inflation & purchasing-power tools', free: false, basic: true, pro: true }
   ]},
   { group: 'Advisory & Intelligence', icon: 'sparkles', rows: [
-    { label: 'Credit health monitoring', free: 'false', basic: true, pro: true },
+    { label: 'Credit health monitoring', free: false, basic: true, pro: true },
     { label: 'Credit score simulator', free: false, basic: false, pro: true },
     { label: 'AI-driven wealth insights', free: false, basic: false, pro: true },
     { label: 'Human + AI hybrid advisory', free: false, basic: false, pro: true },
@@ -4339,12 +4364,16 @@ function renderTierCards(){
         ${p.excluded.map(e => `<div class="feat-row" style="opacity:.55;"><span class="ic" style="color:var(--text-4);font-size:12px;">✕</span><span style="text-decoration:line-through;text-decoration-color:rgba(148,163,184,.4);color:var(--text-2);">${e}</span></div>`).join('')}
       </div>` : '';
 
-    const ribbonOffset = p.ribbon && (isActive || isTrialPlan) ? 'top:26px;' : '';
+    // Ribbon placement: CURRENT ribbon sits in DOM *before* the featured ribbon
+    // so it naturally wins the visual stack. If both are present, we push the
+    // featured ribbon down 30px so the two do not overlap.
+    const bothRibbons = p.ribbon && (isActive || isTrialPlan);
+    const ribbonOffset = bothRibbons ? 'top:30px;' : '';
 
     return `
       <div class="${cardClasses}" style="--glow:${p.glow};">
-        ${p.ribbon ? `<div class="tier-ribbon" style="${p.ribbonStyle}">${p.ribbon}</div>` : ''}
-        ${(isActive || isTrialPlan) ? `<div class="tier-ribbon" style="background:linear-gradient(135deg,#10B981,#059669);color:#fff;${ribbonOffset}">${isTrialPlan ? 'TRIAL ACTIVE' : 'CURRENT'}</div>` : ''}
+        ${(isActive || isTrialPlan) ? `<div class="tier-ribbon" style="background:linear-gradient(135deg,#10B981,#059669);color:#fff;">${isTrialPlan ? 'TRIAL ACTIVE' : 'CURRENT'}</div>` : ''}
+        ${p.ribbon ? `<div class="tier-ribbon" style="${p.ribbonStyle}${ribbonOffset}">${p.ribbon}</div>` : ''}
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;${p.ribbon ? 'margin-top:22px;' : ''}">
           <span style="width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;background:linear-gradient(135deg,${p.accent}30,${p.accent}10);border:1px solid ${p.accent}55;">${p.emoji}</span>
           <div>
@@ -4366,6 +4395,9 @@ function renderTierCards(){
 }
 
 function subMatrixCell(v){
+  // Defensive coercion: string 'false'/'true' should never leak into the UI
+  if(v === 'false') v = false;
+  if(v === 'true')  v = true;
   if(v === true){
     return `<div style="display:flex;justify-content:center;"><span class="matrix-check yes"><i data-lucide="check" style="width:12px;height:12px;"></i></span></div>`;
   }
@@ -4681,9 +4713,6 @@ function setBilling(mode){
 /* ═══════════════════════════════════════════════════════════
    TAB SWITCHING INTERCEPTOR
    ═══════════════════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════════════════
-   TAB SWITCHING INTERCEPTOR
-   ═══════════════════════════════════════════════════════════ */
 const _origSwitchMainTab = switchMainTab;
 window.switchMainTab = function(event, tabId, scrollTop){
   const req = TAB_GATES[tabId];
@@ -4927,6 +4956,25 @@ function showAuthGate(){
   $id('authOverlay').classList.remove('hidden');
   $id('skeletonOverlay').classList.add('hidden');
   renderAuthView('signin');
+
+  // Auto-detect an invite link (?invite=XXXXXX) and jump straight to Co-Owner signup
+  try{
+    const invite = new URLSearchParams(window.location.search).get('invite');
+    if(invite){
+      const code = invite.toUpperCase().trim();
+      renderAuthView('signup');
+      pickSignupRole('coowner');
+      setTimeout(() => {
+        const inp = $id('authSignupInviteCode');
+        if(inp){
+          inp.value = code;
+          inp.readOnly = true;
+          inp.style.background = 'var(--surface-2)';
+        }
+        showAuthMsg('authSignupMsg', `You've been invited to join a household. Complete the form to accept the invite.`, 'info');
+      }, 80);
+    }
+  }catch(_){}
 }
 
 function enterApp(){
@@ -4952,6 +5000,7 @@ function applyHouseholdUI(){
   if(label) label.innerText = n > 1 ? `Household · ${n} members` : 'Personal Finance';
 }
 
+
 function renderHouseholdPane(){
   const wrap = $id('householdPaneBody');
   if(!wrap) return;
@@ -4971,19 +5020,56 @@ function renderHouseholdPane(){
         <div class="min-w-0 flex-grow"><div class="text-xs font-extrabold truncate" style="color:var(--text-1);">${esc(primary.name||'You')}</div><div class="text-[10px] truncate" style="color:var(--text-4);">${esc(primary.email||'—')}</div></div>
       </div>
     </div>
+
     <div class="settings-card">
       <div class="settings-card-header">
         <div class="settings-card-icon"><i data-lucide="user-plus" style="width:18px;height:18px;"></i></div>
-        <div class="flex-grow min-w-0"><h3>Invite a Co-Owner</h3><p>Share the invite code below. The co-owner enters it during signup to join this household.</p></div>
+        <div class="flex-grow min-w-0"><h3>Invite a Co-Owner</h3><p>Send the invite code by email, text, or chat. They enter it during signup to join this household.</p></div>
       </div>
+
       <label class="field-label">Household Invite Code</label>
-      <div class="flex items-center gap-2 flex-wrap">
-        <div class="flex-grow min-w-[180px] rounded-xl px-4 py-3 font-mono text-base font-extrabold tracking-[.25em] text-center" style="background:var(--app-bg);border:1px dashed var(--border-hover);color:var(--text-1);">${codeDisplay}</div>
-        <button onclick="copyInviteCode()" class="btn btn-ghost"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy</button>
-        <button onclick="regenerateInviteCode()" class="btn btn-ghost"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> New</button>
+      <div class="invite-code-box">
+        <span class="invite-code-value" id="inviteCodeDisplay">${codeDisplay}</span>
       </div>
-      <p class="text-[10px] mt-2" style="color:var(--text-4);">Invite code expires when regenerated. Only people with the code can join.</p>
+
+      <div class="invite-share-grid">
+        <button type="button" class="invite-share-btn" data-method="email" onclick="inviteViaEmail()">
+          <span class="invite-share-icon"><i data-lucide="mail" class="w-4 h-4"></i></span>
+          <span>Email</span>
+        </button>
+        <button type="button" class="invite-share-btn" data-method="sms" onclick="inviteViaSMS()">
+          <span class="invite-share-icon"><i data-lucide="message-square" class="w-4 h-4"></i></span>
+          <span>Text Message</span>
+        </button>
+        <button type="button" class="invite-share-btn" data-method="whatsapp" onclick="inviteViaWhatsApp()">
+          <span class="invite-share-icon"><i data-lucide="message-circle" class="w-4 h-4"></i></span>
+          <span>WhatsApp</span>
+        </button>
+        <button type="button" class="invite-share-btn" data-method="telegram" onclick="inviteViaTelegram()">
+          <span class="invite-share-icon"><i data-lucide="send" class="w-4 h-4"></i></span>
+          <span>Telegram</span>
+        </button>
+        <button type="button" class="invite-share-btn" data-method="native" onclick="inviteViaNativeShare()" id="inviteNativeBtn">
+          <span class="invite-share-icon"><i data-lucide="share-2" class="w-4 h-4"></i></span>
+          <span>Share…</span>
+        </button>
+        <button type="button" class="invite-share-btn" data-method="copy" onclick="inviteCopyMessage()">
+          <span class="invite-share-icon"><i data-lucide="copy" class="w-4 h-4"></i></span>
+          <span>Copy Message</span>
+        </button>
+      </div>
+
+      <p class="text-[10px] mt-3 leading-relaxed" style="color:var(--text-4);">
+        The invite opens your own email, messaging, or share app with a prefilled message.
+        Your co-owner enters the code during signup. Regenerating the code invalidates the old one.
+      </p>
+
+      <div class="flex items-center gap-2 pt-3 mt-3 flex-wrap" style="border-top:1px solid var(--border);">
+        <button onclick="copyInviteCode()" class="btn btn-ghost !text-[11px]"><i data-lucide="clipboard-copy" class="w-3.5 h-3.5"></i> Copy code only</button>
+        <button onclick="regenerateInviteCode()" class="btn btn-ghost !text-[11px] ml-auto"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Generate new code</button>
+      </div>
     </div>
+
     <div class="settings-card">
       <div class="settings-card-header">
         <div class="settings-card-icon"><i data-lucide="users" style="width:18px;height:18px;"></i></div>
@@ -5000,9 +5086,10 @@ function renderHouseholdPane(){
             </div>
             ${mem.role==='coowner' ? `<button onclick="removeCoOwner('${mem.id}')" class="btn-icon btn-ghost" style="color:#BE123C;" title="Remove co-owner"><i data-lucide="user-minus" class="w-4 h-4"></i></button>` : ''}
           </div>`).join('')}
-        ${m.length < 2 ? `<div class="p-4 rounded-xl text-center text-[11px]" style="background:var(--surface-2);border:1px dashed var(--border-strong);color:var(--text-4);">No co-owner yet. Share the invite code above to add one.</div>` : ''}
+        ${m.length < 2 ? `<div class="p-4 rounded-xl text-center text-[11px]" style="background:var(--surface-2);border:1px dashed var(--border-strong);color:var(--text-4);">No co-owner yet. Use the share options above to invite one.</div>` : ''}
       </div>
     </div>
+
     <div class="settings-card">
       <div class="settings-card-header">
         <div class="settings-card-icon"><i data-lucide="database-zap" style="width:18px;height:18px;"></i></div>
@@ -5017,9 +5104,135 @@ function renderHouseholdPane(){
         <div class="settings-row-control"><button onclick="openSettingsSection('data')" class="btn btn-ghost !text-[11px]">Configure</button></div>
       </div>
     </div>`;
-  if(typeof lucide!=='undefined') lucide.createIcons();
+
+  // Hide the native share option on desktop browsers that don't support it
+  const nativeBtn = $id('inviteNativeBtn');
+  if(nativeBtn && !(navigator.share && /mobile|android|iphone|ipad|ipod/i.test(navigator.userAgent))){
+    nativeBtn.style.display = 'none';
+  }
+
+  if(typeof lucide!=='undefined')lucide.createIcons();
 }
 
+/* ═══════════════════════════════════════════════════════════
+   INVITE CO-OWNER · share via email / SMS / chat / native
+   ═══════════════════════════════════════════════════════════ */
+function _inviteCode(){
+  return (householdState.inviteCode || '').trim();
+}
+function _inviteLink(){
+  const code = _inviteCode();
+  if(!code) return window.location.href;
+  try{
+    const url = new URL(window.location.href);
+    url.search = '';
+    url.hash = '';
+    url.searchParams.set('invite', code);
+    return url.toString();
+  }catch(_){
+    return window.location.href;
+  }
+}
+function _inviteOwnerName(){
+  return (appSettings.profile && appSettings.profile.name) || authState.user?.name || 'Your household owner';
+}
+function _inviteSubject(){
+  return `${_inviteOwnerName()} invited you to Executive Wealth`;
+}
+function _inviteMessage(includeLink){
+  const code = _inviteCode();
+  const owner = _inviteOwnerName();
+  if(!code){
+    return `${owner} would like you to join their household on Executive Wealth. Open the app to generate an invite code.`;
+  }
+  const base = `${owner} has invited you to join their household on Executive Wealth.\n\nYour invite code: ${code}\n\nDuring signup choose "Co-Owner" and enter this code to join.`;
+  return includeLink ? `${base}\n\nOr just tap this link:\n${_inviteLink()}` : base;
+}
+function _requireInviteCode(){
+  if(!_inviteCode()){
+    toast('No invite code yet — generate one first.','warning');
+    return false;
+  }
+  return true;
+}
+
+/* ── Email (mailto:) ── */
+function inviteViaEmail(){
+  if(!_requireInviteCode()) return;
+  const subject = encodeURIComponent(_inviteSubject());
+  const body    = encodeURIComponent(_inviteMessage(true));
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  toast('Opening your email app…','info',2000);
+}
+
+/* ── SMS (sms:) ── */
+function inviteViaSMS(){
+  if(!_requireInviteCode()) return;
+  const body = encodeURIComponent(_inviteMessage(true));
+  // iOS uses `&body=`, Android & others accept `?body=`
+  const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const url = isiOS ? `sms:&body=${body}` : `sms:?body=${body}`;
+  window.location.href = url;
+  toast('Opening your messages app…','info',2000);
+}
+
+/* ── WhatsApp ── */
+function inviteViaWhatsApp(){
+  if(!_requireInviteCode()) return;
+  const text = encodeURIComponent(_inviteMessage(true));
+  window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener,noreferrer');
+  toast('Opening WhatsApp…','info',1800);
+}
+
+/* ── Telegram ── */
+function inviteViaTelegram(){
+  if(!_requireInviteCode()) return;
+  const url  = encodeURIComponent(_inviteLink());
+  const text = encodeURIComponent(_inviteSubject());
+  window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank', 'noopener,noreferrer');
+  toast('Opening Telegram…','info',1800);
+}
+
+/* ── Native share sheet (iOS / Android / modern desktop) ── */
+async function inviteViaNativeShare(){
+  if(!_requireInviteCode()) return;
+  if(!navigator.share){
+    inviteCopyMessage();
+    return;
+  }
+  try{
+    await navigator.share({
+      title: _inviteSubject(),
+      text:  _inviteMessage(false),
+      url:   _inviteLink()
+    });
+  }catch(err){
+    if(err && err.name !== 'AbortError') console.warn('[invite share]', err);
+  }
+}
+
+/* ── Copy full message to clipboard ── */
+async function inviteCopyMessage(){
+  if(!_requireInviteCode()) return;
+  const msg = _inviteMessage(true);
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      await navigator.clipboard.writeText(msg);
+    }else{
+      const ta = document.createElement('textarea');
+      ta.value = msg;
+      ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none;';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    toast('Invite message copied to clipboard.','success');
+  }catch(_){
+    // Last-resort fallback: show a prompt so the user can copy manually
+    window.prompt('Copy this invite message:', msg);
+  }
+}
 function copyInviteCode(){
   const c = householdState.inviteCode || '';
   if(!c) return;
@@ -5517,9 +5730,6 @@ const WB_TOOLS_FLAT=[
   {id:'insights',label:'Insights',icon:'sparkles',desc:'Tactical analysis'}
 ];
 /* Which plan unlocks each Blueprint tool. `null` = available to everyone (Free). */
-/* Which plan unlocks each Blueprint tool. `null` = available to everyone (Free). */
-/* Which plan unlocks each Blueprint tool. `null` = available to everyone (Free).
-   Values MUST be keys from FEATURE_GATES (not plan/tier names). */
 const WB_TOOL_GATES = {
   paycheck:    null,               // Free — ONLY tool available to Free users
   projections: 'wealth_blueprint', // Locked for Free (Basic feature)
@@ -6076,7 +6286,15 @@ function openAddFromHeader(){switchMainTab(null,'tab-expenses',true);setTimeout(
 function switchPaySection(secId){document.querySelectorAll('.paystub-section-panel').forEach(el=>el.classList.add('hidden'));document.querySelectorAll('#tab-blueprint .seg-item').forEach(el=>el.classList.remove('active'));const p=$id(secId);if(p)p.classList.remove('hidden');const map={'pay-sec-base':'btnPaySectionBase','pay-sec-pre':'btnPaySectionPre','pay-sec-post':'btnPaySectionPost','pay-sec-withhold':'btnPaySectionWithhold'};if(map[secId])$id(map[secId])?.classList.add('active');}
 function toggleLedgerDrawer(){const d=$id('ledgerDrawer');if(!d)return;const o=d.classList.contains('translate-y-full');if(o)populateLedgerYearFilter();d.classList.toggle('translate-y-full');}
 function switchDataTab(event,tabName){$id('balancesTab').classList.toggle('hidden',tabName!=='balances');$id('investedTab').classList.toggle('hidden',tabName!=='invested');$id('contributionsTab').classList.toggle('hidden',tabName!=='contributions');document.querySelectorAll('.drawer-tab-btn').forEach(btn=>{btn.style.color='var(--text-4)';btn.style.borderBottomColor='transparent';});if(event&&event.currentTarget){event.currentTarget.style.color='#6D28D9';event.currentTarget.style.borderBottomColor='#6D28D9';}applyPrivacyState();}
-function toggleMasterPrivacy(){isMasterHidden=!isMasterHidden;applyPrivacyState();}
+function toggleMasterPrivacy(){
+  isMasterHidden = !isMasterHidden;
+  // Persist so the toggle survives reloads (issue #6 fix)
+  appSettings.security.privacyDefault = isMasterHidden;
+  try{ persistAppSettings(); }catch(_){}
+  applyPrivacyState();
+  try{ refreshSettingsNavStatus(); }catch(_){}
+  toast(isMasterHidden ? 'Privacy mode ON' : 'Privacy mode OFF', 'info', 1600);
+}
 function toggleCardPrivacy(id){$id(id)?.classList.toggle('privacy-masked');}
 function applyPrivacyState(){const t=document.querySelectorAll('.privacy-target, td:not(:first-child)');if(isMasterHidden)t.forEach(el=>el.classList.add('privacy-masked'));else t.forEach(el=>el.classList.remove('privacy-masked'));if(typeof lucide!=='undefined')lucide.createIcons();}
 function updateDriftLabel(v){const l=$id('driftToleranceVal');if(l)l.innerText=`${parseFloat(v).toFixed(1)}%`;}
@@ -6212,7 +6430,30 @@ function openFilterSheet(kind){const s=$id('filterSheet'),t=$id('filterSheetTitl
   else if(kind==='exp-tx'){t.innerText='Filter Transactions';const s1=expLocalDateRange.preset==='custom'&&expLocalDateRange.start?expLocalDateRange.start.toISOString().slice(0,10):'';const e1=expLocalDateRange.preset==='custom'&&expLocalDateRange.end?expLocalDateRange.end.toISOString().slice(0,10):'';b.innerHTML=`<div class="filter-sheet-section"><span class="filter-sheet-label">Source</span><div class="filter-sheet-options">${[['all','All','layers'],['manual','Manual','pencil'],['plaid','Plaid','link']].map(([k,l,i])=>`<button class="filter-option ${txSourceFilter===k?'active':''}" data-value="${k}" onclick="pickTxSource('${k}')"><i data-lucide="${i}"></i> ${l}</button>`).join('')}</div></div><div class="filter-sheet-section"><span class="filter-sheet-label">Date range</span><div class="filter-sheet-options">${[['all','All Time'],['ytd','YTD'],['mtd','MTD'],['7d','Last 7d'],['30d','Last 30d'],['90d','Last 90d'],['12m','12 Months'],['ly','Last Year']].map(([k,l])=>`<button class="filter-option ${expLocalDateRange.preset===k?'active':''}" data-value="${k}" onclick="pickExpDatePreset('${k}')">${l}</button>`).join('')}</div></div><div class="filter-sheet-section"><span class="filter-sheet-label">Custom range</span><div class="filter-sheet-input-wrap"><input type="date" class="input" id="fsExpStart" value="${s1}"><span style="color:var(--text-4);">→</span><input type="date" class="input" id="fsExpEnd" value="${e1}"></div><button class="btn btn-primary w-full !py-2 mt-2" onclick="applyExpSheetCustom()">Apply custom range</button></div>`;}
   s.classList.add('open');if(typeof lucide!=='undefined')lucide.createIcons();}
 function closeFilterSheet(){$id('filterSheet')?.classList.remove('open');}
-function resetFilterSheet(){const t=$id('filterSheetTitle')?.innerText||'';if(t.includes('Accounts')){setAccountsFilter('all');openFilterSheet('accounts');}else if(t.includes('Transactions')){if(currentTabId==='tab-expenses'){setTxSourceFilter('all');clearExpLocalDateRange();openFilterSheet('exp-tx');}else{setTxSourceFilter('all');const acct=$id('txAccountFilter');if(acct)acct.value='';const cat=$id('txCategoryFilter');if(cat)cat.value='';const pend=$id('txPendingOnly');if(pend)pend.checked=false;const s1=$id('txSearchInput');if(s1)s1.value='';const s2=$id('txSearchInputMobile');if(s2)s2.value='';clearTxLocalDateRange();openFilterSheet('plaid-tx');}}updateFilterCountBadges();}
+function resetFilterSheet(){
+  const t=$id('filterSheetTitle')?.innerText||'';
+  if(t.includes('Accounts')){
+    setAccountsFilter('all');
+    // Defer reopen to next frame so the underlying re-render settles first (issue #7 fix)
+    requestAnimationFrame(() => openFilterSheet('accounts'));
+  } else if(t.includes('Transactions')){
+    if(currentTabId==='tab-expenses'){
+      setTxSourceFilter('all');
+      clearExpLocalDateRange();
+      requestAnimationFrame(() => openFilterSheet('exp-tx'));
+    } else {
+      setTxSourceFilter('all');
+      const acct=$id('txAccountFilter');if(acct)acct.value='';
+      const cat=$id('txCategoryFilter');if(cat)cat.value='';
+      const pend=$id('txPendingOnly');if(pend)pend.checked=false;
+      const s1=$id('txSearchInput');if(s1)s1.value='';
+      const s2=$id('txSearchInputMobile');if(s2)s2.value='';
+      clearTxLocalDateRange();
+      requestAnimationFrame(() => openFilterSheet('plaid-tx'));
+    }
+  }
+  updateFilterCountBadges();
+}
 function pickAccountsFilter(v){setAccountsFilter(v);openFilterSheet('accounts');}
 function pickTxSource(v){setTxSourceFilter(v);openFilterSheet(currentTabId==='tab-expenses'?'exp-tx':'plaid-tx');}
 function pickPlaidAccount(v){const e=$id('txAccountFilter');if(e)e.value=v;renderTransactions();updateFilterCountBadges();}
@@ -6472,7 +6713,7 @@ function initDashboard(){
   updatePortfolioDataStatus();
   renderSubscriptionUI();
   updateFeatureLocksInApp();
-  refreshOnboarding();          // ← ADD THIS
+  refreshOnboarding();
 
 }
 function populateYearFilter(){
@@ -6845,7 +7086,9 @@ function renderRebalancer(){
     if(df>.01) sl.push({label:cat.label,amount:df});
     else if(df<-.01) bu.push({label:cat.label,amount:Math.abs(df)});
     const bh=isod ? `<span class="badge badge-rose whitespace-nowrap"><i data-lucide="alert-triangle" class="w-3 h-3"></i> OVER DRIFT</span>` : `<span class="badge badge-emerald whitespace-nowrap"><i data-lucide="check-circle-2" class="w-3 h-3"></i> BALANCED</span>`;
-    tb.innerHTML+=`<tr class="transition-all" style="${isod?'background:rgba(251,113,133,.06);':''}"><td class="py-3 px-4 font-bold" style="color:var(--text-2);" data-label="Asset Class"><span class="inline-flex items-center gap-2"><span>${categoryEmoji(cat)}</span>${cat.label}</span></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Current Value"><span>${formatCurrency(v,0)}</span></td><td class="py-3 px-4 font-semibold text-right font-mono" style="color:var(--text-2);" data-label="Current %"><span>${cp.toFixed(1)}%</span></td><td class="py-3 px-4 text-right" data-label="Target %"><div><input type="number" step="0.1" class="input !w-16 !py-1 text-right font-mono" value="${tp}" oninput="handleTargetInput('${cat.key}', this.value)">%</div></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Target Balance"><span>${formatCurrency(tv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${isod?'#BE123C':'var(--text-3)'};" data-label="Abs. Delta %"><span>${adp.toFixed(1)}%</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${df>=0?'#059669':'#BE123C'};" data-label="Rebalance Delta"><span>${df>=0?'+':''}${formatCurrency(df,0)}</span></td><td class="py-3 px-4" data-label="Drift Status"><div>${bh}</div></td></tr>`;
+    // Fix #4: use `onchange` (not `oninput`) so the input doesn't lose focus on every keystroke.
+    // Full table re-render fires on blur / Enter; live feedback happens on the summary only.
+    tb.innerHTML+=`<tr class="transition-all" style="${isod?'background:rgba(251,113,133,.06);':''}"><td class="py-3 px-4 font-bold" style="color:var(--text-2);" data-label="Asset Class"><span class="inline-flex items-center gap-2"><span>${categoryEmoji(cat)}</span>${cat.label}</span></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Current Value"><span>${formatCurrency(v,0)}</span></td><td class="py-3 px-4 font-semibold text-right font-mono" style="color:var(--text-2);" data-label="Current %"><span>${cp.toFixed(1)}%</span></td><td class="py-3 px-4 text-right" data-label="Target %"><div><input type="number" step="0.1" class="input !w-16 !py-1 text-right font-mono" value="${tp}" onchange="handleTargetInput('${cat.key}', this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">%</div></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Target Balance"><span>${formatCurrency(tv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${isod?'#BE123C':'var(--text-3)'};" data-label="Abs. Delta %"><span>${adp.toFixed(1)}%</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${df>=0?'#059669':'#BE123C'};" data-label="Rebalance Delta"><span>${df>=0?'+':''}${formatCurrency(df,0)}</span></td><td class="py-3 px-4" data-label="Drift Status"><div>${bh}</div></td></tr>`;
   });
   const se=$id('actionPlanSummaryText');
   if(se){
@@ -7376,7 +7619,47 @@ function renderExpenseChart(ft){
     });
   }
 }
-function renderSubscriptions(ft){const c=$id('expSubscriptionsGrid');if(!c)return;const t=ft||getFilteredExpenseTransactions('exp');const r=t.filter(x=>x.isRecurring);c.innerHTML="";if(r.length===0){c.innerHTML=`<div class="col-span-full p-5 text-center text-xs font-semibold rounded-xl" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-3);">No recurring subscriptions in the current range.</div>`;return;}r.forEach(sub=>{const cat=expenseStore.categories.find(x=>x.id===sub.categoryId)||{label:"Bill"};const card=expenseStore.cards.find(x=>x.id===sub.cardId)||{name:"Card"};c.innerHTML+=`<div class="rounded-2xl p-4 flex items-center justify-between gap-3" style="background:var(--surface-2);border:1px solid var(--border);"><div class="space-y-1 min-w-0"><span class="badge badge-pink">Auto-Renew</span><h4 class="text-xs font-bold truncate flex items-center gap-1.5" style="color:var(--text-1);"><span class="text-sm leading-none">${expenseEmoji(cat)}</span><span class="truncate">${esc(sub.description)}</span></h4><p class="text-[10px] truncate" style="color:var(--text-4);">${esc(card.name)} · ${esc(cat.label)}</p></div><div class="text-right shrink-0"><div class="privacy-target text-sm font-extrabold font-mono" style="color:var(--text-1);">${formatCurrency(parseFloat(sub.amount))}</div><span class="text-[9px]" style="color:var(--text-4);">Monthly</span></div></div>`;});}
+function renderSubscriptions(ft){
+  const c = $id('expSubscriptionsGrid');
+  if(!c) return;
+  const t = ft || getFilteredExpenseTransactions('exp');
+  // Handle BOTH unified-tx (._*) and merged-tx formats (fix #1)
+  const norm = t.map(x => ({
+    id:          x.id          ?? x._id,
+    isRecurring: !!(x.isRecurring ?? x._isRecurring),
+    categoryId:  x.categoryId  ?? x._categoryId,
+    cardId:      x.cardId      ?? x._cardId,
+    description: x.description ?? x._description ?? 'Subscription',
+    amount:      parseFloat(x.amount ?? x._amount ?? 0)
+  }));
+  const r = norm.filter(x => x.isRecurring);
+  c.innerHTML = "";
+  if(r.length === 0){
+    c.innerHTML = `<div class="col-span-full p-5 text-center text-xs font-semibold rounded-xl"
+      style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-3);">
+      No recurring subscriptions in the current range.</div>`;
+    return;
+  }
+  r.forEach(sub => {
+    const cat  = expenseStore.categories.find(x => x.id === sub.categoryId) || { label: 'Bill' };
+    const card = expenseStore.cards.find(x => x.id === sub.cardId)        || { name: 'Card' };
+    c.innerHTML += `<div class="rounded-2xl p-4 flex items-center justify-between gap-3"
+        style="background:var(--surface-2);border:1px solid var(--border);">
+      <div class="space-y-1 min-w-0">
+        <span class="badge badge-pink">Auto-Renew</span>
+        <h4 class="text-xs font-bold truncate flex items-center gap-1.5" style="color:var(--text-1);">
+          <span class="text-sm leading-none">${expenseEmoji(cat)}</span>
+          <span class="truncate">${esc(sub.description)}</span>
+        </h4>
+        <p class="text-[10px] truncate" style="color:var(--text-4);">${esc(card.name)} · ${esc(cat.label)}</p>
+      </div>
+      <div class="text-right shrink-0">
+        <div class="privacy-target text-sm font-extrabold font-mono" style="color:var(--text-1);">${formatCurrency(sub.amount)}</div>
+        <span class="text-[9px]" style="color:var(--text-4);">Monthly</span>
+      </div>
+    </div>`;
+  });
+}
 function populateFormDropdowns(){const cs=$id('txCardSelect'),ct=$id('txCategorySelect');if(cs){cs.innerHTML=`<option value="">Cash / Unassigned</option>`+(expenseStore.cards||[]).map(c=>`<option value="${c.id}">${c.name} (••${c.masked})</option>`).join('');}if(ct)ct.innerHTML=expenseStore.categories.map(c=>`<option value="${c.id}">${expenseEmoji(c)} ${c.label}</option>`).join('');}
 function openTransactionDrawer(){$id('expTxForm').reset();$id('txEditId').value="";setText('expDrawerTitle',"Log New Expense");$id('txDate').value=new Date().toISOString().split('T')[0];populateFormDropdowns();$id('expTransactionDrawer').classList.remove('translate-x-full');}
 function openManualTransactionDrawer(){$id('expTxForm').reset();$id('txEditId').value = '';setText('expDrawerTitle', 'New Transaction');$id('txDate').value = new Date().toISOString().split('T')[0];populateFormDropdowns();$id('expTransactionDrawer').classList.remove('translate-x-full');setTimeout(()=>$id('txAmount')?.focus(), 180);}
@@ -7549,10 +7832,17 @@ function renderTransactions(){
     <div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 mb-1" style="color:var(--text-4);"><span>⚠️</span> Needs Review</div><div class="text-lg font-extrabold" style="color:${uc>0?'#B45309':'var(--text-1)'};">${uc}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${pc} pending · ${rl}</div></div>`;}
   if(ls)ls.innerText=accountsStore.lastSync?`Last synced: ${new Date(accountsStore.lastSync).toLocaleString()}`:'Never synced';
   if(sy){sy.innerText=`${f.length} / ${allTx.length}`;sy.className="badge badge-violet";}
-  tb.innerHTML='';
-  if(f.length===0){if(ee){ee.classList.remove('hidden');ee.innerHTML=`No transactions match your filters. <button onclick="clearTxFilters()" class="underline ml-1" style="color:#6D28D9;">Clear filters</button>`;}renderPlaidTxMobileList(f);updateFilterCountBadges();return;}
+
+  // ── Batch DOM write (fix #5) — avoid `innerHTML +=` inside a loop ──
+  if(f.length===0){
+    tb.innerHTML='';
+    if(ee){ee.classList.remove('hidden');ee.innerHTML=`No transactions match your filters. <button onclick="clearTxFilters()" class="underline ml-1" style="color:#6D28D9;">Clear filters</button>`;}
+    renderPlaidTxMobileList(f);
+    updateFilterCountBadges();
+    return;
+  }
   if(ee)ee.classList.add('hidden');
-  f.forEach(tx=>{
+  const rows = f.map(tx=>{
     const isManual=tx._source==='manual';const io=tx._isExpense;const ac=io?'#BE123C':'#059669';const ag=io?'−':'+';
     let co=`<option value="">— Uncategorized —</option>`;expenseStore.categories.forEach(c=>{const s=c.id===tx.categoryId?'selected':'';co+=`<option value="${c.id}" ${s}>${expenseEmoji(c)} ${esc(c.label)}</option>`;});
     let plaidCatCell,ruleCell,accountCell;
@@ -7571,8 +7861,9 @@ function renderTransactions(){
     const sourcePill=isManual?`<span class="badge badge-slate !text-[8px] !px-1.5 !py-0.5">MANUAL</span>`:`<span class="badge badge-violet !text-[8px] !px-1.5 !py-0.5">PLAID</span>`;
     const editFn=isManual?`editManualTransaction('${tx.id}')`:`openEditPlaidTxModal('${tx.id}')`;
     const delFn=isManual?`deleteManualTransaction('${tx.id}')`:`deletePlaidTransaction('${tx.id}')`;
-    tb.innerHTML+=`<tr data-tx-id="${tx.id}" data-tx-src="${tx._source}" class="transition-all" style="${tx.pending?'opacity:.75;':''}"><td class="py-3 px-3 font-mono text-[11px]" style="color:var(--text-4);" data-label="Date"><div class="flex items-center gap-1.5 justify-end lg:justify-start"><span>${tx.date}</span>${tx.pending?'<span class="badge badge-amber whitespace-nowrap">PENDING</span>':''}</div></td><td class="py-3 px-3 font-bold" style="color:var(--text-1);" data-label="Merchant"><div class="flex items-center gap-1.5 justify-end lg:justify-start min-w-0"><span class="truncate">${esc(tx._merchant)}</span>${sourcePill}</div></td><td class="py-3 px-3 text-[11px]" style="color:var(--text-4);" data-label="Account"><span class="truncate">${accountCell}</span></td><td class="py-3 px-3" data-label="Source Category">${plaidCatCell}</td><td class="py-3 px-3" data-label="Your Category"><div class="flex items-center gap-1.5 justify-end lg:justify-start"><select onchange="updateTxCategory('${tx.id}','${tx._source}', this.value)" class="input !py-1 !text-[11px] !max-w-[180px]">${co}</select>${sb2}</div></td><td class="py-3 px-3 text-right font-bold privacy-target font-mono" style="color:${ac};" data-label="Amount"><span>${ag}${formatCurrency(tx._abs)}</span></td><td class="py-3 px-3 text-center" data-label="Rule">${ruleCell}</td><td class="py-3 px-3" data-label="Actions"><div class="flex items-center justify-end lg:justify-center gap-1"><button onclick="${editFn}" class="p-1.5 rounded-lg transition-colors" style="color:var(--text-3);" title="Edit transaction"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="${delFn}" class="p-1.5 rounded-lg transition-colors" style="color:#BE123C;" title="Delete transaction"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></td></tr>`;
-  });
+    return `<tr data-tx-id="${tx.id}" data-tx-src="${tx._source}" class="transition-all" style="${tx.pending?'opacity:.75;':''}"><td class="py-3 px-3 font-mono text-[11px]" style="color:var(--text-4);" data-label="Date"><div class="flex items-center gap-1.5 justify-end lg:justify-start"><span>${tx.date}</span>${tx.pending?'<span class="badge badge-amber whitespace-nowrap">PENDING</span>':''}</div></td><td class="py-3 px-3 font-bold" style="color:var(--text-1);" data-label="Merchant"><div class="flex items-center gap-1.5 justify-end lg:justify-start min-w-0"><span class="truncate">${esc(tx._merchant)}</span>${sourcePill}</div></td><td class="py-3 px-3 text-[11px]" style="color:var(--text-4);" data-label="Account"><span class="truncate">${accountCell}</span></td><td class="py-3 px-3" data-label="Source Category">${plaidCatCell}</td><td class="py-3 px-3" data-label="Your Category"><div class="flex items-center gap-1.5 justify-end lg:justify-start"><select onchange="updateTxCategory('${tx.id}','${tx._source}', this.value)" class="input !py-1 !text-[11px] !max-w-[180px]">${co}</select>${sb2}</div></td><td class="py-3 px-3 text-right font-bold privacy-target font-mono" style="color:${ac};" data-label="Amount"><span>${ag}${formatCurrency(tx._abs)}</span></td><td class="py-3 px-3 text-center" data-label="Rule">${ruleCell}</td><td class="py-3 px-3" data-label="Actions"><div class="flex items-center justify-end lg:justify-center gap-1"><button onclick="${editFn}" class="p-1.5 rounded-lg transition-colors" style="color:var(--text-3);" title="Edit transaction"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="${delFn}" class="p-1.5 rounded-lg transition-colors" style="color:#BE123C;" title="Delete transaction"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></td></tr>`;
+  }).join('');
+  tb.innerHTML = rows;
   if(typeof lucide!=='undefined')lucide.createIcons();
   applyPrivacyState();
   renderPlaidTxMobileList(f);
