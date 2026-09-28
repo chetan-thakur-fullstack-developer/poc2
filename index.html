@@ -3606,6 +3606,8 @@ function _positionBubble(inputEl, bubble){
 }
 
 function _showBubble(inputEl, message){
+    if(!inputEl || !inputEl.isConnected) return;      // ← add this guard
+
   const b = _ensureBubble();
   b.textContent = message || 'Please check this field.';
   b.classList.add('show');
@@ -3625,7 +3627,13 @@ function _hideBubble(){
   clearTimeout(_errorBubbleTimer);
   _errorBubbleTimer = null;
 }
+document.addEventListener('click', () => {
+  if(_errorBubbleField && !_errorBubbleField.isConnected) _hideBubble();
+}, true);
 
+document.addEventListener('input', () => {
+  if(_errorBubbleField && !_errorBubbleField.isConnected) _hideBubble();
+}, true);
 function showFieldError(inputEl, message){
   if(!inputEl) return;
   inputEl.classList.add('invalid');
@@ -5094,6 +5102,8 @@ function hashPassword(pw){
 }
 
 function renderAuthView(view){
+    _hideBubble();                       // ← add this line
+
   const body = $id('authBody');
   const signinTab = $id('authTabSignin');
   const signupTab = $id('authTabSignup');
