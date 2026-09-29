@@ -2562,7 +2562,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
                 <button onclick="expandAllBudgetGroups(true)"  class="btn btn-ghost" title="Expand all"><i data-lucide="chevrons-down" class="w-3.5 h-3.5"></i></button>
                 <button onclick="expandAllBudgetGroups(false)" class="btn btn-ghost" title="Collapse all"><i data-lucide="chevrons-up" class="w-3.5 h-3.5"></i></button>
                 <button onclick="openBudgetGroupsModal()"     class="btn btn-ghost"><i data-lucide="folder-plus" class="w-3.5 h-3.5"></i> Group</button>
-                <button onclick="gateFeature('unlimited_budget_cats', ()=>openSettingsAddCategory())" class="btn btn-ghost"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Category</button>
+                <button onclick="openSettingsAddCategory()" class="btn btn-ghost"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Category</button>
               </div>
             </div>
             <div id="budgetCategoriesPanel"></div>
@@ -3131,6 +3131,21 @@ html.dark .auth-msg.info{color:#C4B5FD}
                     <div class="flex-grow min-w-0"><h2>Categories</h2><p>Drag to reorder · click eye to show/hide · edit or delete any category</p></div>
                   </div>
                 </div>
+
+                <!-- Free-tier category lock notice -->
+                <div id="catTierBanner" style="display:none;margin-bottom:1.25rem;" class="settings-card">
+                  <div class="flex items-start gap-3">
+                    <span class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:#C4B5FD;">
+                      <i data-lucide="lock" class="w-4 h-4"></i>
+                    </span>
+                    <div class="min-w-0 flex-grow">
+                      <div class="text-xs font-extrabold" style="color:var(--text-1);">Custom categories are a Basic feature</div>
+                      <div class="text-[11px] mt-0.5" style="color:var(--text-4);">On the Free plan your default category list is locked in place — categories can’t be added, renamed, or removed. You can still hide them from charts, and you can upgrade at any time.</div>
+                    </div>
+                    <button onclick="subConfirmUpgrade('basic')" class="btn btn-primary !py-2 !text-[11px] shrink-0"><i data-lucide="arrow-up-right" class="w-3 h-3"></i> Upgrade</button>
+                  </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   <div class="settings-card">
                     <div class="settings-card-header">
@@ -3143,7 +3158,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
                         <button onclick="bulkToggleVisibility('portfolio', true)" class="mini-btn" title="Show all"><i data-lucide="eye" class="w-3 h-3"></i></button>
                         <button onclick="bulkToggleVisibility('portfolio', false)" class="mini-btn" title="Hide all"><i data-lucide="eye-off" class="w-3 h-3"></i></button>
                         <button onclick="resetCategoryOrder('portfolio')" class="mini-btn" title="Reset order"><i data-lucide="rotate-ccw" class="w-3 h-3"></i></button>
-                        <button onclick="openPortfolioCategoryModal()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
+                        <button id="portfolioCatAddBtn" onclick="openPortfolioCategoryModal()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
                       </div>
                     </div>
                     <div id="portfolioCategoriesList" class="space-y-0.5 max-h-[28rem] overflow-y-auto scroll pr-1"></div>
@@ -3159,7 +3174,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
                         <button onclick="bulkToggleVisibility('expense', true)" class="mini-btn" title="Show all"><i data-lucide="eye" class="w-3 h-3"></i></button>
                         <button onclick="bulkToggleVisibility('expense', false)" class="mini-btn" title="Hide all"><i data-lucide="eye-off" class="w-3 h-3"></i></button>
                         <button onclick="resetCategoryOrder('expense')" class="mini-btn" title="Reset order"><i data-lucide="rotate-ccw" class="w-3 h-3"></i></button>
-                        <button onclick="openSettingsAddCategory()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
+                        <button id="expenseCatAddBtn" onclick="openSettingsAddCategory()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
                       </div>
                     </div>
                     <div id="expenseCategoriesList" class="space-y-0.5 max-h-[28rem] overflow-y-auto scroll pr-1"></div>
@@ -3520,7 +3535,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
       <div><label class="field-label">Expense Amount (<span class="currency-prefix">$</span>)<span class="req-mark">*</span></label><input type="number" id="txAmount" required inputmode="decimal" class="input !text-sm text-right font-mono" placeholder="0.00"></div>
       <div><label class="field-label">Merchant / Description<span class="req-mark">*</span></label><input type="text" id="txDescription" required class="input" placeholder="Merchant name"></div>
       <div><label class="field-label">Payment Card / Account</label><select id="txCardSelect" class="input"></select></div>
-      <div><div class="flex justify-between items-center mb-1.5"><label class="field-label !mb-0">Category<span class="req-mark">*</span></label><button type="button" onclick="toggleCategoryModal()" class="text-[11px] font-semibold hover:underline" style="color:#6D28D9;">+ Add Custom Category</button></div><select id="txCategorySelect" required class="input"></select></div>
+      <div><div class="flex justify-between items-center mb-1.5"><label class="field-label !mb-0">Category<span class="req-mark">*</span></label><button type="button" onclick="openSettingsAddCategory()" class="text-[11px] font-semibold hover:underline" style="color:#6D28D9;">+ Add Custom Category</button></div><select id="txCategorySelect" required class="input"></select></div>
       <div><label class="field-label">Transaction Date<span class="req-mark">*</span></label><input type="date" id="txDate" required class="input"></div>
       <div class="flex items-center gap-2.5 pt-2"><input type="checkbox" id="txIsRecurring" style="accent-color:var(--accent);"><label for="txIsRecurring" class="text-xs font-semibold" style="color:var(--text-2);">Flag as Recurring Subscription</label></div>
       <div class="pt-4 flex items-center justify-end gap-3" style="border-top:1px solid var(--border);"><button type="button" onclick="closeTransactionDrawer()" class="btn btn-ghost">Cancel</button><button type="submit" class="btn btn-primary">Save Transaction</button></div>
@@ -3927,6 +3942,7 @@ const FEATURE_GATES = {
   unlimited_goals:          'basic',
   custom_budget_rules:      'basic',
   unlimited_budget_cats:    'basic',
+  custom_categories:        'basic',
   recurring_subscriptions:  'basic',
   rebalancing:              'basic',
   account_growth:           'basic',
@@ -4286,6 +4302,7 @@ function gateFeature(feature, action){
   unlimited_goals: 'Unlimited Savings Goals',
   custom_budget_rules: 'Custom Budget Rules',
   unlimited_budget_cats: 'Unlimited Budget Categories',
+  custom_categories: 'Custom Categories',
   recurring_subscriptions: 'Recurring Subscription Detection',
   rebalancing: 'Portfolio Rebalancing Engine',
   account_growth: 'Account Growth & Performance',
@@ -4332,6 +4349,16 @@ function gateFeature(feature, action){
       </div>
     </div>`);
   if(typeof lucide !== 'undefined') lucide.createIcons();
+  return false;
+}
+
+/* ── Category management gate ──────────────────────────────
+   Free plan is locked to the default category list:
+   no adding, no renaming, no deleting.                    */
+function canManageCategories(){ return hasFeature('custom_categories'); }
+function guardCategoryManagement(){
+  if(canManageCategories()) return true;
+  gateFeature('custom_categories', null);
   return false;
 }
 
@@ -4844,7 +4871,11 @@ function updateFeatureLocksInApp(){
 
   const gb = document.getElementById('goalsGateBanner');
   if(gb) gb.style.display = hasFeature('unlimited_goals') ? 'none' : 'flex';
-    try{ updateAccountGrowthGate(); }catch(_){}
+
+  const catBanner = document.getElementById('catTierBanner');
+  if(catBanner) catBanner.style.display = hasFeature('custom_categories') ? 'none' : 'block';
+
+  try{ updateAccountGrowthGate(); }catch(_){}
 
 }
 
@@ -5701,6 +5732,7 @@ window.switchSettingsSection = function(id) {
   if (id === 'household')  renderHouseholdPane();
   if (id === 'data'){      refreshGithubStatus(); refreshOnboardingStatusChip(); }
   if (id === 'currency')   loadCurrencyUI();
+  if (id === 'categories') renderSettingsCategoryLists();
   if (id === 'subscription') renderSubscriptionSettingsPane();
 };
 document.addEventListener('input', (e) => { if (e.target && e.target.id === 'setPin') handlePinInput(e); });
@@ -6300,17 +6332,37 @@ function uploadProfileAvatar(ev){const f=ev.target.files?.[0];if(!f)return;if(f.
 function resetProfileAvatar(){appSettings.profile.avatar='';persistAppSettings();loadSettingsUI();updateSidebarProfile();toast('Avatar removed.','info');}
 
 let _catDragSrc=null;
-function renderSettingsCategoryLists(){renderSettingsCategoryList('portfolio');renderSettingsCategoryList('expense');}
-function renderSettingsCategoryList(kind){const c=$id(kind==='portfolio'?'portfolioCategoriesList':'expenseCategoriesList');if(!c)return;const src=kind==='portfolio'?categoriesConfig:expenseStore.categories;const ord=appSettings.categoryOrder[kind]||[],hid=appSettings.hiddenCategories[kind]||[];const sEl=$id(kind==='portfolio'?'portfolioCatSearch':'expenseCatSearch');const s=(sEl?.value||'').toLowerCase().trim();const o=[...src].sort((a,b)=>{const ia=ord.indexOf(a.key||a.id),ib=ord.indexOf(b.key||b.id);if(ia===-1&&ib===-1)return 0;if(ia===-1)return 1;if(ib===-1)return-1;return ia-ib;});const f=s?o.filter(x=>(x.label||'').toLowerCase().includes(s)||(x.key||x.id||'').toLowerCase().includes(s)):o;const b=$id(kind==='portfolio'?'portfolioCountBadge':'expenseCountBadge');if(b){const v=o.filter(x=>!hid.includes(x.key||x.id)).length;b.textContent=`${v} of ${o.length} visible`;}if(f.length===0){c.innerHTML=`<div class="settings-empty">${s?'No categories match your search.':'No categories yet. Click <b>Add</b> to create one.'}</div>`;return;}c.innerHTML=f.map(cat=>{const id=cat.key||cat.id;const ih=hid.includes(id);const em=kind==='portfolio'?categoryEmoji(cat):expenseEmoji(cat);const cl=cat.color||'#8B5CF6';let meta='';if(kind==='portfolio'){const yu=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0).length;meta=`${cat.type||'taxable'} · ${yu} year${yu===1?'':'s'} with data`;}else{const tc=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;meta=cat.limit?`Budget ${formatCurrency(cat.limit,0)} · ${tc} tx`:`${tc} transaction${tc===1?'':'s'}`;}return `<div class="cat-item ${ih?'cat-hidden':''}" draggable="true" data-cat-id="${id}" data-cat-kind="${kind}"><span class="cat-handle"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span><span class="cat-swatch" style="background:${cl}18;color:${cl};border-color:${cl}33;">${em}</span><div class="min-w-0 flex-grow"><div class="cat-name truncate">${cat.label}</div><div class="cat-meta truncate">${meta}</div></div><div class="cat-actions"><button onclick="toggleCategoryVisibility('${kind}','${id}')" title="${ih?'Show':'Hide'}" class="cat-action-btn"><i data-lucide="${ih?'eye-off':'eye'}" class="w-3.5 h-3.5"></i></button><button onclick="editSettingsCategory('${kind}','${id}')" title="Edit" class="cat-action-btn"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteSettingsCategory('${kind}','${id}')" title="Delete" class="cat-action-btn danger"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div>`;}).join('');if(typeof lucide!=='undefined')lucide.createIcons();c.querySelectorAll('.cat-item').forEach(el=>{el.addEventListener('dragstart',e=>{_catDragSrc={id:el.dataset.catId,kind:el.dataset.catKind};el.classList.add('dragging');try{e.dataTransfer.setData('text/plain',el.dataset.catId);}catch(_){}e.dataTransfer.effectAllowed='move';});el.addEventListener('dragover',e=>{if(_catDragSrc&&_catDragSrc.kind===el.dataset.catKind&&_catDragSrc.id!==el.dataset.catId){e.preventDefault();el.classList.add('drag-over');}});el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag-over');if(!_catDragSrc||_catDragSrc.kind!==el.dataset.catKind)return;reorderSettingsCategory(_catDragSrc.kind,_catDragSrc.id,el.dataset.catId);});el.addEventListener('dragend',()=>{el.classList.remove('dragging');_catDragSrc=null;});});}
+function renderSettingsCategoryLists(){
+  const locked = !canManageCategories();
+
+  const banner = $id('catTierBanner');
+  if(banner) banner.style.display = locked ? 'block' : 'none';
+
+  const pb = $id('portfolioCatAddBtn');
+  const eb = $id('expenseCatAddBtn');
+  [pb, eb].forEach(btn => {
+    if(!btn) return;
+    btn.classList.toggle('btn-primary', !locked);
+    btn.classList.toggle('btn-ghost',   locked);
+    btn.title = locked ? 'Custom categories require Basic' : '';
+    btn.innerHTML = `<i data-lucide="${locked ? 'lock' : 'plus'}" class="w-3 h-3"></i> Add`;
+  });
+
+  renderSettingsCategoryList('portfolio');
+  renderSettingsCategoryList('expense');
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+function renderSettingsCategoryList(kind){const c=$id(kind==='portfolio'?'portfolioCategoriesList':'expenseCategoriesList');if(!c)return;const catLocked=!canManageCategories();const src=kind==='portfolio'?categoriesConfig:expenseStore.categories;const ord=appSettings.categoryOrder[kind]||[],hid=appSettings.hiddenCategories[kind]||[];const sEl=$id(kind==='portfolio'?'portfolioCatSearch':'expenseCatSearch');const s=(sEl?.value||'').toLowerCase().trim();const o=[...src].sort((a,b)=>{const ia=ord.indexOf(a.key||a.id),ib=ord.indexOf(b.key||b.id);if(ia===-1&&ib===-1)return 0;if(ia===-1)return 1;if(ib===-1)return-1;return ia-ib;});const f=s?o.filter(x=>(x.label||'').toLowerCase().includes(s)||(x.key||x.id||'').toLowerCase().includes(s)):o;const b=$id(kind==='portfolio'?'portfolioCountBadge':'expenseCountBadge');if(b){const v=o.filter(x=>!hid.includes(x.key||x.id)).length;b.textContent=`${v} of ${o.length} visible`;}if(f.length===0){c.innerHTML=`<div class="settings-empty">${s?'No categories match your search.':'No categories yet. Click <b>Add</b> to create one.'}</div>`;return;}c.innerHTML=f.map(cat=>{const id=cat.key||cat.id;const ih=hid.includes(id);const em=kind==='portfolio'?categoryEmoji(cat):expenseEmoji(cat);const cl=cat.color||'#8B5CF6';let meta='';if(kind==='portfolio'){const yu=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0).length;meta=`${cat.type||'taxable'} · ${yu} year${yu===1?'':'s'} with data`;}else{const tc=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;meta=cat.limit?`Budget ${formatCurrency(cat.limit,0)} · ${tc} tx`:`${tc} transaction${tc===1?'':'s'}`;}return `<div class="cat-item ${ih?'cat-hidden':''}" draggable="true" data-cat-id="${id}" data-cat-kind="${kind}"><span class="cat-handle"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span><span class="cat-swatch" style="background:${cl}18;color:${cl};border-color:${cl}33;">${em}</span><div class="min-w-0 flex-grow"><div class="cat-name truncate">${cat.label}</div><div class="cat-meta truncate">${meta}</div></div><div class="cat-actions"><button onclick="toggleCategoryVisibility('${kind}','${id}')" title="${ih?'Show':'Hide'}" class="cat-action-btn"><i data-lucide="${ih?'eye-off':'eye'}" class="w-3.5 h-3.5"></i></button><button onclick="editSettingsCategory('${kind}','${id}')" title="${catLocked?'Editing categories requires Basic':'Edit'}" class="cat-action-btn" style="${catLocked?'opacity:.55;':''}"><i data-lucide="${catLocked?'lock':'pencil'}" class="w-3.5 h-3.5"></i></button><button onclick="deleteSettingsCategory('${kind}','${id}')" title="${catLocked?'Deleting categories requires Basic':'Delete'}" class="cat-action-btn danger" style="${catLocked?'opacity:.55;':''}"><i data-lucide="${catLocked?'lock':'trash-2'}" class="w-3.5 h-3.5"></i></button></div></div>`;}).join('');if(typeof lucide!=='undefined')lucide.createIcons();c.querySelectorAll('.cat-item').forEach(el=>{el.addEventListener('dragstart',e=>{_catDragSrc={id:el.dataset.catId,kind:el.dataset.catKind};el.classList.add('dragging');try{e.dataTransfer.setData('text/plain',el.dataset.catId);}catch(_){}e.dataTransfer.effectAllowed='move';});el.addEventListener('dragover',e=>{if(_catDragSrc&&_catDragSrc.kind===el.dataset.catKind&&_catDragSrc.id!==el.dataset.catId){e.preventDefault();el.classList.add('drag-over');}});el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag-over');if(!_catDragSrc||_catDragSrc.kind!==el.dataset.catKind)return;reorderSettingsCategory(_catDragSrc.kind,_catDragSrc.id,el.dataset.catId);});el.addEventListener('dragend',()=>{el.classList.remove('dragging');_catDragSrc=null;});});}
 function reorderSettingsCategory(kind,srcId,tgtId){if(srcId===tgtId)return;const src=kind==='portfolio'?categoriesConfig:expenseStore.categories;const all=src.map(c=>c.key||c.id);const eo=(appSettings.categoryOrder[kind]||[]).filter(id=>all.includes(id));const rem=all.filter(id=>!eo.includes(id));const ord=[...eo,...rem];const si=ord.indexOf(srcId),ti=ord.indexOf(tgtId);if(si===-1||ti===-1)return;ord.splice(si,1);ord.splice(ti,0,srcId);appSettings.categoryOrder[kind]=ord;persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast('Category order updated.','success',1600);}
 function resetCategoryOrder(kind){appSettings.categoryOrder[kind]=[];persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast('Category order reset.','info');}
 function toggleCategoryVisibility(kind,id){const h=appSettings.hiddenCategories[kind]||[];const i=h.indexOf(id);if(i===-1)h.push(id);else h.splice(i,1);appSettings.hiddenCategories[kind]=h;persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast(h.includes(id)?'Category hidden.':'Category visible.','info',1400);}
 function bulkToggleVisibility(kind,visible){const s=kind==='portfolio'?categoriesConfig:expenseStore.categories;const ids=s.map(c=>c.key||c.id);appSettings.hiddenCategories[kind]=visible?[]:ids;persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast(visible?'All categories shown.':'All categories hidden.','info',1600);}
 function propagateCategoryChanges(kind){if(typeof buildDynamicMiniCards==='function')buildDynamicMiniCards();if(typeof renderMiniCharts==='function')renderMiniCharts();if(typeof renderTables==='function')renderTables();if(typeof renderComparisonTable==='function')renderComparisonTable();if(typeof updateDashboard==='function')updateDashboard();if(typeof dashRender==='function')dashRender();if(typeof renderRebalancer==='function')renderRebalancer();if(typeof renderTaxBuckets==='function')renderTaxBuckets();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof populateFormDropdowns==='function')populateFormDropdowns();if(typeof renderExpenseChart==='function')renderExpenseChart();try{renderCharts(portfolioData.find(d=>d.year===(document.getElementById('yearFilter')?.value||currentYear()))||portfolioData[portfolioData.length-1]);}catch(_){}}
-function editSettingsCategory(kind,id){if(kind==='portfolio')openPortfolioCategoryModal(id);else{const c=expenseStore.categories.find(x=>x.id===id);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}}
-function deleteSettingsCategory(kind,id){const s=kind==='portfolio'?categoriesConfig:expenseStore.categories;const c=s.find(x=>(x.key||x.id)===id);if(!c)return;if(!confirm(`Delete category "${c.label}"?\n\nThis action cannot be undone.`))return;if(kind==='portfolio'){const uy=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0);if(uy.length>0){if(!confirm(`⚠️ This category has data in ${uy.length} year(s). Continue?`))return;}categoriesConfig=categoriesConfig.filter(x=>x.key!==id);portfolioData.forEach(r=>{if(r.balances)delete r.balances[id];if(r.invested)delete r.invested[id];if(r.contri)delete r.contri[id];});if(customTargets[id]!==undefined)delete customTargets[id];appSettings.hiddenCategories.portfolio=(appSettings.hiddenCategories.portfolio||[]).filter(k=>k!==id);appSettings.categoryOrder.portfolio=(appSettings.categoryOrder.portfolio||[]).filter(k=>k!==id);[...(accountsStore.linked||[]),...(accountsStore.manual||[])].forEach(a=>{if(a.mapping&&a.mapping.portfolioKey===id)delete a.mapping;});persistAppSettings();scheduleSaveData(400);try{saveAccountsStore();}catch(_){}initDashboard();toast(`Portfolio category "${c.label}" deleted.`,'info');}else{const u=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;if(u>0){if(!confirm(`⚠️ ${u} transaction(s) use this category. They will become Uncategorized.\n\nContinue?`))return;}expenseStore.categories=expenseStore.categories.filter(x=>x.id!==id);(expenseStore.transactions||[]).forEach(tx=>{if(tx.categoryId===id)tx.categoryId=null;});(accountsStore.plaidTransactions||[]).forEach(tx=>{if(tx.categoryId===id){tx.categoryId=null;tx.categorySource=null;}});Object.keys(accountsStore.plaidMappings||{}).forEach(k=>{if(accountsStore.plaidMappings[k]===id)delete accountsStore.plaidMappings[k];});Object.keys(accountsStore.merchantRules||{}).forEach(k=>{if(accountsStore.merchantRules[k]===id)delete accountsStore.merchantRules[k];});appSettings.hiddenCategories.expense=(appSettings.hiddenCategories.expense||[]).filter(k=>k!==id);appSettings.categoryOrder.expense=(appSettings.categoryOrder.expense||[]).filter(k=>k!==id);persistAppSettings();try{saveExpenseStore();}catch(_){}try{saveAccountsStore();}catch(_){}populateFormDropdowns();renderBudgetTab();toast(`Expense category "${c.label}" deleted.`,'info');}renderSettingsCategoryList(kind);propagateCategoryChanges(kind);}
+function editSettingsCategory(kind,id){if(!guardCategoryManagement()) return;if(kind==='portfolio')openPortfolioCategoryModal(id);else{const c=expenseStore.categories.find(x=>x.id===id);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}}
+function deleteSettingsCategory(kind,id){if(!guardCategoryManagement()) return;const s=kind==='portfolio'?categoriesConfig:expenseStore.categories;const c=s.find(x=>(x.key||x.id)===id);if(!c)return;if(!confirm(`Delete category "${c.label}"?\n\nThis action cannot be undone.`))return;if(kind==='portfolio'){const uy=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0);if(uy.length>0){if(!confirm(`⚠️ This category has data in ${uy.length} year(s). Continue?`))return;}categoriesConfig=categoriesConfig.filter(x=>x.key!==id);portfolioData.forEach(r=>{if(r.balances)delete r.balances[id];if(r.invested)delete r.invested[id];if(r.contri)delete r.contri[id];});if(customTargets[id]!==undefined)delete customTargets[id];appSettings.hiddenCategories.portfolio=(appSettings.hiddenCategories.portfolio||[]).filter(k=>k!==id);appSettings.categoryOrder.portfolio=(appSettings.categoryOrder.portfolio||[]).filter(k=>k!==id);[...(accountsStore.linked||[]),...(accountsStore.manual||[])].forEach(a=>{if(a.mapping&&a.mapping.portfolioKey===id)delete a.mapping;});persistAppSettings();scheduleSaveData(400);try{saveAccountsStore();}catch(_){}initDashboard();toast(`Portfolio category "${c.label}" deleted.`,'info');}else{const u=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;if(u>0){if(!confirm(`⚠️ ${u} transaction(s) use this category. They will become Uncategorized.\n\nContinue?`))return;}expenseStore.categories=expenseStore.categories.filter(x=>x.id!==id);(expenseStore.transactions||[]).forEach(tx=>{if(tx.categoryId===id)tx.categoryId=null;});(accountsStore.plaidTransactions||[]).forEach(tx=>{if(tx.categoryId===id){tx.categoryId=null;tx.categorySource=null;}});Object.keys(accountsStore.plaidMappings||{}).forEach(k=>{if(accountsStore.plaidMappings[k]===id)delete accountsStore.plaidMappings[k];});Object.keys(accountsStore.merchantRules||{}).forEach(k=>{if(accountsStore.merchantRules[k]===id)delete accountsStore.merchantRules[k];});appSettings.hiddenCategories.expense=(appSettings.hiddenCategories.expense||[]).filter(k=>k!==id);appSettings.categoryOrder.expense=(appSettings.categoryOrder.expense||[]).filter(k=>k!==id);persistAppSettings();try{saveExpenseStore();}catch(_){}try{saveAccountsStore();}catch(_){}populateFormDropdowns();renderBudgetTab();toast(`Expense category "${c.label}" deleted.`,'info');}renderSettingsCategoryList(kind);propagateCategoryChanges(kind);}
 let _editingPortfolioKey=null;
-function openPortfolioCategoryModal(editKey){_editingPortfolioKey=editKey||null;const t=$id('portfolioCatModalTitle'),b=$id('portfolioCatSaveBtn'),k=$id('newPortKey');if(editKey){const c=categoriesConfig.find(x=>x.key===editKey);if(!c)return;if(t)t.textContent='Edit Portfolio Category';if(b)b.textContent='Save Changes';k.value=c.key;k.disabled=true;$id('newPortLabel').value=c.label;$id('newPortEmoji').value=c.emoji||'';$id('newPortColor').value=c.color||'#8B5CF6';$id('newPortTaxType').value=c.type||'taxable';}else{if(t)t.textContent='Add Portfolio Category';if(b)b.textContent='Add Category';k.value='';k.disabled=false;$id('newPortLabel').value='';$id('newPortEmoji').value='';$id('newPortColor').value='#8B5CF6';$id('newPortTaxType').value='taxable';}$id('portfolioCategoryModal').classList.remove('hidden');renderPortfolioCategoryAccountList();
+function openPortfolioCategoryModal(editKey){if(!guardCategoryManagement()) return;_editingPortfolioKey=editKey||null;const t=$id('portfolioCatModalTitle'),b=$id('portfolioCatSaveBtn'),k=$id('newPortKey');if(editKey){const c=categoriesConfig.find(x=>x.key===editKey);if(!c)return;if(t)t.textContent='Edit Portfolio Category';if(b)b.textContent='Save Changes';k.value=c.key;k.disabled=true;$id('newPortLabel').value=c.label;$id('newPortEmoji').value=c.emoji||'';$id('newPortColor').value=c.color||'#8B5CF6';$id('newPortTaxType').value=c.type||'taxable';}else{if(t)t.textContent='Add Portfolio Category';if(b)b.textContent='Add Category';k.value='';k.disabled=false;$id('newPortLabel').value='';$id('newPortEmoji').value='';$id('newPortColor').value='#8B5CF6';$id('newPortTaxType').value='taxable';}$id('portfolioCategoryModal').classList.remove('hidden');renderPortfolioCategoryAccountList();
   setTimeout(() => {
     if(!_editingPortfolioKey){
       attachById('newPortKey',  [V.required('Key is required.'), V.pattern(/^[a-z][a-z0-9_]{1,30}$/, 'Lowercase letters, numbers, underscores only.')]);
@@ -6393,6 +6445,7 @@ function renderPortfolioCategoryAccountList(){
 function openCategoryModal(){openPortfolioCategoryModal();}
 function closeCategoryModal(){$id('portfolioCategoryModal').classList.add('hidden');_editingPortfolioKey=null;const k=$id('newPortKey');if(k)k.disabled=false;}
 function savePortfolioCategory(){
+  if(!guardCategoryManagement()) return;
   const krEl = $id('newPortKey');
   const lEl  = $id('newPortLabel');
   const eEl  = $id('newPortEmoji');
@@ -6467,17 +6520,12 @@ function savePortfolioCategory(){
   propagateCategoryChanges('portfolio');
 }
 function openSettingsAddCategory(){
-  if(!hasFeature('unlimited_budget_cats')){
-    const current = (expenseStore.categories||[]).length;
-    if(current >= 3){
-      gateFeature('unlimited_budget_cats', null);
-      return;
-    }
-  }
+  if(!guardCategoryManagement()) return;
   $id('editCatId').value='';$id('newCatName').value='';$id('newCatEmoji').value='';$id('newCatColor').value='#8B5CF6';$id('newCatBudget').value='';setText('expCatModalTitle','Add New Category');$id('expCategoryModal').classList.remove('hidden');
 }
 function toggleCategoryModal(){$id('expCategoryModal').classList.toggle('hidden');}
 function saveCustomCategory(){
+  if(!guardCategoryManagement()) return;
   const e  = $id('editCatId').value;
   const nEl = $id('newCatName');
   const emEl = $id('newCatEmoji');
@@ -6515,7 +6563,7 @@ function saveCustomCategory(){
   renderSettingsCategoryList('expense');
   propagateCategoryChanges('expense');
 }
-function editExpenseCategoryModal(catId){const c=expenseStore.categories.find(x=>x.id===catId);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}
+function editExpenseCategoryModal(catId){if(!guardCategoryManagement()) return;const c=expenseStore.categories.find(x=>x.id===catId);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}
 function applyCategoryAccountLinks(){
   const accs = allAccounts();
   const cy = currentYear();
@@ -7900,7 +7948,7 @@ function renderBudgetCategoryRow(cat,c){
 }
 function toggleBudgetGroup(id){const g=(expenseStore.categoryGroups||[]).find(x=>x.id===id);if(!g) return;g.collapsed=!g.collapsed;try{ saveExpenseStore(); }catch(_){}const el=document.querySelector(`.budget-group[data-group-id="${id}"]`);if(el) el.classList.toggle('collapsed',g.collapsed);}
 function inlineEditBudgetCap(catId, btn){const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;const current=parseFloat(cat.limit)||0;const wrap=btn.parentElement;const input=document.createElement('input');input.type='number'; input.className='budget-cap-input';input.value=current; input.step=10; input.min=0;wrap.replaceChild(input,btn);input.focus(); input.select();let done=false;const commit=()=>{ if(done) return; done=true; const v=Math.max(0,parseFloat(input.value)||0); cat.limit=v; try{ saveExpenseStore(); }catch(_){} renderBudgetTab(); toast(v>0?`${cat.label} cap set to ${formatCurrency(v,0)}`:`${cat.label} cap cleared`,'success',1600); };input.addEventListener('blur',commit);input.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();input.blur();} if(e.key==='Escape'){done=true;input.value=current;input.blur();renderBudgetTab();} });}
-function openBudgetCatMenu(ev, catId){ev.stopPropagation(); closeAllFloatMenus();const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;const menu=document.createElement('div');menu.className='ew-float-menu';const r=ev.currentTarget.getBoundingClientRect();const left=Math.max(8,Math.min(r.left-160,window.innerWidth-224));menu.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${left}px;z-index:4000;min-width:210px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;box-shadow:var(--shadow-lift);padding:4px;`;const groups=expenseStore.categoryGroups||[];const groupItems=groups.map(g=>`<button class="popover-item ${cat.groupId===g.id?'active':''}" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','${g.id}')"><span>${g.emoji}</span><span>${esc(g.name)}</span>${cat.groupId===g.id?'<i data-lucide="check" class="w-3.5 h-3.5 ml-auto"></i>':''}</button>`).join('');menu.innerHTML=`<button class="popover-item" onclick="closeAllFloatMenus(); editExpenseCategoryModal('${cat.id}')"><i data-lucide="pencil" class="w-4 h-4"></i> Edit category</button><button class="popover-item" onclick="closeAllFloatMenus(); inlineEditBudgetCap('${cat.id}', document.querySelector('.budget-cat-row[data-cat-id=&quot;${cat.id}&quot;] .budget-cap-btn'))"><i data-lucide="target" class="w-4 h-4"></i> Set cap</button><div class="divider my-1"></div><div class="cmd-section-label">Move to group</div>${groupItems}<button class="popover-item" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','')"><i data-lucide="circle-slash" class="w-4 h-4"></i> Remove from group</button><div class="divider my-1"></div><button class="popover-item danger" onclick="closeAllFloatMenus(); deleteSettingsCategory('expense','${cat.id}')"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete</button>`;document.body.appendChild(menu);if(typeof lucide!=='undefined') lucide.createIcons();setTimeout(()=>document.addEventListener('click',closeAllFloatMenus,{once:true}),10);}
+function openBudgetCatMenu(ev, catId){ev.stopPropagation(); closeAllFloatMenus();const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;const catLocked=!canManageCategories();const menu=document.createElement('div');menu.className='ew-float-menu';const r=ev.currentTarget.getBoundingClientRect();const left=Math.max(8,Math.min(r.left-160,window.innerWidth-224));menu.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${left}px;z-index:4000;min-width:210px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;box-shadow:var(--shadow-lift);padding:4px;`;const groups=expenseStore.categoryGroups||[];const groupItems=groups.map(g=>`<button class="popover-item ${cat.groupId===g.id?'active':''}" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','${g.id}')"><span>${g.emoji}</span><span>${esc(g.name)}</span>${cat.groupId===g.id?'<i data-lucide="check" class="w-3.5 h-3.5 ml-auto"></i>':''}</button>`).join('');menu.innerHTML=`<button class="popover-item" onclick="closeAllFloatMenus(); editExpenseCategoryModal('${cat.id}')"><i data-lucide="${catLocked?'lock':'pencil'}" class="w-4 h-4"></i> Edit category${catLocked?'<span class="badge badge-violet ml-auto" style="font-size:.5rem;">BASIC</span>':''}</button><button class="popover-item" onclick="closeAllFloatMenus(); inlineEditBudgetCap('${cat.id}', document.querySelector('.budget-cat-row[data-cat-id=&quot;${cat.id}&quot;] .budget-cap-btn'))"><i data-lucide="target" class="w-4 h-4"></i> Set cap</button><div class="divider my-1"></div><div class="cmd-section-label">Move to group</div>${groupItems}<button class="popover-item" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','')"><i data-lucide="circle-slash" class="w-4 h-4"></i> Remove from group</button><div class="divider my-1"></div><button class="popover-item danger" onclick="closeAllFloatMenus(); deleteSettingsCategory('expense','${cat.id}')"><i data-lucide="${catLocked?'lock':'trash-2'}" class="w-4 h-4"></i> Delete</button>`;document.body.appendChild(menu);if(typeof lucide!=='undefined') lucide.createIcons();setTimeout(()=>document.addEventListener('click',closeAllFloatMenus,{once:true}),10);}
 function moveCategoryToGroup(catId, groupId){const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;cat.groupId=groupId||null;try{ saveExpenseStore(); }catch(_){}renderBudgetTab();toast(groupId?'Category moved.':'Category removed from group.','success',1500);}
 function openBudgetGroupMenu(ev, groupId){ev.stopPropagation(); closeAllFloatMenus();const g=(expenseStore.categoryGroups||[]).find(x=>x.id===groupId);if(!g) return;const menu=document.createElement('div');menu.className='ew-float-menu';const r=ev.currentTarget.getBoundingClientRect();const left=Math.max(8,Math.min(r.left-160,window.innerWidth-224));menu.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${left}px;z-index:4000;min-width:200px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;box-shadow:var(--shadow-lift);padding:4px;`;menu.innerHTML=`<button class="popover-item" onclick="closeAllFloatMenus(); renameBudgetGroup('${g.id}')"><i data-lucide="pencil" class="w-4 h-4"></i> Rename</button><button class="popover-item" onclick="closeAllFloatMenus(); changeBudgetGroupEmoji('${g.id}')"><i data-lucide="smile" class="w-4 h-4"></i> Change emoji</button><div class="divider my-1"></div><button class="popover-item" onclick="closeAllFloatMenus(); moveBudgetGroup('${g.id}',-1)"><i data-lucide="arrow-up" class="w-4 h-4"></i> Move up</button><button class="popover-item" onclick="closeAllFloatMenus(); moveBudgetGroup('${g.id}',1)"><i data-lucide="arrow-down" class="w-4 h-4"></i> Move down</button><div class="divider my-1"></div><button class="popover-item danger" onclick="closeAllFloatMenus(); deleteBudgetGroup('${g.id}')"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete group</button>`;document.body.appendChild(menu);if(typeof lucide!=='undefined') lucide.createIcons();setTimeout(()=>document.addEventListener('click',closeAllFloatMenus,{once:true}),10);}
 function renameBudgetGroup(id){const g=(expenseStore.categoryGroups||[]).find(x=>x.id===id); if(!g) return;const n=prompt('Group name:',g.name);if(!n||!n.trim()) return;g.name=n.trim();try{ saveExpenseStore(); }catch(_){}renderBudgetTab();}
