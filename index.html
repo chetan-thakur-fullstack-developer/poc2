@@ -1161,12 +1161,6 @@ html.dark .invite-share-btn[data-method="copy"] .invite-share-icon{color:#CBD5E1
 /* ═══════════════════════════════════════════════════════════
    INLINE VALIDATION
    ═══════════════════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════════════════
-   INLINE VALIDATION — floating bubble + shake (no layout shift)
-   ═══════════════════════════════════════════════════════════ */
-
-/* Floating bubble — created dynamically in JS, positioned fixed
-   so it never distorts the surrounding layout. */
 .field-error-bubble {
   position: fixed;
   z-index: 9999;
@@ -1224,7 +1218,6 @@ html.dark .invite-share-btn[data-method="copy"] .invite-share-icon{color:#CBD5E1
   border-top: 1px solid rgba(251, 113, 133, .38);
 }
 
-/* Light theme variant */
 html.light .field-error-bubble {
   background: #FEF2F2;
   color: #7F1D1D;
@@ -1239,7 +1232,6 @@ html.light .field-error-bubble::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BE123C' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='8' x2='12' y2='12'/%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'/%3E%3C/svg%3E");
 }
 
-/* Invalid field state — red ring only, no layout change */
 .input.invalid,
 .ps-input.invalid,
 .wb-slider-val-input.invalid,
@@ -1263,7 +1255,6 @@ select.invalid:focus {
   box-shadow: 0 0 0 4px rgba(251, 113, 133, .26) !important;
 }
 
-/* Shake animation */
 @keyframes fieldShake {
   0%, 100% { transform: translateX(0); }
   15% { transform: translateX(-5px); }
@@ -1274,7 +1265,6 @@ select.invalid:focus {
 }
 .shake { animation: fieldShake .42s cubic-bezier(.36,.07,.19,.97) both; }
 
-/* Required asterisk */
 .req-mark {
   color: #FB7185;
   font-weight: 800;
@@ -1282,7 +1272,6 @@ select.invalid:focus {
   font-size: .85em;
 }
 
-/* Small helper hint */
 .field-hint {
   display: block;
   font-size: 10.5px;
@@ -1292,13 +1281,11 @@ select.invalid:focus {
   line-height: 1.4;
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .shake { animation: none; }
   .field-error-bubble { transition: none; }
 }
 
-/* Auth messages (unchanged) */
 .auth-msg{padding:10px 12px;border-radius:9px;font-size:11.5px;font-weight:600;line-height:1.5;margin-bottom:4px}
 .auth-msg.error{background:rgba(190,18,60,.10);color:#BE123C;border:1px solid rgba(190,18,60,.3)}
 .auth-msg.success{background:rgba(5,150,105,.10);color:#059669;border:1px solid rgba(5,150,105,.3)}
@@ -1306,6 +1293,114 @@ select.invalid:focus {
 html.dark .auth-msg.error{color:#FDA4AF}
 html.dark .auth-msg.success{color:#6EE7B7}
 html.dark .auth-msg.info{color:#C4B5FD}
+
+/* ── Lease gauge ─────────────────────────────────────────── */
+.lease-gauge-wrap{
+  padding:1.15rem 1.35rem 1rem;
+  border-bottom:1px solid var(--border);
+}
+.lease-gauge{position:relative}
+.lease-gauge-track{
+  position:relative;
+  height:12px;
+  border-radius:9999px;
+  display:flex;
+  overflow:visible;
+}
+.lease-gauge-zone{height:100%}
+.lease-gauge-zone:first-child{border-top-left-radius:9999px;border-bottom-left-radius:9999px}
+.lease-gauge-zone:last-child{border-top-right-radius:9999px;border-bottom-right-radius:9999px}
+.lease-gauge-marker{
+  position:absolute;
+  top:-5px;
+  width:4px;
+  height:22px;
+  border-radius:9999px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.35),0 0 0 2px rgba(15,23,42,.35);
+  transition:left .35s cubic-bezier(.4,0,.2,1);
+  transform:translateX(-50%);
+  z-index:2;
+  pointer-events:none;
+}
+html.dark .lease-gauge-marker{
+  box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 2px rgba(255,255,255,.25);
+}
+.lease-gauge-labels{
+  display:flex;
+  justify-content:space-between;
+  margin-top:.6rem;
+  font-size:.6rem;
+  font-weight:700;
+  color:var(--text-4);
+  font-family:'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+}
+.lease-verdict{
+  margin:0 1.35rem 1.15rem;
+  padding:.85rem 1rem;
+  border-radius:12px;
+  font-size:.75rem;
+  font-weight:600;
+  line-height:1.5;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease;
+}
+.lease-verdict.grade-excellent{background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.32);color:#047857}
+.lease-verdict.grade-good{background:rgba(20,184,166,.10);border:1px solid rgba(20,184,166,.32);color:#0F766E}
+.lease-verdict.grade-average{background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.32);color:#B45309}
+.lease-verdict.grade-poor{background:rgba(244,63,94,.10);border:1px solid rgba(244,63,94,.32);color:#BE123C}
+html.dark .lease-verdict.grade-excellent{color:#6EE7B7}
+html.dark .lease-verdict.grade-good{color:#5EEAD4}
+html.dark .lease-verdict.grade-average{color:#FCD34D}
+html.dark .lease-verdict.grade-poor{color:#FDA4AF}
+.lease-receipt-table{width:100%;border-collapse:collapse}
+.lease-receipt-table td{
+  padding:.6rem 1.35rem;
+  font-variant-numeric:tabular-nums;
+  vertical-align:middle;
+}
+.lease-receipt-table tr.lease-section td{
+  padding-top:1.1rem;padding-bottom:.35rem;
+  font-size:.55rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-4);
+}
+.lease-receipt-table tr.lease-row td:first-child{
+  font-size:.78rem;font-weight:600;color:var(--text-2);
+}
+.lease-receipt-table tr.lease-row td:last-child{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  font-weight:700;color:var(--text-1);text-align:right;white-space:nowrap;
+}
+.lease-receipt-table tr.lease-row.is-neg td:last-child{color:#BE123C}
+html.dark .lease-receipt-table tr.lease-row.is-neg td:last-child{color:#FDA4AF}
+.lease-receipt-table tr.lease-subtotal td{
+  border-top:1px solid var(--border);
+  padding-top:.75rem;padding-bottom:.75rem;
+}
+.lease-receipt-table tr.lease-subtotal td:first-child{
+  font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-1);
+}
+.lease-receipt-table tr.lease-subtotal td:last-child{
+  color:var(--text-1);font-weight:800;
+}
+.lease-receipt-table tr.lease-net{
+  border-top:1px solid var(--border);
+  background:linear-gradient(90deg,rgba(16,185,129,.07),transparent 70%);
+}
+.lease-receipt-table tr.lease-net td{padding-top:1.05rem;padding-bottom:1.05rem}
+.lease-receipt-table tr.lease-net td:first-child{
+  font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:#059669;
+}
+.lease-receipt-table tr.lease-net td:last-child{
+  font-size:1.05rem;font-weight:900;color:#059669;letter-spacing:-.02em;
+}
+@media(max-width:640px){
+  .lease-receipt-table td{padding:.55rem 1rem}
+  .lease-gauge-wrap{padding:1rem 1rem .9rem}
+  .lease-verdict{margin:0 1rem 1rem}
+}
 </style>
 </head>
 <body>
@@ -1565,14 +1660,6 @@ html.dark .auth-msg.info{color:#C4B5FD}
               <button onclick="toggleAllSections(true)" class="btn-icon btn-ghost" title="Expand all"><i data-lucide="chevrons-down-up" class="w-4 h-4"></i></button>
               <button onclick="toggleAllSections(false)" class="btn-icon btn-ghost" title="Collapse all"><i data-lucide="chevrons-up-down" class="w-4 h-4"></i></button>
             </div>
-
-            <!-- <button id="headerLedgerBtn" onclick="toggleLedgerDrawer()" class="btn" style="background:rgba(139,92,246,.10);color:#6D28D9;border:1px solid rgba(139,92,246,.24);">
-              <i data-lucide="database" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Ledger</span>
-            </button>
-
-            <button onclick="openAddFromHeader()" class="btn btn-primary">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Add</span>
-            </button> -->
           </div>
         </div>
       </header>
@@ -2086,7 +2173,6 @@ html.dark .auth-msg.info{color:#C4B5FD}
 
     <div class="wb-content">
       <!-- ═══ PAYCHECK ═══ -->
-            <!-- ═══ PAYCHECK ═══ -->
       <div class="wb-pane active" data-wb-pane="paycheck">
 
         <!-- Hero Strip -->
@@ -2255,6 +2341,348 @@ html.dark .auth-msg.info{color:#C4B5FD}
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- ═══ VEHICLE (Lease + Valuation) ═══ -->
+      <div class="wb-pane" data-wb-pane="vehicle">
+
+        <!-- Sub-mode toggle -->
+        <div class="flex items-center justify-between gap-3 mb-5 flex-wrap">
+          <div class="seg" id="vehicleModeSeg">
+            <button type="button" class="seg-item active" data-vmode="lease" onclick="setVehicleMode('lease')">
+              <i data-lucide="car" class="w-3.5 h-3.5"></i> Lease Check
+            </button>
+            <button type="button" class="seg-item" data-vmode="valuation" onclick="setVehicleMode('valuation')">
+              <i data-lucide="tag" class="w-3.5 h-3.5"></i> Buy / Sell Value
+            </button>
+          </div>
+        </div>
+
+        <!-- ── LEASE MODE ── -->
+        <div id="vehicleModeLease" class="vehicle-mode-panel">
+
+          <div class="ps-hero">
+            <div class="ps-hero-main">
+              <span class="ps-hero-label">Deal Percentage</span>
+              <div class="ps-hero-value" id="leaseDealPct">0.00%</div>
+              <div class="ps-hero-sub" id="leaseDealGradeSub">Enter deal details to evaluate</div>
+              <div id="leaseActiveBenchmark"
+                   style="margin-top:.55rem;display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.62rem;font-weight:800;background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text-3);transition:all .18s ease;">
+                Good target: <b style="color:#14B8A6;">≤ 1.25%</b>
+              </div>
+              <div id="leaseTermMileageChip"
+                   style="margin-top:.35rem;font-size:.62rem;font-weight:700;color:var(--text-4);font-variant-numeric:tabular-nums;">
+                36 mo · 12,000 mi/yr
+              </div>
+            </div>
+            <div class="ps-hero-stats">
+              <div class="ps-stat">
+                <span class="ps-stat-label">True Monthly</span>
+                <div class="ps-stat-value" id="leaseTrueMonthly">$0</div>
+                <div class="ps-stat-sub">down payment amortized</div>
+              </div>
+              <div class="ps-stat">
+                <span class="ps-stat-label">Quoted</span>
+                <div class="ps-stat-value" id="leaseQuotedMonthly">$0</div>
+                <div class="ps-stat-sub">as advertised</div>
+              </div>
+              <div class="ps-stat">
+                <span class="ps-stat-label">Total Cost</span>
+                <div class="ps-stat-value" id="leaseTotalCost">$0</div>
+                <div class="ps-stat-sub" id="leaseTotalCostSub">over 36 months</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ps-layout">
+            <div class="ps-controls">
+              <div class="ps-block">
+                <div class="ps-block-head">
+                  <span class="ps-block-label">Deal Inputs</span>
+                  <button type="button" onclick="leaseResetAll()" class="ps-mini-btn">
+                    <i data-lucide="rotate-ccw"></i> Reset
+                  </button>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Vehicle MSRP</span>
+                    <span class="ps-field-hint" id="leaseMsrpHint">$0</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="leaseMsrp" class="ps-input" value="45000" step="500" min="0"
+                      oninput="leaseSyncSlider('leaseMsrpSlider','leaseMsrp'); leaseCalc();">
+                    <input type="range" id="leaseMsrpSlider" class="ps-slider" min="0" max="200000" step="500" value="45000"
+                      oninput="leaseSyncInput('leaseMsrpSlider','leaseMsrp'); leaseCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Quoted Monthly Payment</span>
+                    <span class="ps-field-hint" id="leaseMonthlyHint">$0</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="leaseMonthly" class="ps-input" value="499" step="5" min="0"
+                      oninput="leaseSyncSlider('leaseMonthlySlider','leaseMonthly'); leaseCalc();">
+                    <input type="range" id="leaseMonthlySlider" class="ps-slider" min="0" max="3000" step="5" value="499"
+                      oninput="leaseSyncInput('leaseMonthlySlider','leaseMonthly'); leaseCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Down Payment / Cash Due</span>
+                    <span class="ps-field-hint" id="leaseDownHint">$0</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="leaseDown" class="ps-input" value="0" step="100" min="0"
+                      oninput="leaseSyncSlider('leaseDownSlider','leaseDown'); leaseCalc();">
+                    <input type="range" id="leaseDownSlider" class="ps-slider" min="0" max="20000" step="100" value="0"
+                      oninput="leaseSyncInput('leaseDownSlider','leaseDown'); leaseCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label"><span>Lease Term</span></label>
+                  <div class="ps-seg" id="leaseTermSeg">
+                    <button type="button" class="ps-seg-item" data-term="12" onclick="leasePickTerm('12')">12</button>
+                    <button type="button" class="ps-seg-item" data-term="24" onclick="leasePickTerm('24')">24</button>
+                    <button type="button" class="ps-seg-item active" data-term="36" onclick="leasePickTerm('36')">36</button>
+                    <button type="button" class="ps-seg-item" data-term="39" onclick="leasePickTerm('39')">39</button>
+                    <button type="button" class="ps-seg-item" data-term="48" onclick="leasePickTerm('48')">48</button>
+                  </div>
+                  <select id="leaseTerm" class="hidden" onchange="leaseCalc()">
+                    <option value="12">12 months</option>
+                    <option value="24">24 months</option>
+                    <option value="36" selected>36 months</option>
+                    <option value="39">39 months</option>
+                    <option value="48">48 months</option>
+                  </select>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Annual Mileage Allowance</span>
+                    <span class="ps-field-hint" id="leaseMileageHint">Standard thresholds</span>
+                  </label>
+                  <div class="ps-seg" id="leaseMileageSeg">
+                    <button type="button" class="ps-seg-item" data-miles="10000" onclick="leasePickMileage('10000')">10k</button>
+                    <button type="button" class="ps-seg-item active" data-miles="12000" onclick="leasePickMileage('12000')">12k</button>
+                    <button type="button" class="ps-seg-item" data-miles="15000" onclick="leasePickMileage('15000')">15k</button>
+                  </div>
+                  <select id="leaseMileage" class="hidden" onchange="leaseCalc()">
+                    <option value="10000">10,000 mi / year</option>
+                    <option value="12000" selected>12,000 mi / year</option>
+                    <option value="15000">15,000 mi / year</option>
+                  </select>
+                </div>
+
+                <div class="ps-banner" style="margin-top:1rem;">
+                  <i data-lucide="info"></i>
+                  <span>The <b>1.25% rule</b>: a strong lease should cost less than <b>1.25%</b> of the vehicle's MSRP per month with <b>$0 down</b>. High-mileage leases (15k/yr) get a <b>+0.10% leniency</b>.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ps-receipt-wrap">
+              <div class="ps-receipt">
+                <div class="ps-receipt-head">
+                  <div>
+                    <div class="ps-receipt-eyebrow">Deal Analysis</div>
+                    <div class="ps-receipt-title">1.25% Rule Benchmark</div>
+                  </div>
+                  <span class="ps-receipt-badge" id="leaseGradeBadge">—</span>
+                </div>
+                <div class="ps-receipt-body">
+                  <div class="lease-gauge-wrap">
+                    <div class="lease-gauge">
+                      <div class="lease-gauge-track" id="leaseGaugeTrack">
+                        <div class="lease-gauge-zone" data-zone="excellent" style="width:50%;background:#10B981;"></div>
+                        <div class="lease-gauge-zone" data-zone="good"      style="width:12.5%;background:#14B8A6;"></div>
+                        <div class="lease-gauge-zone" data-zone="average"   style="width:12.5%;background:#F59E0B;"></div>
+                        <div class="lease-gauge-zone" data-zone="poor"      style="width:25%;background:#F43F5E;"></div>
+                        <div class="lease-gauge-marker" id="leaseGaugeMarker" style="left:0%;"></div>
+                      </div>
+                      <div class="lease-gauge-labels" id="leaseGaugeLabels">
+                        <span>0%</span><span>1.00%</span><span>1.25%</span><span>1.50%</span><span>2.00%+</span>
+                      </div>
+                    </div>
+                  </div>
+                  <table class="lease-receipt-table">
+                    <tbody id="leaseReceiptBody"></tbody>
+                  </table>
+                  <div class="lease-verdict" id="leaseVerdict"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── VALUATION MODE ── -->
+        <div id="vehicleModeValuation" class="vehicle-mode-panel hidden">
+
+          <div class="ps-hero">
+            <div class="ps-hero-main">
+              <span class="ps-hero-label">Calculated Market Value</span>
+              <div class="ps-hero-value" id="valMarketValue">$0</div>
+              <div class="ps-hero-sub" id="valMarketValueSub">Age · mileage · condition adjusted</div>
+            </div>
+            <div class="ps-hero-stats">
+              <div class="ps-stat">
+                <span class="ps-stat-label">Listed</span>
+                <div class="ps-stat-value" id="valHeroListed">$0</div>
+                <div class="ps-stat-sub">asking price</div>
+              </div>
+              <div class="ps-stat">
+                <span class="ps-stat-label">Target Price</span>
+                <div class="ps-stat-value" id="valHeroTarget">$0</div>
+                <div class="ps-stat-sub" id="valHeroTargetSub">listed price</div>
+              </div>
+              <div class="ps-stat">
+                <span class="ps-stat-label">Variance</span>
+                <div class="ps-stat-value" id="valHeroVariance">0.0%</div>
+                <div class="ps-stat-sub">vs market value</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ps-layout">
+            <div class="ps-controls">
+
+              <div class="ps-block">
+                <div class="ps-block-head">
+                  <span class="ps-block-label">Your Perspective</span>
+                </div>
+                <div class="ps-seg" id="valPerspectiveSeg">
+                  <button type="button" class="ps-seg-item active" data-vpersp="buying" onclick="valPickPerspective('buying')">I am Buying</button>
+                  <button type="button" class="ps-seg-item" data-vpersp="selling" onclick="valPickPerspective('selling')">I am Selling</button>
+                </div>
+              </div>
+
+              <div class="ps-block">
+                <div class="ps-block-head">
+                  <span class="ps-block-label">Vehicle Baseline</span>
+                  <button type="button" onclick="valResetAll()" class="ps-mini-btn">
+                    <i data-lucide="rotate-ccw"></i> Reset
+                  </button>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Original MSRP</span>
+                    <span class="ps-field-hint" id="valMsrpHint">$0</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="valMsrp" class="ps-input" value="35000" step="500" min="0"
+                      oninput="valSyncSlider('valMsrpSlider','valMsrp'); valCalc();">
+                    <input type="range" id="valMsrpSlider" class="ps-slider" min="0" max="200000" step="500" value="35000"
+                      oninput="valSyncInput('valMsrpSlider','valMsrp'); valCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Vehicle Age</span>
+                    <span class="ps-field-hint" id="valAgeHint">3 years old</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="valAge" class="ps-input" value="3" step="1" min="0" max="15"
+                      oninput="valSyncSlider('valAgeSlider','valAge'); valCalc();">
+                    <input type="range" id="valAgeSlider" class="ps-slider" min="0" max="15" step="1" value="3"
+                      oninput="valSyncInput('valAgeSlider','valAge'); valCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Odometer Mileage</span>
+                    <span class="ps-field-hint" id="valMileageHint">36,000 mi</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="valMileage" class="ps-input" value="36000" step="1000" min="0"
+                      oninput="valSyncSlider('valMileageSlider','valMileage'); valCalc();">
+                    <input type="range" id="valMileageSlider" class="ps-slider" min="0" max="300000" step="1000" value="36000"
+                      oninput="valSyncInput('valMileageSlider','valMileage'); valCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Vehicle Condition</span>
+                    <span class="ps-field-hint" id="valConditionHint">×1.00 multiplier</span>
+                  </label>
+                  <select id="valCondition" class="input" onchange="valCalc()">
+                    <option value="excellent">Excellent — 1.05×</option>
+                    <option value="good" selected>Good — 1.00×</option>
+                    <option value="fair">Fair — 0.85×</option>
+                    <option value="poor">Poor — 0.65×</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="ps-block">
+                <div class="ps-block-head">
+                  <span class="ps-block-label">Pricing & Deal</span>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Listed Selling Price</span>
+                    <span class="ps-field-hint" id="valListedHint">$0</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="valListedPrice" class="ps-input" value="25000" step="500" min="0"
+                      oninput="valSyncSlider('valListedSlider','valListedPrice'); valCalc();">
+                    <input type="range" id="valListedSlider" class="ps-slider" min="0" max="200000" step="500" value="25000"
+                      oninput="valSyncInput('valListedSlider','valListedPrice'); valCalc();">
+                  </div>
+                </div>
+
+                <div class="ps-field">
+                  <label class="ps-field-label">
+                    <span>Final Sale Price</span>
+                    <span class="ps-field-hint">optional — overrides listed</span>
+                  </label>
+                  <div class="ps-field-input">
+                    <input type="number" id="valFinalPrice" class="ps-input" value="0" step="500" min="0" placeholder="0"
+                      oninput="valCalc();">
+                  </div>
+                </div>
+              </div>
+
+              <div class="ps-banner">
+                <i data-lucide="info"></i>
+                <span>Market value uses a <b>20% year-1 drop</b>, then <b>10% compound depreciation</b> per year, adjusted for mileage (±12,000 mi/yr baseline) and condition.</span>
+              </div>
+            </div>
+
+            <div class="ps-receipt-wrap">
+              <div class="ps-receipt">
+                <div class="ps-receipt-head">
+                  <div>
+                    <div class="ps-receipt-eyebrow">Deal Analysis</div>
+                    <div class="ps-receipt-title">Market Value &amp; Verdict</div>
+                  </div>
+                  <span class="ps-receipt-badge" id="valDealGradeBadge">—</span>
+                </div>
+                <div class="ps-receipt-body">
+
+                  <div id="valDealBanner" class="lease-verdict grade-average" style="margin:1rem 1.35rem;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span id="valDealEmoji" style="font-size:1.05rem;">⚠️</span>
+                      <span id="valDealText">Adjust inputs to see your deal rating</span>
+                    </div>
+                  </div>
+
+                  <table class="lease-receipt-table">
+                    <tbody id="valReceiptBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2439,6 +2867,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
     <div class="wb-sheet-body scroll" id="wbSheetBody"></div>
   </div>
 </div>
+
         <!-- BUDGET TAB -->
         <div id="tab-expenses" class="main-tab-content space-y-5 hidden">
           <div class="surface p-4 lg:p-5 flex flex-wrap items-center gap-3">
@@ -2562,7 +2991,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
                 <button onclick="expandAllBudgetGroups(true)"  class="btn btn-ghost" title="Expand all"><i data-lucide="chevrons-down" class="w-3.5 h-3.5"></i></button>
                 <button onclick="expandAllBudgetGroups(false)" class="btn btn-ghost" title="Collapse all"><i data-lucide="chevrons-up" class="w-3.5 h-3.5"></i></button>
                 <button onclick="openBudgetGroupsModal()"     class="btn btn-ghost"><i data-lucide="folder-plus" class="w-3.5 h-3.5"></i> Group</button>
-                <button onclick="openSettingsAddCategory()" class="btn btn-ghost"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Category</button>
+                <button onclick="gateFeature('unlimited_budget_cats', ()=>openSettingsAddCategory())" class="btn btn-ghost"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Category</button>
               </div>
             </div>
             <div id="budgetCategoriesPanel"></div>
@@ -3131,21 +3560,6 @@ html.dark .auth-msg.info{color:#C4B5FD}
                     <div class="flex-grow min-w-0"><h2>Categories</h2><p>Drag to reorder · click eye to show/hide · edit or delete any category</p></div>
                   </div>
                 </div>
-
-                <!-- Free-tier category lock notice -->
-                <div id="catTierBanner" style="display:none;margin-bottom:1.25rem;" class="settings-card">
-                  <div class="flex items-start gap-3">
-                    <span class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:#C4B5FD;">
-                      <i data-lucide="lock" class="w-4 h-4"></i>
-                    </span>
-                    <div class="min-w-0 flex-grow">
-                      <div class="text-xs font-extrabold" style="color:var(--text-1);">Custom categories are a Basic feature</div>
-                      <div class="text-[11px] mt-0.5" style="color:var(--text-4);">On the Free plan your default category list is locked in place — categories can’t be added, renamed, or removed. You can still hide them from charts, and you can upgrade at any time.</div>
-                    </div>
-                    <button onclick="subConfirmUpgrade('basic')" class="btn btn-primary !py-2 !text-[11px] shrink-0"><i data-lucide="arrow-up-right" class="w-3 h-3"></i> Upgrade</button>
-                  </div>
-                </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   <div class="settings-card">
                     <div class="settings-card-header">
@@ -3158,7 +3572,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
                         <button onclick="bulkToggleVisibility('portfolio', true)" class="mini-btn" title="Show all"><i data-lucide="eye" class="w-3 h-3"></i></button>
                         <button onclick="bulkToggleVisibility('portfolio', false)" class="mini-btn" title="Hide all"><i data-lucide="eye-off" class="w-3 h-3"></i></button>
                         <button onclick="resetCategoryOrder('portfolio')" class="mini-btn" title="Reset order"><i data-lucide="rotate-ccw" class="w-3 h-3"></i></button>
-                        <button id="portfolioCatAddBtn" onclick="openPortfolioCategoryModal()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
+                        <button onclick="openPortfolioCategoryModal()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
                       </div>
                     </div>
                     <div id="portfolioCategoriesList" class="space-y-0.5 max-h-[28rem] overflow-y-auto scroll pr-1"></div>
@@ -3174,7 +3588,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
                         <button onclick="bulkToggleVisibility('expense', true)" class="mini-btn" title="Show all"><i data-lucide="eye" class="w-3 h-3"></i></button>
                         <button onclick="bulkToggleVisibility('expense', false)" class="mini-btn" title="Hide all"><i data-lucide="eye-off" class="w-3 h-3"></i></button>
                         <button onclick="resetCategoryOrder('expense')" class="mini-btn" title="Reset order"><i data-lucide="rotate-ccw" class="w-3 h-3"></i></button>
-                        <button id="expenseCatAddBtn" onclick="openSettingsAddCategory()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
+                        <button onclick="openSettingsAddCategory()" class="btn btn-primary !py-1.5 !px-3 !text-[11px]"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
                       </div>
                     </div>
                     <div id="expenseCategoriesList" class="space-y-0.5 max-h-[28rem] overflow-y-auto scroll pr-1"></div>
@@ -3535,7 +3949,7 @@ html.dark .auth-msg.info{color:#C4B5FD}
       <div><label class="field-label">Expense Amount (<span class="currency-prefix">$</span>)<span class="req-mark">*</span></label><input type="number" id="txAmount" required inputmode="decimal" class="input !text-sm text-right font-mono" placeholder="0.00"></div>
       <div><label class="field-label">Merchant / Description<span class="req-mark">*</span></label><input type="text" id="txDescription" required class="input" placeholder="Merchant name"></div>
       <div><label class="field-label">Payment Card / Account</label><select id="txCardSelect" class="input"></select></div>
-      <div><div class="flex justify-between items-center mb-1.5"><label class="field-label !mb-0">Category<span class="req-mark">*</span></label><button type="button" onclick="openSettingsAddCategory()" class="text-[11px] font-semibold hover:underline" style="color:#6D28D9;">+ Add Custom Category</button></div><select id="txCategorySelect" required class="input"></select></div>
+      <div><div class="flex justify-between items-center mb-1.5"><label class="field-label !mb-0">Category<span class="req-mark">*</span></label><button type="button" onclick="toggleCategoryModal()" class="text-[11px] font-semibold hover:underline" style="color:#6D28D9;">+ Add Custom Category</button></div><select id="txCategorySelect" required class="input"></select></div>
       <div><label class="field-label">Transaction Date<span class="req-mark">*</span></label><input type="date" id="txDate" required class="input"></div>
       <div class="flex items-center gap-2.5 pt-2"><input type="checkbox" id="txIsRecurring" style="accent-color:var(--accent);"><label for="txIsRecurring" class="text-xs font-semibold" style="color:var(--text-2);">Flag as Recurring Subscription</label></div>
       <div class="pt-4 flex items-center justify-end gap-3" style="border-top:1px solid var(--border);"><button type="button" onclick="closeTransactionDrawer()" class="btn btn-ghost">Cancel</button><button type="submit" class="btn btn-primary">Save Transaction</button></div>
@@ -3568,10 +3982,6 @@ html.dark .auth-msg.info{color:#C4B5FD}
 /* ═══════════════════════════════════════════════════════════
    INLINE VALIDATION ENGINE
    ═══════════════════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════════════════
-   INLINE VALIDATION ENGINE
-   Floating bubble + shake — zero layout distortion
-   ═══════════════════════════════════════════════════════════ */
 let _errorBubble = null;
 let _errorBubbleField = null;
 let _errorBubbleTimer = null;
@@ -3595,7 +4005,6 @@ function _positionBubble(inputEl, bubble){
   const vh = window.innerHeight;
   const margin = 8;
 
-  // Vertical: prefer above; if no room, place below
   let top, below = false;
   if(r.top - bh - 10 >= margin){
     top = r.top - bh - 10;
@@ -3606,12 +4015,10 @@ function _positionBubble(inputEl, bubble){
     top = margin;
   }
 
-  // Horizontal: align left edge, clamp to viewport
   let left = r.left;
   if(left + bw + margin > vw) left = vw - bw - margin;
   if(left < margin) left = margin;
 
-  // Arrow — align over the field's left area
   const arrowOffset = Math.max(12, Math.min(bw - 20, r.left + 16 - left));
   bubble.style.setProperty('--arrow-left', arrowOffset + 'px');
 
@@ -3621,17 +4028,15 @@ function _positionBubble(inputEl, bubble){
 }
 
 function _showBubble(inputEl, message){
-    if(!inputEl || !inputEl.isConnected) return;      // ← add this guard
+  if(!inputEl || !inputEl.isConnected) return;
 
   const b = _ensureBubble();
   b.textContent = message || 'Please check this field.';
   b.classList.add('show');
   _positionBubble(inputEl, b);
-  // Re-measure on next frame so fonts / sizes are accurate
   requestAnimationFrame(() => { _positionBubble(inputEl, b); });
   _errorBubbleField = inputEl;
 
-  // Auto-dismiss after 5s so it doesn't linger
   clearTimeout(_errorBubbleTimer);
   _errorBubbleTimer = setTimeout(() => { _hideBubble(); }, 5000);
 }
@@ -3661,7 +4066,6 @@ function showFieldError(inputEl, message){
     _showBubble(inputEl, message);
   }
 
-  // Shake animation — restart each time
   inputEl.classList.remove('shake');
   void inputEl.offsetWidth;
   inputEl.classList.add('shake');
@@ -3681,7 +4085,6 @@ function flashFieldError(inputEl, message){
   try{
     inputEl.focus({preventScroll:false});
     inputEl.scrollIntoView({behavior:'smooth', block:'center'});
-    // Reposition after scroll animation finishes
     setTimeout(() => {
       if(_errorBubbleField === inputEl && _errorBubble?.classList.contains('show')){
         _positionBubble(inputEl, _errorBubble);
@@ -3690,7 +4093,6 @@ function flashFieldError(inputEl, message){
   }catch(_){}
 }
 
-/* ── Rule factories ─────────────────────────────────────────── */
 const V = {
   required:  (m) => (v) => (!v || (typeof v === 'string' && !v.trim())) ? (m || 'This field is required.') : null,
   email:     (m) => (v) => v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim())
@@ -3757,7 +4159,6 @@ function attachValidator(inputEl, rules, opts){
     validateField(inputEl, rules);
   });
 
-  // Re-show bubble on focus if the field is still invalid
   inputEl.addEventListener('focus', () => {
     if(inputEl.classList.contains('invalid') && inputEl.dataset.errorMessage){
       _showBubble(inputEl, inputEl.dataset.errorMessage);
@@ -3775,11 +4176,10 @@ function attachValidator(inputEl, rules, opts){
 
 function attachById(id, rules, opts){ attachValidator(document.getElementById(id), rules, opts); }
 
-/* Dismiss the bubble when the user scrolls or resizes,
-   so it never drifts away from its field. */
 window.addEventListener('scroll', () => { _hideBubble(); }, { passive:true, capture:true });
 window.addEventListener('resize', () => { _hideBubble(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape') _hideBubble(); });
+
 /* ═══════════════════════════════════════════════════════════
    CONFIG  ·  Per-user GitHub storage
    ═══════════════════════════════════════════════════════════ */
@@ -3942,13 +4342,14 @@ const FEATURE_GATES = {
   unlimited_goals:          'basic',
   custom_budget_rules:      'basic',
   unlimited_budget_cats:    'basic',
-  custom_categories:        'basic',
   recurring_subscriptions:  'basic',
   rebalancing:              'basic',
   account_growth:           'basic',
   csv_export:               'basic',
   github_sync:              'basic',
   fire_modelling:           'basic',
+  custom_categories:        'basic',
+
   real_time_sync:           'pro',
   tax_loss_harvesting:      'pro',
   allocation_simulation:    'pro',
@@ -4148,11 +4549,10 @@ function subEndTrial(){
   persistAppSettings();
   subLogEvent(`Trial on ${SUB_PLANS[wasPlan].name} expired — account reverted to Free`, 'warning');
   subLogEvent('All data captured during the trial has been retained', 'info');
-    toast('Your trial has ended. You are now on the Free plan — premium data has been archived.', 'info', 5000);
+  toast('Your trial has ended. You are now on the Free plan — premium data has been archived.', 'info', 5000);
   renderSubscriptionUI();
   refreshAllGatedUI();
   try{ purgePremiumDataForPlan(); }catch(_){}
-
 }
 
 function subSimulateCycleEnd(){
@@ -4170,7 +4570,7 @@ function subSimulateCycleEnd(){
     subLogEvent('Premium views converted to read-only archives · no data deleted', 'info');
     toast(`Downgrade to ${SUB_PLANS[target].name} executed. Premium data archived.`, 'info', 5000);
     try{ purgePremiumDataForPlan(); }catch(_){}
-    } else if(subIsTrialing()){
+  } else if(subIsTrialing()){
     subEndTrial();
     return;
   } else {
@@ -4296,26 +4696,27 @@ function gateFeature(feature, action){
   const wasTrial = subIsTrialing();
 
   const featureLabels = {
-  plaid_sync: 'Automated Bank Sync',
-  multi_currency: 'Multi-Currency Support',
-  wealth_blueprint: 'Wealth Blueprint Planner',
-  unlimited_goals: 'Unlimited Savings Goals',
-  custom_budget_rules: 'Custom Budget Rules',
-  unlimited_budget_cats: 'Unlimited Budget Categories',
-  custom_categories: 'Custom Categories',
-  recurring_subscriptions: 'Recurring Subscription Detection',
-  rebalancing: 'Portfolio Rebalancing Engine',
-  account_growth: 'Account Growth & Performance',
-  csv_export: 'CSV Transaction Export',
-  github_sync: 'GitHub Cloud Backup',
-  fire_modelling: 'FIRE / Freedom Modelling',
-  real_time_sync: 'Real-Time Sync',
-  tax_loss_harvesting: 'Tax-Loss Harvesting',
-  allocation_simulation: 'Allocation Simulation Engine',
-  ai_advisory: 'Human + AI Advisory',
-  credit_simulator: 'Credit Score Simulator',
-  ai_insights: 'AI Spend Insights'
-};
+    plaid_sync: 'Automated Bank Sync',
+    multi_currency: 'Multi-Currency Support',
+    wealth_blueprint: 'Wealth Blueprint Planner',
+    unlimited_goals: 'Unlimited Savings Goals',
+    custom_budget_rules: 'Custom Budget Rules',
+    unlimited_budget_cats: 'Unlimited Budget Categories',
+    custom_categories: 'Custom Categories',
+    recurring_subscriptions: 'Recurring Subscription Detection',
+    rebalancing: 'Portfolio Rebalancing Engine',
+    account_growth: 'Account Growth & Performance',
+    csv_export: 'CSV Transaction Export',
+    github_sync: 'GitHub Cloud Backup',
+    fire_modelling: 'FIRE / Freedom Modelling',
+    real_time_sync: 'Real-Time Sync',
+    tax_loss_harvesting: 'Tax-Loss Harvesting',
+    allocation_simulation: 'Allocation Simulation Engine',
+    ai_advisory: 'Human + AI Advisory',
+    credit_simulator: 'Credit Score Simulator',
+    ai_insights: 'AI Spend Insights'
+  };
+
   const featureLabel = featureLabels[feature] || feature;
 
   const canTrial = !wasTrial && from === 'free' && !(ensureSubscriptionState().trialUsed[required]);
@@ -4352,9 +4753,6 @@ function gateFeature(feature, action){
   return false;
 }
 
-/* ── Category management gate ──────────────────────────────
-   Free plan is locked to the default category list:
-   no adding, no renaming, no deleting.                    */
 function canManageCategories(){ return hasFeature('custom_categories'); }
 function guardCategoryManagement(){
   if(canManageCategories()) return true;
@@ -4587,7 +4985,7 @@ function renderPlanChips(){
     navSub.classList.toggle('status-on', trialing || eff !== 'free');
   }
 
-document.querySelectorAll('.nav-pro-badge').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.nav-pro-badge').forEach(el => el.style.display = 'none');
 
   const goalsBadge = document.getElementById('navGoalsBadge');
   if(goalsBadge){
@@ -4871,12 +5269,7 @@ function updateFeatureLocksInApp(){
 
   const gb = document.getElementById('goalsGateBanner');
   if(gb) gb.style.display = hasFeature('unlimited_goals') ? 'none' : 'flex';
-
-  const catBanner = document.getElementById('catTierBanner');
-  if(catBanner) catBanner.style.display = hasFeature('custom_categories') ? 'none' : 'block';
-
   try{ updateAccountGrowthGate(); }catch(_){}
-
 }
 
 function renderSubscriptionSettingsPane(){
@@ -4926,12 +5319,6 @@ function renderSubscriptionSettingsPane(){
       </div>` : ''}
     `;
 
-  const statusBadges = {
-    free: trialing ? 'badge-slate' : (s.plan === 'free' ? 'badge-emerald' : 'badge-slate'),
-    basic: trialing && s.trial.plan==='basic' ? 'badge-emerald' : (s.plan === 'basic' && !trialing ? 'badge-emerald' : 'badge-slate'),
-    pro: trialing && s.trial.plan==='pro' ? 'badge-emerald' : (s.plan === 'pro' && !trialing ? 'badge-emerald' : 'badge-slate')
-  };
-  const trialActive = trialing;
   const targetBasicActive = (s.trialTarget || 'basic') === 'basic' ? 'active' : '';
   const targetProActive = (s.trialTarget || 'basic') === 'pro' ? 'active' : '';
 
@@ -5133,7 +5520,7 @@ function hashPassword(pw){
 }
 
 function renderAuthView(view){
-    _hideBubble();                       // ← add this line
+  _hideBubble();
 
   const body = $id('authBody');
   const signinTab = $id('authTabSignin');
@@ -5374,7 +5761,6 @@ function applyHouseholdUI(){
   const label = $id('sidebarHouseholdLabel');
   if(label) label.innerText = n > 1 ? `Household · ${n} members` : 'Personal Finance';
 }
-
 
 function renderHouseholdPane(){
   const wrap = $id('householdPaneBody');
@@ -5732,7 +6118,6 @@ window.switchSettingsSection = function(id) {
   if (id === 'household')  renderHouseholdPane();
   if (id === 'data'){      refreshGithubStatus(); refreshOnboardingStatusChip(); }
   if (id === 'currency')   loadCurrencyUI();
-  if (id === 'categories') renderSettingsCategoryLists();
   if (id === 'subscription') renderSubscriptionSettingsPane();
 };
 document.addEventListener('input', (e) => { if (e.target && e.target.id === 'setPin') handlePinInput(e); });
@@ -6085,6 +6470,7 @@ function restoreNavSections(){try{const st=JSON.parse(localStorage.getItem(NAV_S
 
 const WB_TOOLS_FLAT=[
   {id:'paycheck',label:'Paycheck',icon:'receipt',desc:'Take-home pay'},
+  {id:'vehicle',label:'Vehicle',icon:'car',desc:'Lease check & used-car valuation'},
   {id:'projections',label:'Projections',icon:'rocket',desc:'Growth projections'},
   {id:'fire',label:'Freedom',icon:'flame',desc:'FIRE progress'},
   {id:'emergency',label:'Emergency',icon:'shield',desc:'Liquidity runway'},
@@ -6093,6 +6479,7 @@ const WB_TOOLS_FLAT=[
 ];
 const WB_TOOL_GATES = {
   paycheck:    null,
+  vehicle:     'wealth_blueprint',
   projections: 'wealth_blueprint',
   fire:        'fire_modelling',
   emergency:   'wealth_blueprint',
@@ -6141,7 +6528,8 @@ function switchWbTool(toolId){
     if(pane){
       const lock = document.createElement('div');
       lock.className = 'wb-tool-lock';
-lock.style.cssText = 'position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1rem;text-align:center;padding:3.5rem 2rem 2rem;min-height:520px;overflow-y:auto;background:radial-gradient(600px 300px at 50% 0%,rgba(139,92,246,.14),transparent 65%),linear-gradient(180deg,rgba(11,17,32,.35),rgba(11,17,32,.75));border-radius:14px;backdrop-filter:blur(6px);';      const tool = WB_TOOLS_FLAT.find(t => t.id === toolId);
+      lock.style.cssText = 'position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1rem;text-align:center;padding:3.5rem 2rem 2rem;min-height:520px;overflow-y:auto;background:radial-gradient(600px 300px at 50% 0%,rgba(139,92,246,.14),transparent 65%),linear-gradient(180deg,rgba(11,17,32,.35),rgba(11,17,32,.75));border-radius:14px;backdrop-filter:blur(6px);';
+      const tool = WB_TOOLS_FLAT.find(t => t.id === toolId);
       lock.innerHTML = `
         <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(236,72,153,.13));border:1px solid rgba(139,92,246,.4);">
           <i data-lucide="lock" style="width:22px;height:22px;color:#C4B5FD;"></i>
@@ -6154,7 +6542,7 @@ lock.style.cssText = 'position:absolute;inset:0;z-index:20;display:flex;flex-dir
           ${isTrialPlan ? `<button class="btn btn-ghost" onclick="subConfirmTrial('${plan.id}')"><i data-lucide="timer" style="width:13px;height:13px;"></i> Start 7-Day Trial</button>` : ''}
           <button class="btn btn-primary" onclick="subConfirmUpgrade('${plan.id}')"><i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i> Upgrade to ${plan.name}</button>
         </div>`;
-pane.style.minHeight = '520px';
+      pane.style.minHeight = '520px';
       pane.appendChild(lock);
     }
     if(typeof lucide !== 'undefined') lucide.createIcons();
@@ -6167,7 +6555,11 @@ pane.style.minHeight = '520px';
   if(toolId === 'fire') calculateFIRE();
   if(toolId === 'emergency') calculateEmergencyFund();
   if(toolId === 'paycheck'){ psSyncSegs(); calculatePaystub(); }
-  
+  if(toolId === 'vehicle'){
+    if(currentVehicleMode === 'lease') leaseCalc();
+    else valCalc();
+  }
+
   if(toolId === 'insights') renderStrategicHub();
   if(typeof lucide !== 'undefined') lucide.createIcons();
   renderChartToggles();
@@ -6203,6 +6595,489 @@ function psPickFiling(v){
 }
 function initAllToolSliders(){[['payCustomSalarySlider','payCustomSalary'],['fireAnnualExpensesSlider','fireAnnualExpenses'],['fireWithdrawalRateSlider','fireWithdrawalRate'],['efMonthlyExpSlider','efMonthlyExp']].forEach(([s,i])=>{const sl=$id(s),inp=$id(i);if(sl&&inp)sl.value=parseFloat(inp.value)||0;});}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWbSheet();});
+
+/* ═══════════════════════════════════════════════════════════
+   1.25% RULE — CAR LEASE CALCULATOR LOGIC
+   ═══════════════════════════════════════════════════════════ */
+function leaseSyncSlider(sliderId, inputId) {
+  const s = document.getElementById(sliderId);
+  const i = document.getElementById(inputId);
+  if (s && i) s.value = i.value;
+}
+function leaseSyncInput(sliderId, inputId) {
+  const s = document.getElementById(sliderId);
+  const i = document.getElementById(inputId);
+  if (s && i) i.value = s.value;
+}
+function leasePickTerm(v) {
+  const el = document.getElementById('leaseTerm');
+  if (el) el.value = v;
+  document.querySelectorAll('#leaseTermSeg .ps-seg-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.term === String(v));
+  });
+  leaseCalc();
+}
+function leasePickMileage(v) {
+  const el = document.getElementById('leaseMileage');
+  if (el) el.value = v;
+  document.querySelectorAll('#leaseMileageSeg .ps-seg-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.miles === String(v));
+  });
+  leaseCalc();
+}
+function leaseResetAll() {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('leaseMsrp', 45000);
+  set('leaseMsrpSlider', 45000);
+  set('leaseMonthly', 499);
+  set('leaseMonthlySlider', 499);
+  set('leaseDown', 0);
+  set('leaseDownSlider', 0);
+  leasePickTerm('36');
+  leasePickMileage('12000');
+  if (typeof toast === 'function') toast('Lease calculator reset.', 'info', 1800);
+}
+function leaseFmt(n, decimals) {
+  const d = decimals === undefined ? (Number.isInteger(n) ? 0 : 2) : decimals;
+  return '$' + Number(n).toLocaleString('en-US', {
+    minimumFractionDigits: d,
+    maximumFractionDigits: d
+  });
+}
+function leaseFmtMiles(n) {
+  return Number(n).toLocaleString('en-US') + ' mi';
+}
+
+/* Leniency logic — 15k/yr leases get +0.10% on every threshold */
+function leaseComputeThresholds(miles) {
+  const leniency = miles >= 15000 ? 0.10 : 0;
+  return {
+    leniency:    leniency,
+    excellentMax: 1.00 + leniency,
+    goodMax:      1.25 + leniency,
+    averageMax:   1.50 + leniency,
+    poorCeil:     2.00 + leniency,
+    isLenient:    leniency > 0
+  };
+}
+
+function leaseRenderGauge(th) {
+  const scale = 2.00;
+  const track = document.getElementById('leaseGaugeTrack');
+  if (track) {
+    const zones = track.querySelectorAll('.lease-gauge-zone');
+    if (zones.length === 4) {
+      zones[0].style.width = (th.excellentMax / scale * 100) + '%';
+      zones[1].style.width = ((th.goodMax      - th.excellentMax) / scale * 100) + '%';
+      zones[2].style.width = ((th.averageMax   - th.goodMax)      / scale * 100) + '%';
+      zones[3].style.width = ((scale           - th.averageMax)   / scale * 100) + '%';
+    }
+  }
+  const labels = document.getElementById('leaseGaugeLabels');
+  if (labels) {
+    const spans = labels.querySelectorAll('span');
+    if (spans.length === 5) {
+      spans[0].textContent = '0%';
+      spans[1].textContent = th.excellentMax.toFixed(2) + '%';
+      spans[2].textContent = th.goodMax.toFixed(2) + '%';
+      spans[3].textContent = th.averageMax.toFixed(2) + '%';
+      spans[4].textContent = '2.00%+';
+    }
+  }
+}
+
+
+let _lastLeaseDealPct = null;
+function leaseFlashDealPct(el, newText) {
+  if (!el) return;
+  if (_lastLeaseDealPct !== null && _lastLeaseDealPct !== newText) {
+    el.style.transition = 'none';
+    el.style.transform  = 'scale(1.06)';
+    el.style.color      = '#6D28D9';
+    requestAnimationFrame(() => {
+      el.style.transition = 'transform .32s cubic-bezier(.34,1.56,.64,1), color .32s ease';
+      el.style.transform  = 'scale(1)';
+      setTimeout(() => { el.style.color = ''; }, 340);
+    });
+  }
+  el.textContent = newText;
+  _lastLeaseDealPct = newText;
+}
+
+function leaseCalc() {
+  const msrp    = parseFloat(document.getElementById('leaseMsrp')?.value) || 0;
+  const quoted  = parseFloat(document.getElementById('leaseMonthly')?.value) || 0;
+  const down    = parseFloat(document.getElementById('leaseDown')?.value) || 0;
+  const term    = parseInt(document.getElementById('leaseTerm')?.value) || 36;
+  const miles   = parseInt(document.getElementById('leaseMileage')?.value) || 12000;
+
+  const msrpHint = document.getElementById('leaseMsrpHint');
+  const monHint  = document.getElementById('leaseMonthlyHint');
+  const dwnHint  = document.getElementById('leaseDownHint');
+  const milHint  = document.getElementById('leaseMileageHint');
+  if (msrpHint) msrpHint.textContent = leaseFmt(msrp, 0);
+  if (monHint)  monHint.textContent  = leaseFmt(quoted, 0);
+  if (dwnHint)  dwnHint.textContent  = leaseFmt(down, 0);
+
+  const th = leaseComputeThresholds(miles);
+  if (milHint) {
+    if (th.isLenient) {
+      milHint.innerHTML = '<span style="color:#6D28D9;">+0.10% leniency applied</span>';
+    } else {
+      milHint.innerHTML = '<span style="color:var(--text-4);">Standard thresholds</span>';
+    }
+  }
+
+  const benchEl = document.getElementById('leaseActiveBenchmark');
+  if (benchEl) {
+    if (th.isLenient) {
+      benchEl.innerHTML =
+        'Good target: <b style="color:#14B8A6;">≤ ' + th.goodMax.toFixed(2) + '%</b>' +
+        ' <span style="color:#C4B5FD;font-weight:900;">· 15k +0.10%</span>';
+      benchEl.style.borderColor = 'rgba(139,92,246,.42)';
+      benchEl.style.background  = 'linear-gradient(135deg,rgba(139,92,246,.12),rgba(236,72,153,.08))';
+    } else {
+      benchEl.innerHTML =
+        'Good target: <b style="color:#14B8A6;">≤ ' + th.goodMax.toFixed(2) + '%</b>' +
+        ' <span style="color:var(--text-4);font-weight:700;">· standard</span>';
+      benchEl.style.borderColor = 'var(--border-strong)';
+      benchEl.style.background  = 'var(--surface-2)';
+    }
+  }
+
+  const chipEl = document.getElementById('leaseTermMileageChip');
+  if (chipEl) {
+    chipEl.textContent =
+      term + ' mo · ' + Number(miles).toLocaleString('en-US') + ' mi/yr';
+  }
+
+  const downPerMonth = term > 0 ? down / term : 0;
+  const trueMonthly  = quoted + downPerMonth;
+  const dealPct      = msrp > 0 ? (trueMonthly / msrp) * 100 : 0;
+  const totalCost    = trueMonthly * term;
+
+  const pctEl = document.getElementById('leaseDealPct');
+  if (pctEl) leaseFlashDealPct(pctEl, dealPct.toFixed(2) + '%');
+
+  const tmEl = document.getElementById('leaseTrueMonthly');
+  if (tmEl) tmEl.textContent = leaseFmt(trueMonthly, 0);
+
+  const qmEl = document.getElementById('leaseQuotedMonthly');
+  if (qmEl) qmEl.textContent = leaseFmt(quoted, 0);
+
+  const tcEl = document.getElementById('leaseTotalCost');
+  if (tcEl) {
+    const newCost = leaseFmt(totalCost, 0);
+    if (tcEl.textContent !== newCost) {
+      tcEl.style.transition = 'none';
+      tcEl.style.transform  = 'scale(1.05)';
+      tcEl.style.color      = '#6D28D9';
+      requestAnimationFrame(() => {
+        tcEl.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), color .3s ease';
+        tcEl.style.transform  = 'scale(1)';
+        setTimeout(() => { tcEl.style.color = ''; }, 320);
+      });
+    }
+    tcEl.textContent = newCost;
+  }
+
+  const tcsEl = document.getElementById('leaseTotalCostSub');
+  if (tcsEl) tcsEl.textContent = 'over ' + term + ' months';
+
+  let grade, gradeEmoji, gradeLabel, verdictText, color;
+
+  if (dealPct < th.excellentMax) {
+    grade        = 'excellent';
+    gradeEmoji   = '🏆';
+    gradeLabel   = 'Excellent';
+    verdictText  = 'A steal. This is well below the benchmark' + (th.isLenient ? ' even for a 15k-mile lease.' : ' — sign it.');
+    color        = '#10B981';
+  } else if (dealPct <= th.goodMax) {
+    grade        = 'good';
+    gradeEmoji   = '✅';
+    gradeLabel   = 'Good';
+    verdictText  = 'Solid deal. Right at or under the 1.25% rule' + (th.isLenient ? ' (adjusted for high mileage).' : ' of thumb.');
+    color        = '#14B8A6';
+  } else if (dealPct <= th.averageMax) {
+    grade        = 'average';
+    gradeEmoji   = '⚠️';
+    gradeLabel   = 'Average';
+    verdictText  = 'High limit. Push for a lower cap cost or more discount before signing.';
+    color        = '#F59E0B';
+  } else {
+    grade        = 'poor';
+    gradeEmoji   = '❌';
+    gradeLabel   = 'Poor';
+    verdictText  = 'Walk away. Well above the benchmark — not a good value.';
+    color        = '#F43F5E';
+  }
+
+  const subEl = document.getElementById('leaseDealGradeSub');
+  if (subEl) {
+    subEl.textContent = gradeEmoji + ' ' + gradeLabel + ' Deal' + (th.isLenient ? ' · 15k leniency' : '');
+    subEl.style.color = color;
+  }
+
+  const badge = document.getElementById('leaseGradeBadge');
+  if (badge) {
+    badge.textContent = gradeLabel.toUpperCase();
+    badge.style.color = color;
+    badge.style.borderColor = color + '55';
+    badge.style.background = color + '18';
+  }
+
+  const marker = document.getElementById('leaseGaugeMarker');
+  if (marker) {
+    const pos = Math.max(0, Math.min(100, (dealPct / 2.0) * 100));
+    marker.style.left = pos + '%';
+  }
+
+  leaseRenderGauge(th);
+
+  const verdict = document.getElementById('leaseVerdict');
+  if (verdict) {
+    verdict.className = 'lease-verdict grade-' + grade;
+    verdict.innerHTML =
+      '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<span style="font-size:1.05rem;">' + gradeEmoji + '</span>' +
+        '<span>' + verdictText + '</span>' +
+      '</div>';
+  }
+
+  const receipt = document.getElementById('leaseReceiptBody');
+  if (receipt) {
+    const rows = [];
+
+    rows.push('<tr class="lease-section"><td colspan="2">Deal Breakdown</td></tr>');
+    rows.push('<tr class="lease-row"><td>Vehicle MSRP</td><td>' + leaseFmt(msrp, 0) + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Quoted Monthly Payment</td><td>' + leaseFmt(quoted, 0) + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Lease Term</td><td><b style="color:#6D28D9;">' + term + ' months</b></td></tr>');
+    rows.push('<tr class="lease-row"><td>Annual Mileage Allowance</td><td><b style="color:' + (th.isLenient ? '#6D28D9' : 'var(--text-1)') + ';">' + leaseFmtMiles(miles) + ' / yr</b></td></tr>');
+
+    if (down > 0) {
+      rows.push('<tr class="lease-row is-neg"><td>Down Payment</td><td>−' + leaseFmt(down, 0) + '</td></tr>');
+      rows.push('<tr class="lease-row"><td>Down Amortized / month</td><td>+' + leaseFmt(downPerMonth, 0) + '</td></tr>');
+    }
+
+    rows.push('<tr class="lease-subtotal"><td>True Monthly Payment</td><td>' + leaseFmt(trueMonthly, 0) + '</td></tr>');
+
+    rows.push('<tr class="lease-section"><td colspan="2">Grading Thresholds' + (th.isLenient ? ' (15k leniency)' : '') + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Excellent</td><td>Under ' + th.excellentMax.toFixed(2) + '%</td></tr>');
+    rows.push('<tr class="lease-row"><td>Good</td><td>≤ ' + th.goodMax.toFixed(2) + '%</td></tr>');
+    rows.push('<tr class="lease-row"><td>Average</td><td>≤ ' + th.averageMax.toFixed(2) + '%</td></tr>');
+
+    rows.push('<tr class="lease-net"><td>Deal % (True ÷ MSRP)</td><td>' + dealPct.toFixed(2) + '%</td></tr>');
+
+    receipt.innerHTML = rows.join('');
+  }
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   USED CAR VALUATION & DEAL CALCULATOR
+   ═══════════════════════════════════════════════════════════ */
+let currentVehicleMode = 'lease';
+let currentValPerspective = 'buying';
+
+function setVehicleMode(mode){
+  currentVehicleMode = (mode === 'valuation') ? 'valuation' : 'lease';
+  document.querySelectorAll('#vehicleModeSeg .seg-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.vmode === currentVehicleMode);
+  });
+  const leasePanel = document.getElementById('vehicleModeLease');
+  const valPanel   = document.getElementById('vehicleModeValuation');
+  if(leasePanel) leasePanel.classList.toggle('hidden', currentVehicleMode !== 'lease');
+  if(valPanel)   valPanel.classList.toggle('hidden',   currentVehicleMode !== 'valuation');
+  if(currentVehicleMode === 'lease') { try { leaseCalc(); } catch(_){} }
+  else { try { valCalc(); } catch(_){} }
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function valSyncSlider(sliderId, inputId){
+  const s = document.getElementById(sliderId);
+  const i = document.getElementById(inputId);
+  if(s && i) s.value = i.value;
+}
+function valSyncInput(sliderId, inputId){
+  const s = document.getElementById(sliderId);
+  const i = document.getElementById(inputId);
+  if(s && i) i.value = s.value;
+}
+
+function valPickPerspective(p){
+  currentValPerspective = (p === 'selling') ? 'selling' : 'buying';
+  document.querySelectorAll('#valPerspectiveSeg .ps-seg-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.vpersp === currentValPerspective);
+  });
+  valCalc();
+}
+
+function valFmt(n, decimals){
+  const d = decimals === undefined ? (Number.isInteger(n) ? 0 : 2) : decimals;
+  return '$' + Number(n).toLocaleString('en-US', {
+    minimumFractionDigits: d, maximumFractionDigits: d
+  });
+}
+
+function valResetAll(){
+  const set = (id, v) => { const el = document.getElementById(id); if(el) el.value = v; };
+  set('valMsrp', 35000);          set('valMsrpSlider', 35000);
+  set('valAge', 3);               set('valAgeSlider', 3);
+  set('valMileage', 36000);       set('valMileageSlider', 36000);
+  set('valListedPrice', 25000);   set('valListedSlider', 25000);
+  set('valFinalPrice', 0);
+  const c = document.getElementById('valCondition'); if(c) c.value = 'good';
+  valPickPerspective('buying');
+  if(typeof toast === 'function') toast('Valuation calculator reset.', 'info', 1800);
+}
+
+function valCalc(){
+  const msrp      = parseFloat(document.getElementById('valMsrp')?.value) || 0;
+  const age       = Math.max(0, Math.min(15, parseInt(document.getElementById('valAge')?.value) || 0));
+  const mileage   = Math.max(0, parseFloat(document.getElementById('valMileage')?.value) || 0);
+  const condition = document.getElementById('valCondition')?.value || 'good';
+  const listed    = parseFloat(document.getElementById('valListedPrice')?.value) || 0;
+  const final     = parseFloat(document.getElementById('valFinalPrice')?.value) || 0;
+  const perspective = currentValPerspective;
+
+  const msrpHint = document.getElementById('valMsrpHint');         if(msrpHint) msrpHint.textContent = valFmt(msrp, 0);
+  const ageHint  = document.getElementById('valAgeHint');          if(ageHint)  ageHint.textContent  = age === 0 ? 'Brand new' : age + ' year' + (age === 1 ? '' : 's') + ' old';
+  const milHint  = document.getElementById('valMileageHint');      if(milHint)  milHint.textContent  = mileage.toLocaleString('en-US') + ' mi';
+  const lstHint  = document.getElementById('valListedHint');       if(lstHint)  lstHint.textContent  = valFmt(listed, 0);
+
+  const condMap = { excellent: 1.05, good: 1.00, fair: 0.85, poor: 0.65 };
+  const condLbl = { excellent: 'Excellent', good: 'Good', fair: 'Fair', poor: 'Poor' };
+  const condMul = condMap[condition] || 1.00;
+  const condHint = document.getElementById('valConditionHint');
+  if(condHint) condHint.textContent = '×' + condMul.toFixed(2) + ' multiplier';
+
+  let baseValue;
+  if(age === 0) baseValue = msrp;
+  else          baseValue = msrp * 0.8 * Math.pow(0.9, age - 1);
+
+  const expected   = age === 0 ? 6000 : age * 12000;
+  const diff       = mileage - expected;
+  let   mileageAdj = 0;
+  let   mileageCapApplied = false;
+  if(diff > 0){
+    mileageAdj = -diff * 0.15;
+  } else if(diff < 0){
+    mileageAdj = Math.abs(diff) * 0.08;
+    const cap  = baseValue * 0.20;
+    if(mileageAdj > cap){ mileageAdj = cap; mileageCapApplied = true; }
+  }
+  const afterMileage = Math.max(0, baseValue + mileageAdj);
+
+  const marketValue = Math.max(0, afterMileage * condMul);
+
+  const targetPrice = final > 0 ? final : listed;
+
+  let diffPct = 0;
+  if(marketValue > 0) diffPct = ((targetPrice - marketValue) / marketValue) * 100;
+
+  let grade, gradeEmoji, gradeLabel, gradeColor, verdictText;
+  if(perspective === 'buying'){
+    if(diffPct < -10){
+      grade='excellent'; gradeEmoji='🏆'; gradeLabel='Great Deal'; gradeColor='#10B981';
+      verdictText='You’re paying over 10% below market value — an excellent buy.';
+    } else if(diffPct <= 5){
+      grade='good'; gradeEmoji='✅'; gradeLabel='Good Deal'; gradeColor='#14B8A6';
+      verdictText='Fair market range for a buyer — solid value.';
+    } else {
+      grade='poor'; gradeEmoji='❌'; gradeLabel='Bad Deal'; gradeColor='#F43F5E';
+      verdictText='Price is more than 5% above market — push back or walk away.';
+    }
+  } else {
+    if(diffPct > 10){
+      grade='excellent'; gradeEmoji='🏆'; gradeLabel='Great Deal'; gradeColor='#10B981';
+      verdictText='You’re getting over 10% above market — an excellent sale.';
+    } else if(diffPct >= -5){
+      grade='good'; gradeEmoji='✅'; gradeLabel='Good Deal'; gradeColor='#14B8A6';
+      verdictText='Fair market range for a seller — a solid price.';
+    } else {
+      grade='poor'; gradeEmoji='❌'; gradeLabel='Bad Deal'; gradeColor='#F43F5E';
+      verdictText='You’re pricing more than 5% below market — consider holding out.';
+    }
+  }
+
+  const mvEl = document.getElementById('valMarketValue');
+  if(mvEl) mvEl.textContent = valFmt(marketValue, 0);
+  const hlEl = document.getElementById('valHeroListed');
+  if(hlEl) hlEl.textContent = valFmt(listed, 0);
+  const htEl = document.getElementById('valHeroTarget');
+  if(htEl) htEl.textContent = valFmt(targetPrice, 0);
+  const htsEl = document.getElementById('valHeroTargetSub');
+  if(htsEl) htsEl.textContent = final > 0 ? 'final sale price' : 'listed price';
+  const vEl = document.getElementById('valHeroVariance');
+  if(vEl){
+    vEl.textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(1) + '%';
+    vEl.style.color = gradeColor;
+  }
+
+  const badge = document.getElementById('valDealGradeBadge');
+  if(badge){
+    badge.textContent = gradeLabel.toUpperCase();
+    badge.style.color = gradeColor;
+    badge.style.borderColor = gradeColor + '55';
+    badge.style.background  = gradeColor + '18';
+  }
+
+  const banner = document.getElementById('valDealBanner');
+  if(banner){
+    banner.className = 'lease-verdict grade-' + (grade === 'excellent' ? 'excellent' : grade === 'good' ? 'good' : 'poor');
+    banner.style.margin = '1rem 1.35rem';
+    const emo = document.getElementById('valDealEmoji');
+    const txt = document.getElementById('valDealText');
+    if(emo) emo.textContent = gradeEmoji;
+    if(txt) txt.innerHTML   = '<b>' + gradeLabel + '</b> · ' + verdictText;
+  }
+
+  const receipt = document.getElementById('valReceiptBody');
+  if(receipt){
+    const rows = [];
+
+    rows.push('<tr class="lease-section"><td colspan="2">Vehicle Baseline</td></tr>');
+    rows.push('<tr class="lease-row"><td>Original MSRP</td><td>' + valFmt(msrp, 0) + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Vehicle Age</td><td>' + (age === 0 ? 'New (0 yr)' : age + ' yr' + (age === 1 ? '' : 's')) + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Odometer</td><td>' + mileage.toLocaleString('en-US') + ' mi</td></tr>');
+    rows.push('<tr class="lease-row"><td>Condition</td><td><b style="color:#6D28D9;">' + condLbl[condition] + ' (×' + condMul.toFixed(2) + ')</b></td></tr>');
+
+    rows.push('<tr class="lease-section"><td colspan="2">Depreciation & Adjustments</td></tr>');
+    rows.push('<tr class="lease-row"><td>Depreciated base</td><td>' + valFmt(baseValue, 0) + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Expected mileage</td><td>' + expected.toLocaleString('en-US') + ' mi</td></tr>');
+    const diffLabel = (diff >= 0 ? '+' : '') + diff.toLocaleString('en-US');
+    rows.push('<tr class="lease-row"><td>Mileage difference</td><td>' + diffLabel + ' mi</td></tr>');
+    rows.push('<tr class="lease-row ' + (mileageAdj < 0 ? 'is-neg' : '') + '"><td>Mileage adjustment' + (mileageCapApplied ? ' <span style="font-size:.55rem;color:#B45309;">(cap 20%)</span>' : '') + '</td><td>' + (mileageAdj >= 0 ? '+' : '') + valFmt(mileageAdj, 0) + '</td></tr>');
+    const condAdjDollar = afterMileage * (condMul - 1);
+    rows.push('<tr class="lease-row ' + (condAdjDollar < 0 ? 'is-neg' : '') + '"><td>Condition adjustment</td><td>' + (condAdjDollar >= 0 ? '+' : '') + valFmt(condAdjDollar, 0) + '</td></tr>');
+
+    rows.push('<tr class="lease-section"><td colspan="2">Deal Evaluation</td></tr>');
+    rows.push('<tr class="lease-row"><td>Listed price</td><td>' + valFmt(listed, 0) + '</td></tr>');
+    if(final > 0) rows.push('<tr class="lease-row"><td>Final sale price</td><td>' + valFmt(final, 0) + '</td></tr>');
+    rows.push('<tr class="lease-row"><td>Target evaluation price</td><td><b style="color:#6D28D9;">' + valFmt(targetPrice, 0) + '</b></td></tr>');
+    rows.push('<tr class="lease-row ' + (diffPct < 0 ? 'is-neg' : '') + '"><td>Variance vs market</td><td>' + (diffPct >= 0 ? '+' : '') + diffPct.toFixed(2) + '%</td></tr>');
+
+    rows.push('<tr class="lease-net"><td>Calculated Market Value</td><td>' + valFmt(marketValue, 0) + '</td></tr>');
+
+    receipt.innerHTML = rows.join('');
+  }
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+(function valBoot(){
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', valCalc);
+  else valCalc();
+})();
+
+(function leaseBoot() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', leaseCalc);
+  } else {
+    leaseCalc();
+  }
+})();
 
 let currentSettingsSection='profile',_pendingSettingsSection=null;
 const SETTINGS_SECTIONS_META=[
@@ -6353,16 +7228,30 @@ function renderSettingsCategoryLists(){
 
   if(typeof lucide !== 'undefined') lucide.createIcons();
 }
-function renderSettingsCategoryList(kind){const c=$id(kind==='portfolio'?'portfolioCategoriesList':'expenseCategoriesList');if(!c)return;const catLocked=!canManageCategories();const src=kind==='portfolio'?categoriesConfig:expenseStore.categories;const ord=appSettings.categoryOrder[kind]||[],hid=appSettings.hiddenCategories[kind]||[];const sEl=$id(kind==='portfolio'?'portfolioCatSearch':'expenseCatSearch');const s=(sEl?.value||'').toLowerCase().trim();const o=[...src].sort((a,b)=>{const ia=ord.indexOf(a.key||a.id),ib=ord.indexOf(b.key||b.id);if(ia===-1&&ib===-1)return 0;if(ia===-1)return 1;if(ib===-1)return-1;return ia-ib;});const f=s?o.filter(x=>(x.label||'').toLowerCase().includes(s)||(x.key||x.id||'').toLowerCase().includes(s)):o;const b=$id(kind==='portfolio'?'portfolioCountBadge':'expenseCountBadge');if(b){const v=o.filter(x=>!hid.includes(x.key||x.id)).length;b.textContent=`${v} of ${o.length} visible`;}if(f.length===0){c.innerHTML=`<div class="settings-empty">${s?'No categories match your search.':'No categories yet. Click <b>Add</b> to create one.'}</div>`;return;}c.innerHTML=f.map(cat=>{const id=cat.key||cat.id;const ih=hid.includes(id);const em=kind==='portfolio'?categoryEmoji(cat):expenseEmoji(cat);const cl=cat.color||'#8B5CF6';let meta='';if(kind==='portfolio'){const yu=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0).length;meta=`${cat.type||'taxable'} · ${yu} year${yu===1?'':'s'} with data`;}else{const tc=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;meta=cat.limit?`Budget ${formatCurrency(cat.limit,0)} · ${tc} tx`:`${tc} transaction${tc===1?'':'s'}`;}return `<div class="cat-item ${ih?'cat-hidden':''}" draggable="true" data-cat-id="${id}" data-cat-kind="${kind}"><span class="cat-handle"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span><span class="cat-swatch" style="background:${cl}18;color:${cl};border-color:${cl}33;">${em}</span><div class="min-w-0 flex-grow"><div class="cat-name truncate">${cat.label}</div><div class="cat-meta truncate">${meta}</div></div><div class="cat-actions"><button onclick="toggleCategoryVisibility('${kind}','${id}')" title="${ih?'Show':'Hide'}" class="cat-action-btn"><i data-lucide="${ih?'eye-off':'eye'}" class="w-3.5 h-3.5"></i></button><button onclick="editSettingsCategory('${kind}','${id}')" title="${catLocked?'Editing categories requires Basic':'Edit'}" class="cat-action-btn" style="${catLocked?'opacity:.55;':''}"><i data-lucide="${catLocked?'lock':'pencil'}" class="w-3.5 h-3.5"></i></button><button onclick="deleteSettingsCategory('${kind}','${id}')" title="${catLocked?'Deleting categories requires Basic':'Delete'}" class="cat-action-btn danger" style="${catLocked?'opacity:.55;':''}"><i data-lucide="${catLocked?'lock':'trash-2'}" class="w-3.5 h-3.5"></i></button></div></div>`;}).join('');if(typeof lucide!=='undefined')lucide.createIcons();c.querySelectorAll('.cat-item').forEach(el=>{el.addEventListener('dragstart',e=>{_catDragSrc={id:el.dataset.catId,kind:el.dataset.catKind};el.classList.add('dragging');try{e.dataTransfer.setData('text/plain',el.dataset.catId);}catch(_){}e.dataTransfer.effectAllowed='move';});el.addEventListener('dragover',e=>{if(_catDragSrc&&_catDragSrc.kind===el.dataset.catKind&&_catDragSrc.id!==el.dataset.catId){e.preventDefault();el.classList.add('drag-over');}});el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag-over');if(!_catDragSrc||_catDragSrc.kind!==el.dataset.catKind)return;reorderSettingsCategory(_catDragSrc.kind,_catDragSrc.id,el.dataset.catId);});el.addEventListener('dragend',()=>{el.classList.remove('dragging');_catDragSrc=null;});});}
+function renderSettingsCategoryList(kind){const c=$id(kind==='portfolio'?'portfolioCategoriesList':'expenseCategoriesList');if(!c)return;const src=kind==='portfolio'?categoriesConfig:expenseStore.categories;const ord=appSettings.categoryOrder[kind]||[],hid=appSettings.hiddenCategories[kind]||[];const sEl=$id(kind==='portfolio'?'portfolioCatSearch':'expenseCatSearch');const s=(sEl?.value||'').toLowerCase().trim();const o=[...src].sort((a,b)=>{const ia=ord.indexOf(a.key||a.id),ib=ord.indexOf(b.key||b.id);if(ia===-1&&ib===-1)return 0;if(ia===-1)return 1;if(ib===-1)return-1;return ia-ib;});const f=s?o.filter(x=>(x.label||'').toLowerCase().includes(s)||(x.key||x.id||'').toLowerCase().includes(s)):o;const b=$id(kind==='portfolio'?'portfolioCountBadge':'expenseCountBadge');if(b){const v=o.filter(x=>!hid.includes(x.key||x.id)).length;b.textContent=`${v} of ${o.length} visible`;}if(f.length===0){c.innerHTML=`<div class="settings-empty">${s?'No categories match your search.':'No categories yet. Click <b>Add</b> to create one.'}</div>`;return;}c.innerHTML=f.map(cat=>{const id=cat.key||cat.id;const ih=hid.includes(id);const catLocked=!canManageCategories();const em=kind==='portfolio'?categoryEmoji(cat):expenseEmoji(cat);const cl=cat.color||'#8B5CF6';let meta='';if(kind==='portfolio'){const yu=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0).length;meta=`${cat.type||'taxable'} · ${yu} year${yu===1?'':'s'} with data`;}else{const tc=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;meta=cat.limit?`Budget ${formatCurrency(cat.limit,0)} · ${tc} tx`:`${tc} transaction${tc===1?'':'s'}`;}return `<div class="cat-item ${ih?'cat-hidden':''}" draggable="true" data-cat-id="${id}" data-cat-kind="${kind}"><span class="cat-handle"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span><span class="cat-swatch" style="background:${cl}18;color:${cl};border-color:${cl}33;">${em}</span><div class="min-w-0 flex-grow"><div class="cat-name truncate">${cat.label}</div><div class="cat-meta truncate">${meta}</div></div>
+<div class="cat-actions">
+  <button onclick="toggleCategoryVisibility('${kind}','${id}')" title="${ih?'Show':'Hide'}" class="cat-action-btn"><i data-lucide="${ih?'eye-off':'eye'}" class="w-3.5 h-3.5"></i></button>
+  <button onclick="editSettingsCategory('${kind}','${id}')" title="${catLocked?'Editing categories requires Basic':'Edit'}" class="cat-action-btn" style="${catLocked?'opacity:.55;':''}"><i data-lucide="${catLocked?'lock':'pencil'}" class="w-3.5 h-3.5"></i></button>
+  <button onclick="deleteSettingsCategory('${kind}','${id}')" title="${catLocked?'Deleting categories requires Basic':'Delete'}" class="cat-action-btn danger" style="${catLocked?'opacity:.55;':''}"><i data-lucide="${catLocked?'lock':'trash-2'}" class="w-3.5 h-3.5"></i></button>
+</div>`;}).join('');if(typeof lucide!=='undefined')lucide.createIcons();c.querySelectorAll('.cat-item').forEach(el=>{el.addEventListener('dragstart',e=>{_catDragSrc={id:el.dataset.catId,kind:el.dataset.catKind};el.classList.add('dragging');try{e.dataTransfer.setData('text/plain',el.dataset.catId);}catch(_){}e.dataTransfer.effectAllowed='move';});el.addEventListener('dragover',e=>{if(_catDragSrc&&_catDragSrc.kind===el.dataset.catKind&&_catDragSrc.id!==el.dataset.catId){e.preventDefault();el.classList.add('drag-over');}});el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag-over');if(!_catDragSrc||_catDragSrc.kind!==el.dataset.catKind)return;reorderSettingsCategory(_catDragSrc.kind,_catDragSrc.id,el.dataset.catId);});el.addEventListener('dragend',()=>{el.classList.remove('dragging');_catDragSrc=null;});});}
 function reorderSettingsCategory(kind,srcId,tgtId){if(srcId===tgtId)return;const src=kind==='portfolio'?categoriesConfig:expenseStore.categories;const all=src.map(c=>c.key||c.id);const eo=(appSettings.categoryOrder[kind]||[]).filter(id=>all.includes(id));const rem=all.filter(id=>!eo.includes(id));const ord=[...eo,...rem];const si=ord.indexOf(srcId),ti=ord.indexOf(tgtId);if(si===-1||ti===-1)return;ord.splice(si,1);ord.splice(ti,0,srcId);appSettings.categoryOrder[kind]=ord;persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast('Category order updated.','success',1600);}
 function resetCategoryOrder(kind){appSettings.categoryOrder[kind]=[];persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast('Category order reset.','info');}
 function toggleCategoryVisibility(kind,id){const h=appSettings.hiddenCategories[kind]||[];const i=h.indexOf(id);if(i===-1)h.push(id);else h.splice(i,1);appSettings.hiddenCategories[kind]=h;persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast(h.includes(id)?'Category hidden.':'Category visible.','info',1400);}
 function bulkToggleVisibility(kind,visible){const s=kind==='portfolio'?categoriesConfig:expenseStore.categories;const ids=s.map(c=>c.key||c.id);appSettings.hiddenCategories[kind]=visible?[]:ids;persistAppSettings();renderSettingsCategoryList(kind);propagateCategoryChanges(kind);toast(visible?'All categories shown.':'All categories hidden.','info',1600);}
 function propagateCategoryChanges(kind){if(typeof buildDynamicMiniCards==='function')buildDynamicMiniCards();if(typeof renderMiniCharts==='function')renderMiniCharts();if(typeof renderTables==='function')renderTables();if(typeof renderComparisonTable==='function')renderComparisonTable();if(typeof updateDashboard==='function')updateDashboard();if(typeof dashRender==='function')dashRender();if(typeof renderRebalancer==='function')renderRebalancer();if(typeof renderTaxBuckets==='function')renderTaxBuckets();if(typeof renderBudgetTab==='function')renderBudgetTab();if(typeof populateFormDropdowns==='function')populateFormDropdowns();if(typeof renderExpenseChart==='function')renderExpenseChart();try{renderCharts(portfolioData.find(d=>d.year===(document.getElementById('yearFilter')?.value||currentYear()))||portfolioData[portfolioData.length-1]);}catch(_){}}
-function editSettingsCategory(kind,id){if(!guardCategoryManagement()) return;if(kind==='portfolio')openPortfolioCategoryModal(id);else{const c=expenseStore.categories.find(x=>x.id===id);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}}
-function deleteSettingsCategory(kind,id){if(!guardCategoryManagement()) return;const s=kind==='portfolio'?categoriesConfig:expenseStore.categories;const c=s.find(x=>(x.key||x.id)===id);if(!c)return;if(!confirm(`Delete category "${c.label}"?\n\nThis action cannot be undone.`))return;if(kind==='portfolio'){const uy=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0);if(uy.length>0){if(!confirm(`⚠️ This category has data in ${uy.length} year(s). Continue?`))return;}categoriesConfig=categoriesConfig.filter(x=>x.key!==id);portfolioData.forEach(r=>{if(r.balances)delete r.balances[id];if(r.invested)delete r.invested[id];if(r.contri)delete r.contri[id];});if(customTargets[id]!==undefined)delete customTargets[id];appSettings.hiddenCategories.portfolio=(appSettings.hiddenCategories.portfolio||[]).filter(k=>k!==id);appSettings.categoryOrder.portfolio=(appSettings.categoryOrder.portfolio||[]).filter(k=>k!==id);[...(accountsStore.linked||[]),...(accountsStore.manual||[])].forEach(a=>{if(a.mapping&&a.mapping.portfolioKey===id)delete a.mapping;});persistAppSettings();scheduleSaveData(400);try{saveAccountsStore();}catch(_){}initDashboard();toast(`Portfolio category "${c.label}" deleted.`,'info');}else{const u=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;if(u>0){if(!confirm(`⚠️ ${u} transaction(s) use this category. They will become Uncategorized.\n\nContinue?`))return;}expenseStore.categories=expenseStore.categories.filter(x=>x.id!==id);(expenseStore.transactions||[]).forEach(tx=>{if(tx.categoryId===id)tx.categoryId=null;});(accountsStore.plaidTransactions||[]).forEach(tx=>{if(tx.categoryId===id){tx.categoryId=null;tx.categorySource=null;}});Object.keys(accountsStore.plaidMappings||{}).forEach(k=>{if(accountsStore.plaidMappings[k]===id)delete accountsStore.plaidMappings[k];});Object.keys(accountsStore.merchantRules||{}).forEach(k=>{if(accountsStore.merchantRules[k]===id)delete accountsStore.merchantRules[k];});appSettings.hiddenCategories.expense=(appSettings.hiddenCategories.expense||[]).filter(k=>k!==id);appSettings.categoryOrder.expense=(appSettings.categoryOrder.expense||[]).filter(k=>k!==id);persistAppSettings();try{saveExpenseStore();}catch(_){}try{saveAccountsStore();}catch(_){}populateFormDropdowns();renderBudgetTab();toast(`Expense category "${c.label}" deleted.`,'info');}renderSettingsCategoryList(kind);propagateCategoryChanges(kind);}
+function editSettingsCategory(kind,id){
+  if(!guardCategoryManagement()) return;
+
+  if(kind==='portfolio')openPortfolioCategoryModal(id);else{const c=expenseStore.categories.find(x=>x.id===id);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}}
+function deleteSettingsCategory(kind,id){
+  if(!guardCategoryManagement()) return;
+
+  const s=kind==='portfolio'?categoriesConfig:expenseStore.categories;const c=s.find(x=>(x.key||x.id)===id);if(!c)return;if(!confirm(`Delete category "${c.label}"?\n\nThis action cannot be undone.`))return;if(kind==='portfolio'){const uy=portfolioData.filter(r=>(r.balances?.[id]||0)!==0||(r.invested?.[id]||0)!==0||(r.contri?.[id]||0)!==0);if(uy.length>0){if(!confirm(`⚠️ This category has data in ${uy.length} year(s). Continue?`))return;}categoriesConfig=categoriesConfig.filter(x=>x.key!==id);portfolioData.forEach(r=>{if(r.balances)delete r.balances[id];if(r.invested)delete r.invested[id];if(r.contri)delete r.contri[id];});if(customTargets[id]!==undefined)delete customTargets[id];appSettings.hiddenCategories.portfolio=(appSettings.hiddenCategories.portfolio||[]).filter(k=>k!==id);appSettings.categoryOrder.portfolio=(appSettings.categoryOrder.portfolio||[]).filter(k=>k!==id);[...(accountsStore.linked||[]),...(accountsStore.manual||[])].forEach(a=>{if(a.mapping&&a.mapping.portfolioKey===id)delete a.mapping;});persistAppSettings();scheduleSaveData(400);try{saveAccountsStore();}catch(_){}initDashboard();toast(`Portfolio category "${c.label}" deleted.`,'info');}else{const u=(expenseStore.transactions||[]).filter(tx=>tx.categoryId===id).length;if(u>0){if(!confirm(`⚠️ ${u} transaction(s) use this category. They will become Uncategorized.\n\nContinue?`))return;}expenseStore.categories=expenseStore.categories.filter(x=>x.id!==id);(expenseStore.transactions||[]).forEach(tx=>{if(tx.categoryId===id)tx.categoryId=null;});(accountsStore.plaidTransactions||[]).forEach(tx=>{if(tx.categoryId===id){tx.categoryId=null;tx.categorySource=null;}});Object.keys(accountsStore.plaidMappings||{}).forEach(k=>{if(accountsStore.plaidMappings[k]===id)delete accountsStore.plaidMappings[k];});Object.keys(accountsStore.merchantRules||{}).forEach(k=>{if(accountsStore.merchantRules[k]===id)delete accountsStore.merchantRules[k];});appSettings.hiddenCategories.expense=(appSettings.hiddenCategories.expense||[]).filter(k=>k!==id);appSettings.categoryOrder.expense=(appSettings.categoryOrder.expense||[]).filter(k=>k!==id);persistAppSettings();try{saveExpenseStore();}catch(_){}try{saveAccountsStore();}catch(_){}populateFormDropdowns();renderBudgetTab();toast(`Expense category "${c.label}" deleted.`,'info');}renderSettingsCategoryList(kind);propagateCategoryChanges(kind);}
 let _editingPortfolioKey=null;
-function openPortfolioCategoryModal(editKey){if(!guardCategoryManagement()) return;_editingPortfolioKey=editKey||null;const t=$id('portfolioCatModalTitle'),b=$id('portfolioCatSaveBtn'),k=$id('newPortKey');if(editKey){const c=categoriesConfig.find(x=>x.key===editKey);if(!c)return;if(t)t.textContent='Edit Portfolio Category';if(b)b.textContent='Save Changes';k.value=c.key;k.disabled=true;$id('newPortLabel').value=c.label;$id('newPortEmoji').value=c.emoji||'';$id('newPortColor').value=c.color||'#8B5CF6';$id('newPortTaxType').value=c.type||'taxable';}else{if(t)t.textContent='Add Portfolio Category';if(b)b.textContent='Add Category';k.value='';k.disabled=false;$id('newPortLabel').value='';$id('newPortEmoji').value='';$id('newPortColor').value='#8B5CF6';$id('newPortTaxType').value='taxable';}$id('portfolioCategoryModal').classList.remove('hidden');renderPortfolioCategoryAccountList();
+function openPortfolioCategoryModal(editKey){
+  if(!guardCategoryManagement()) return;
+
+  _editingPortfolioKey=editKey||null;const t=$id('portfolioCatModalTitle'),b=$id('portfolioCatSaveBtn'),k=$id('newPortKey');if(editKey){const c=categoriesConfig.find(x=>x.key===editKey);if(!c)return;if(t)t.textContent='Edit Portfolio Category';if(b)b.textContent='Save Changes';k.value=c.key;k.disabled=true;$id('newPortLabel').value=c.label;$id('newPortEmoji').value=c.emoji||'';$id('newPortColor').value=c.color||'#8B5CF6';$id('newPortTaxType').value=c.type||'taxable';}else{if(t)t.textContent='Add Portfolio Category';if(b)b.textContent='Add Category';k.value='';k.disabled=false;$id('newPortLabel').value='';$id('newPortEmoji').value='';$id('newPortColor').value='#8B5CF6';$id('newPortTaxType').value='taxable';}$id('portfolioCategoryModal').classList.remove('hidden');renderPortfolioCategoryAccountList();
   setTimeout(() => {
     if(!_editingPortfolioKey){
       attachById('newPortKey',  [V.required('Key is required.'), V.pattern(/^[a-z][a-z0-9_]{1,30}$/, 'Lowercase letters, numbers, underscores only.')]);
@@ -6446,6 +7335,7 @@ function openCategoryModal(){openPortfolioCategoryModal();}
 function closeCategoryModal(){$id('portfolioCategoryModal').classList.add('hidden');_editingPortfolioKey=null;const k=$id('newPortKey');if(k)k.disabled=false;}
 function savePortfolioCategory(){
   if(!guardCategoryManagement()) return;
+
   const krEl = $id('newPortKey');
   const lEl  = $id('newPortLabel');
   const eEl  = $id('newPortEmoji');
@@ -6526,6 +7416,7 @@ function openSettingsAddCategory(){
 function toggleCategoryModal(){$id('expCategoryModal').classList.toggle('hidden');}
 function saveCustomCategory(){
   if(!guardCategoryManagement()) return;
+
   const e  = $id('editCatId').value;
   const nEl = $id('newCatName');
   const emEl = $id('newCatEmoji');
@@ -6563,7 +7454,10 @@ function saveCustomCategory(){
   renderSettingsCategoryList('expense');
   propagateCategoryChanges('expense');
 }
-function editExpenseCategoryModal(catId){if(!guardCategoryManagement()) return;const c=expenseStore.categories.find(x=>x.id===catId);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}
+function editExpenseCategoryModal(catId){
+  if(!guardCategoryManagement()) return;
+
+  const c=expenseStore.categories.find(x=>x.id===catId);if(!c)return;$id('editCatId').value=c.id;$id('newCatName').value=c.label;$id('newCatEmoji').value=c.emoji||'';$id('newCatColor').value=c.color||'#8B5CF6';$id('newCatBudget').value=c.limit||0;setText('expCatModalTitle','Edit Category');$id('expCategoryModal').classList.remove('hidden');}
 function applyCategoryAccountLinks(){
   const accs = allAccounts();
   const cy = currentYear();
@@ -7191,7 +8085,8 @@ function initDashboard(){
   renderSubscriptionUI();
   updateFeatureLocksInApp();
   refreshOnboarding();
-
+  try { leaseCalc(); } catch(_){}
+  try { valCalc(); } catch(_){}
 }
 function populateYearFilter(){
   const sf=$id('yearFilter');if(!sf)return;
@@ -7948,7 +8843,7 @@ function renderBudgetCategoryRow(cat,c){
 }
 function toggleBudgetGroup(id){const g=(expenseStore.categoryGroups||[]).find(x=>x.id===id);if(!g) return;g.collapsed=!g.collapsed;try{ saveExpenseStore(); }catch(_){}const el=document.querySelector(`.budget-group[data-group-id="${id}"]`);if(el) el.classList.toggle('collapsed',g.collapsed);}
 function inlineEditBudgetCap(catId, btn){const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;const current=parseFloat(cat.limit)||0;const wrap=btn.parentElement;const input=document.createElement('input');input.type='number'; input.className='budget-cap-input';input.value=current; input.step=10; input.min=0;wrap.replaceChild(input,btn);input.focus(); input.select();let done=false;const commit=()=>{ if(done) return; done=true; const v=Math.max(0,parseFloat(input.value)||0); cat.limit=v; try{ saveExpenseStore(); }catch(_){} renderBudgetTab(); toast(v>0?`${cat.label} cap set to ${formatCurrency(v,0)}`:`${cat.label} cap cleared`,'success',1600); };input.addEventListener('blur',commit);input.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();input.blur();} if(e.key==='Escape'){done=true;input.value=current;input.blur();renderBudgetTab();} });}
-function openBudgetCatMenu(ev, catId){ev.stopPropagation(); closeAllFloatMenus();const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;const catLocked=!canManageCategories();const menu=document.createElement('div');menu.className='ew-float-menu';const r=ev.currentTarget.getBoundingClientRect();const left=Math.max(8,Math.min(r.left-160,window.innerWidth-224));menu.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${left}px;z-index:4000;min-width:210px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;box-shadow:var(--shadow-lift);padding:4px;`;const groups=expenseStore.categoryGroups||[];const groupItems=groups.map(g=>`<button class="popover-item ${cat.groupId===g.id?'active':''}" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','${g.id}')"><span>${g.emoji}</span><span>${esc(g.name)}</span>${cat.groupId===g.id?'<i data-lucide="check" class="w-3.5 h-3.5 ml-auto"></i>':''}</button>`).join('');menu.innerHTML=`<button class="popover-item" onclick="closeAllFloatMenus(); editExpenseCategoryModal('${cat.id}')"><i data-lucide="${catLocked?'lock':'pencil'}" class="w-4 h-4"></i> Edit category${catLocked?'<span class="badge badge-violet ml-auto" style="font-size:.5rem;">BASIC</span>':''}</button><button class="popover-item" onclick="closeAllFloatMenus(); inlineEditBudgetCap('${cat.id}', document.querySelector('.budget-cat-row[data-cat-id=&quot;${cat.id}&quot;] .budget-cap-btn'))"><i data-lucide="target" class="w-4 h-4"></i> Set cap</button><div class="divider my-1"></div><div class="cmd-section-label">Move to group</div>${groupItems}<button class="popover-item" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','')"><i data-lucide="circle-slash" class="w-4 h-4"></i> Remove from group</button><div class="divider my-1"></div><button class="popover-item danger" onclick="closeAllFloatMenus(); deleteSettingsCategory('expense','${cat.id}')"><i data-lucide="${catLocked?'lock':'trash-2'}" class="w-4 h-4"></i> Delete</button>`;document.body.appendChild(menu);if(typeof lucide!=='undefined') lucide.createIcons();setTimeout(()=>document.addEventListener('click',closeAllFloatMenus,{once:true}),10);}
+function openBudgetCatMenu(ev, catId){ev.stopPropagation(); closeAllFloatMenus();const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;const menu=document.createElement('div');menu.className='ew-float-menu';const r=ev.currentTarget.getBoundingClientRect();const left=Math.max(8,Math.min(r.left-160,window.innerWidth-224));menu.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${left}px;z-index:4000;min-width:210px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;box-shadow:var(--shadow-lift);padding:4px;`;const groups=expenseStore.categoryGroups||[];const groupItems=groups.map(g=>`<button class="popover-item ${cat.groupId===g.id?'active':''}" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','${g.id}')"><span>${g.emoji}</span><span>${esc(g.name)}</span>${cat.groupId===g.id?'<i data-lucide="check" class="w-3.5 h-3.5 ml-auto"></i>':''}</button>`).join('');menu.innerHTML=`<button class="popover-item" onclick="closeAllFloatMenus(); editExpenseCategoryModal('${cat.id}')"><i data-lucide="pencil" class="w-4 h-4"></i> Edit category</button><button class="popover-item" onclick="closeAllFloatMenus(); inlineEditBudgetCap('${cat.id}', document.querySelector('.budget-cat-row[data-cat-id=&quot;${cat.id}&quot;] .budget-cap-btn'))"><i data-lucide="target" class="w-4 h-4"></i> Set cap</button><div class="divider my-1"></div><div class="cmd-section-label">Move to group</div>${groupItems}<button class="popover-item" onclick="closeAllFloatMenus(); moveCategoryToGroup('${cat.id}','')"><i data-lucide="circle-slash" class="w-4 h-4"></i> Remove from group</button><div class="divider my-1"></div><button class="popover-item danger" onclick="closeAllFloatMenus(); deleteSettingsCategory('expense','${cat.id}')"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete</button>`;document.body.appendChild(menu);if(typeof lucide!=='undefined') lucide.createIcons();setTimeout(()=>document.addEventListener('click',closeAllFloatMenus,{once:true}),10);}
 function moveCategoryToGroup(catId, groupId){const cat=(expenseStore.categories||[]).find(x=>x.id===catId);if(!cat) return;cat.groupId=groupId||null;try{ saveExpenseStore(); }catch(_){}renderBudgetTab();toast(groupId?'Category moved.':'Category removed from group.','success',1500);}
 function openBudgetGroupMenu(ev, groupId){ev.stopPropagation(); closeAllFloatMenus();const g=(expenseStore.categoryGroups||[]).find(x=>x.id===groupId);if(!g) return;const menu=document.createElement('div');menu.className='ew-float-menu';const r=ev.currentTarget.getBoundingClientRect();const left=Math.max(8,Math.min(r.left-160,window.innerWidth-224));menu.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${left}px;z-index:4000;min-width:200px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;box-shadow:var(--shadow-lift);padding:4px;`;menu.innerHTML=`<button class="popover-item" onclick="closeAllFloatMenus(); renameBudgetGroup('${g.id}')"><i data-lucide="pencil" class="w-4 h-4"></i> Rename</button><button class="popover-item" onclick="closeAllFloatMenus(); changeBudgetGroupEmoji('${g.id}')"><i data-lucide="smile" class="w-4 h-4"></i> Change emoji</button><div class="divider my-1"></div><button class="popover-item" onclick="closeAllFloatMenus(); moveBudgetGroup('${g.id}',-1)"><i data-lucide="arrow-up" class="w-4 h-4"></i> Move up</button><button class="popover-item" onclick="closeAllFloatMenus(); moveBudgetGroup('${g.id}',1)"><i data-lucide="arrow-down" class="w-4 h-4"></i> Move down</button><div class="divider my-1"></div><button class="popover-item danger" onclick="closeAllFloatMenus(); deleteBudgetGroup('${g.id}')"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete group</button>`;document.body.appendChild(menu);if(typeof lucide!=='undefined') lucide.createIcons();setTimeout(()=>document.addEventListener('click',closeAllFloatMenus,{once:true}),10);}
 function renameBudgetGroup(id){const g=(expenseStore.categoryGroups||[]).find(x=>x.id===id); if(!g) return;const n=prompt('Group name:',g.name);if(!n||!n.trim()) return;g.name=n.trim();try{ saveExpenseStore(); }catch(_){}renderBudgetTab();}
@@ -8841,6 +9736,8 @@ function bootApp(){
     updateCurrencyLabels();
     renderSubscriptionUI();
     updateFeatureLocksInApp();
+    try { leaseCalc(); } catch(_){}
+    try { valCalc(); } catch(_){}
   },120);
   updateFilterCountBadges();
   setBudgetView('month');
@@ -9229,9 +10126,6 @@ function refreshOnboarding(){
   try{ renderGettingStarted(); }catch(e){ console.error(e); }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   REQUIRED SETUP GATE — soft prompt for missing essentials
-   ═══════════════════════════════════════════════════════════ */
 const SETUP_GATE_KEY = 'ew_setup_gate_dismissed_v1';
 
 function checkRequiredSetup(){
