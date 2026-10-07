@@ -2690,11 +2690,11 @@ html.glass-theme input[type="date"]#mortStartInput::-webkit-calendar-picker-indi
                   <span class="ps-field-hint" id="paySalarySource">Source: Income Profile</span>
                 </label>
                 <div class="ps-field-input">
-                  <input type="number" id="payCustomSalary" class="ps-input" value="0" step="1000"
-                    oninput="syncSliderToInput('payCustomSalarySlider','payCustomSalary'); if(document.getElementById('payOverrideToggle')?.checked){ tempSalaryOverride.paycheck=parseFloat(this.value)||0; } calculatePaystub();">
-                  <input type="range" id="payCustomSalarySlider" min="0" max="500000" step="1000" value="0" class="slider-hero"
-                    oninput="syncInputToSlider('payCustomSalarySlider','payCustomSalary'); if(document.getElementById('payOverrideToggle')?.checked){ tempSalaryOverride.paycheck=parseFloat(this.value)||0; } calculatePaystub();">
-                </div>
+  <input type="number" id="payCustomSalary" class="ps-input" value="0" step="1000" min="0"
+         oninput="onPaySalaryChange(this.value, 'input')">
+  <input type="range" id="payCustomSalarySlider" min="0" max="500000" step="1000" value="0" class="slider-hero"
+         oninput="onPaySalaryChange(this.value, 'slider')">
+</div>
               </div>
 
               <div class="ps-field">
@@ -9463,12 +9463,25 @@ function updateNavBadges(){
   refreshMobileBottomBadges();
 }
 function updateSalarySourceLabel(){
-  const el=$id('paySalarySource');if(!el)return;
-  const eff=getEffectiveAnnualIncome();
-  if(tempSalaryOverride.paycheck!==null){ el.innerHTML=`<span class="sim-salary-badge" style="font-size:.55rem;"><i data-lucide="flask-conical" class="w-2.5 h-2.5"></i> Simulated</span>`; el.style.color=''; }
-  else if(eff > 0){ el.innerHTML='From <b>Income Profile</b>'; el.style.color='var(--text-4)'; }
-  else { el.innerHTML='<b>No salary set</b> — add one in Settings → Income &amp; Salary'; el.style.color='#B45309'; }
-  if(typeof lucide!=='undefined')lucide.createIcons();
+  const el = $id('paySalarySource'); if(!el) return;
+  const settingsSalary = getEffectiveAnnualIncome();
+  const hasSettings    = settingsSalary > 0;
+  const isOverridden   = tempSalaryOverride.paycheck !== null;
+
+  if(isOverridden && !hasSettings){
+    el.innerHTML = '<span class="sim-salary-badge" style="background:rgba(59,130,246,.14);color:#93C5FD;border-color:rgba(59,130,246,.35);">✏️ Manually entered</span>';
+    el.style.color = '';
+  } else if(isOverridden && hasSettings){
+    el.innerHTML = '<span class="sim-salary-badge" style="font-size:.55rem;"><i data-lucide="flask-conical" class="w-2.5 h-2.5"></i> Simulated</span>';
+    el.style.color = '';
+  } else if(hasSettings){
+    el.innerHTML = 'From <b>Income Profile</b>';
+    el.style.color = 'var(--text-4)';
+  } else {
+    el.innerHTML = '<b>Type any amount above</b> — settings stay untouched';
+    el.style.color = '#B45309';
+  }
+  if(typeof lucide !== 'undefined') lucide.createIcons();
 }
 const DASH_STORAGE_KEY='dash_layout_v2';
 const DASH_WIDGET_DEFS={
@@ -10057,7 +10070,27 @@ function calculatePaystub(){
 }
 function togglePaycheckOverride(){const e=!!$id('payOverrideToggle')?.checked;const b=$id('simSalaryBannerPaycheck'),i=$id('payCustomSalary');if(e){b?.classList.remove('hidden');const c=parseFloat(i?.value)||0;tempSalaryOverride.paycheck=c>0?c:(getEffectiveAnnualIncome()||0);if(i)i.value=tempSalaryOverride.paycheck;toast('Simulation active — changes do not affect global profile.','warning',3000);}else{b?.classList.add('hidden');tempSalaryOverride.paycheck=null;const gi=getEffectiveAnnualIncome();if(i)i.value=gi;}updateSalarySourceLabel();syncInputToSlider('payCustomSalarySlider','payCustomSalary');calculatePaystub();}
 function clearPaycheckOverride(){const t=$id('payOverrideToggle');if(t)t.checked=false;tempSalaryOverride.paycheck=null;const i=$id('payCustomSalary');if(i)i.value=getEffectiveAnnualIncome();$id('simSalaryBannerPaycheck')?.classList.add('hidden');updateSalarySourceLabel();syncInputToSlider('payCustomSalarySlider','payCustomSalary');calculatePaystub();}
+function onPaySalaryChange(v, source){
+  const num = Math.max(0, parseFloat(v) || 0);
+  const slider = $id('payCustomSalarySlider');
+  const input  = $id('payCustomSalary');
 
+  /* Mirror the *other* control only — never touch the one the user is editing */
+  if(source === 'slider' && input)  input.value  = num;
+  if(source === 'input'  && slider) slider.value = num;
+
+  /* Any manual edit engages override mode automatically */
+  tempSalaryOverride.paycheck = num;
+
+  /* Reflect state in the UI */
+  const toggle = $id('payOverrideToggle');
+  if(toggle) toggle.checked = true;
+  $id('simSalaryBannerPaycheck')?.classList.remove('hidden');
+  $id('psClearOverride')?.classList.remove('hidden');
+
+  updateSalarySourceLabel();
+  calculatePaystub();
+}
 function handleTargetInput(k,v){customTargets[k]=parseFloat(v)||0;renderRebalancer();}
 
 function renderRebalancer(){
