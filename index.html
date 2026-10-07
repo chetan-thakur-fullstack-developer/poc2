@@ -3213,7 +3213,24 @@ html.glass-theme input[type="date"]#mortStartInput::-webkit-calendar-picker-indi
           <div class="ps-block-head">
             <span class="ps-block-label">Regional Tax Evaluation</span>
           </div>
-
+<div class="ps-field">
+  <label class="ps-field-label">
+    <span>Property Value</span>
+    <span class="ps-field-hint" id="mortTaxPropValHint">$622,000</span>
+  </label>
+  <div class="ps-field-input">
+    <input type="number" id="mortTaxPropValInput" class="ps-input" value="622000"
+           step="1000" min="50000" max="2500000"
+           oninput="mortInput('propertyValue', this.value)">
+    <input type="range" id="mortTaxPropValSlider" class="slider-hero"
+           min="50000" max="2500000" step="1000" value="622000"
+           oninput="mortSlider('propertyValue', this.value)">
+  </div>
+</div>
+<div style="margin-top:.55rem;font-size:10px;font-weight:600;color:var(--text-4);line-height:1.5;">
+  <i data-lucide="link-2" class="w-3 h-3" style="vertical-align:-2px;color:#6D28D9;"></i>
+  Shared with <b>Mortgage &amp; Amortization</b> — edits here update both tabs instantly.
+</div>
           <div class="ps-field">
             <label class="ps-field-label">
               <span>Property Tax Rate</span>
@@ -12022,6 +12039,8 @@ function mortSyncInputsFromState(){
   const s = mortState;
   _m$set('mortPropValSlider', s.propertyValue);
   _m$set('mortPropValInput',  s.propertyValue);
+  _m$set('mortTaxPropValSlider', s.propertyValue);
+_m$set('mortTaxPropValInput',  s.propertyValue);
   _m$set('mortDownSlider',    s.downPct);
   _m$set('mortDownPctInput',  s.downPct);
   _m$set('mortDownAmtInput',  s.downAmt);
@@ -12131,6 +12150,8 @@ function mortUpdateHints(){
   const prop = parseFloat(s.propertyValue) || 0;
   const downAmt = prop * (parseFloat(s.downPct) || 0) / 100;
   _m$text('mortPropValHint', formatCurrency(prop, 0));
+
+  _m$text('mortTaxPropValHint', formatCurrency(prop, 0));
   _m$text('mortDownHint',    `${(parseFloat(s.downPct)||0).toFixed(2)}% · ${formatCurrency(downAmt, 0)}`);
   _m$text('mortRateHint',    `${(parseFloat(s.rate)||0).toFixed(2)}%`);
   _m$text('mortTermHint',    `${parseInt(s.term)||0} years`);
@@ -12143,8 +12164,19 @@ function mortUpdateHints(){
 function mortSlider(key, v){
   const num = parseFloat(v) || 0;
   mortState[key] = num;
-  const mapIn = { propertyValue:'mortPropValInput', rate:'mortRateInput', term:'mortTermInput', extra:'mortExtraInput', utilities:'mortUtilInput', insurance:'mortInsInput', taxPct:'mortTaxPctInput' };
-  if(mapIn[key]) _m$set(mapIn[key], num);
+const mapIn = {
+  propertyValue:['mortPropValInput','mortTaxPropValInput'],   // ← array now
+  rate:'mortRateInput',
+  term:'mortTermInput',
+  extra:'mortExtraInput',
+  utilities:'mortUtilInput',
+  insurance:'mortInsInput',
+  taxPct:'mortTaxPctInput'
+};
+if(mapIn[key]){
+  const ids = Array.isArray(mapIn[key]) ? mapIn[key] : [mapIn[key]];
+  ids.forEach(id => _m$set(id, num));
+}
   if(key === 'propertyValue'){
     const amt = num * (parseFloat(mortState.downPct)||0) / 100;
     mortState.downAmt = amt;
@@ -12161,8 +12193,19 @@ function mortInput(key, v){
   if(key === 'term') num = Math.max(1, Math.min(40, Math.round(num)));
   if(key === 'taxPct') num = Math.max(0, Math.min(15, num));
   mortState[key] = num;
-  const mapSl = { propertyValue:'mortPropValSlider', rate:'mortRateSlider', term:'mortTermSlider', extra:'mortExtraSlider', utilities:'mortUtilSlider', insurance:'mortInsSlider', taxPct:'mortTaxPctSlider' };
-  if(mapSl[key]) _m$set(mapSl[key], num);
+  const mapSl = {
+  propertyValue:['mortPropValSlider','mortTaxPropValSlider'],   // ← array now
+  rate:'mortRateSlider',
+  term:'mortTermSlider',
+  extra:'mortExtraSlider',
+  utilities:'mortUtilSlider',
+  insurance:'mortInsSlider',
+  taxPct:'mortTaxPctSlider'
+};
+if(mapSl[key]){
+  const ids = Array.isArray(mapSl[key]) ? mapSl[key] : [mapSl[key]];
+  ids.forEach(id => _m$set(id, num));
+}
   if(key === 'propertyValue'){
     const amt = num * (parseFloat(mortState.downPct)||0) / 100;
     mortState.downAmt = amt;
