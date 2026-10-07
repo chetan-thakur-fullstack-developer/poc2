@@ -1595,6 +1595,309 @@ html.glass-theme #comparisonTable{
     box-shadow:none;
   }
 }
+/* ═══════════════════════════════════════════════════════════
+   MORTGAGE DASHBOARD
+   ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   MORTGAGE DASHBOARD — ps-hero themed sticky header
+   ═══════════════════════════════════════════════════════════ */
+.mort-global-header{
+  position:sticky;top:0;z-index:25;margin-bottom:1.1rem;
+  padding:.35rem 0 .75rem;
+  background:linear-gradient(180deg,var(--app-bg) 55%,transparent);
+}
+.mort-global-header .ps-hero{
+  margin-bottom:0;
+  padding:1.25rem 1.5rem;
+  align-items:center;
+}
+.mort-global-header .ps-hero-value{ font-size:2.4rem; }
+.mort-global-header .ps-stat-value{ font-size:1.05rem; }
+.mort-hero-donut{
+  flex:0 0 auto;
+  display:flex;align-items:center;gap:1rem;
+  padding-left:1.5rem;
+  border-left:1px solid var(--border);
+  min-width:0;
+}
+.mort-donut-wrap{position:relative;width:128px;height:128px;flex-shrink:0;}
+.mort-donut-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;pointer-events:none;text-align:center;
+}
+.mort-donut-center-label{
+  font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-4);
+}
+.mort-donut-center-value{
+  font-size:12.5px;font-weight:900;color:var(--text-1);
+  font-variant-numeric:tabular-nums;line-height:1.1;margin-top:1px;
+}
+.mort-donut-side{flex:0 0 auto;min-width:200px;max-width:230px;}
+
+.mort-term-label{
+  font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-4);margin-bottom:5px;
+}
+.mort-term-toggle{
+  display:flex;gap:2px;padding:3px;
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:9px;flex-wrap:wrap;
+}
+.mort-term-toggle button{
+  flex:1 1 calc(50% - 2px);min-width:0;
+  padding:.42rem .5rem;font-size:10.5px;font-weight:800;border-radius:6px;
+  border:none;background:transparent;color:var(--text-3);cursor:pointer;
+  transition:all .18s ease;white-space:nowrap;font-family:inherit;
+  -webkit-tap-highlight-color:transparent;overflow:hidden;text-overflow:ellipsis;
+}
+.mort-term-toggle button:hover{color:var(--text-1);background:var(--surface-3);}
+.mort-term-toggle button.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;box-shadow:0 2px 10px -3px rgba(139,92,246,.55);
+}
+/* Custom-term chip — appears only when term ∉ {15, 30} */
+.mort-term-toggle button.custom{
+  flex:1 1 100%;
+  background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(236,72,153,.10));
+  color:#6D28D9;
+  border:1px dashed rgba(139,92,246,.55);
+  font-variant-numeric:tabular-nums;
+}
+.mort-term-toggle button.custom:hover{
+  background:linear-gradient(135deg,rgba(139,92,246,.26),rgba(236,72,153,.16));
+  color:#6D28D9;
+}
+html.dark .mort-term-toggle button.custom,
+html.glass-theme .mort-term-toggle button.custom{
+  color:#C4B5FD;border-color:rgba(139,92,246,.7);
+}
+html.dark .mort-term-toggle button.custom:hover,
+html.glass-theme .mort-term-toggle button.custom:hover{
+  background:linear-gradient(135deg,rgba(139,92,246,.32),rgba(236,72,153,.2));
+  color:#DDD6FE;
+}
+.mort-term-toggle button.custom .mort-custom-dot{
+  display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:currentColor;margin-right:5px;vertical-align:middle;
+  animation:mortCustomPulse 1.8s ease-in-out infinite;
+}
+@keyframes mortCustomPulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:.45;transform:scale(.7);}
+}
+.mort-donut-legend{
+  display:flex;flex-direction:column;gap:5px;margin-top:8px;
+}
+.mort-donut-legend-row{
+  display:grid;
+  grid-template-columns:8px minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+.mort-donut-legend-dot{
+  width:8px;height:8px;border-radius:2px;flex-shrink:0;
+}
+.mort-donut-legend-label{
+  font-size:9.5px;font-weight:700;
+  color:var(--text-3);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  min-width:0;
+}
+.mort-donut-legend-amount{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;font-weight:800;
+  color:var(--text-1);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.mort-donut-legend-pct{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  color:var(--text-4);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  min-width:36px;text-align:right;
+}
+/* Sub-tabs */
+.mort-subtabs{
+  display:flex;gap:4px;padding:5px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;margin-bottom:1rem;
+  overflow-x:auto;scrollbar-width:none;
+}
+.mort-subtabs::-webkit-scrollbar{display:none;}
+.mort-subtab{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:9px;
+  border:none;background:transparent;color:var(--text-3);font-size:12px;font-weight:700;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s ease;
+  font-family:inherit;-webkit-tap-highlight-color:transparent;
+}
+.mort-subtab:hover{background:var(--surface-2);color:var(--text-1);}
+.mort-subtab.active{
+  background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(236,72,153,.10));
+  color:#6D28D9;box-shadow:0 1px 3px rgba(139,92,246,.12);
+}
+html.dark .mort-subtab.active,html.glass-theme .mort-subtab.active{color:#C4B5FD;}
+
+.mort-tab-pane{display:none;}
+.mort-tab-pane.active{display:block;animation:fadeInUp .25s cubic-bezier(.4,0,.2,1) both;}
+
+/* Insight cards */
+.mort-insight-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem;
+}
+.mort-insight-card{
+  padding:.85rem 1rem;border-radius:12px;background:var(--surface-2);
+  border:1px solid var(--border);min-width:0;
+}
+.mort-metric-label{
+  display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-4);margin-bottom:4px;
+}
+.mort-metric-value{
+  font-size:1.1rem;font-weight:900;letter-spacing:-.02em;color:var(--text-1);
+  line-height:1.15;font-variant-numeric:tabular-nums;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mort-metric-sub{
+  font-size:9.5px;font-weight:600;color:var(--text-4);margin-top:2px;line-height:1.35;
+}
+
+/* Milestones */
+.mort-milestone{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border);}
+.mort-milestone:last-child{border-bottom:none;padding-bottom:0;}
+.mort-milestone-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;
+  box-shadow:0 0 0 3px var(--surface);
+}
+.mort-insight-pill{
+  display:inline-flex;align-items:center;gap:4px;padding:.18rem .5rem;
+  border-radius:9999px;font-size:9.5px;font-weight:800;letter-spacing:.03em;
+  text-transform:uppercase;white-space:nowrap;
+}
+
+/* Amortization table */
+.mort-amort-wrap{
+  max-height:24rem;overflow:auto;border-radius:12px;
+  border:1px solid var(--border);background:var(--surface);
+}
+.mort-amort-table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.mort-amort-table th{
+  text-align:right;padding:9px 12px;font-size:9px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-4);
+  background:var(--surface-2);border-bottom:1px solid var(--border-strong);
+  position:sticky;top:0;z-index:2;
+}
+.mort-amort-table th:first-child{text-align:left;}
+.mort-amort-table td{
+  text-align:right;padding:7px 12px;font-variant-numeric:tabular-nums;
+  font-family:'JetBrains Mono',monospace;color:var(--text-2);
+  border-bottom:1px solid var(--border);
+}
+.mort-amort-table td:first-child{text-align:left;font-weight:700;color:var(--text-1);}
+.mort-amort-table tbody tr:hover td{background:rgba(139,92,246,.06);}
+html.glass-theme .mort-amort-table th{background:#0D111A !important;}
+html.glass-theme .mort-amort-table tbody tr:hover td{background:rgba(139,92,246,.12);}
+
+.mort-pager{
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  padding:.75rem 0 .25rem;flex-wrap:wrap;
+}
+.mort-pager-info{font-size:10.5px;font-weight:700;color:var(--text-4);}
+
+/* Formula tab */
+.mort-formula{
+  font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;
+  text-align:center;padding:1.25rem 1rem;background:var(--surface-2);
+  border:1px solid var(--border);border-radius:14px;color:var(--text-1);
+  overflow-x:auto;line-height:1.85;letter-spacing:-.01em;
+}
+.mort-formula em{font-style:normal;color:#6D28D9;}
+html.dark .mort-formula em,html.glass-theme .mort-formula em{color:#C4B5FD;}
+.mort-formula-line{
+  display:block;padding:.3rem 0;font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;font-weight:700;color:var(--text-2);
+}
+.mort-formula-line b{color:#6D28D9;font-weight:900;}
+html.dark .mort-formula-line b,html.glass-theme .mort-formula-line b{color:#C4B5FD;}
+.mort-formula-step{
+  padding:.85rem 1rem;border-radius:11px;background:var(--surface-2);
+  border:1px solid var(--border);margin-bottom:.55rem;
+}
+.mort-formula-step-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(139,92,246,.14);color:#6D28D9;font-size:11px;font-weight:900;flex-shrink:0;
+}
+html.dark .mort-formula-step-num,html.glass-theme .mort-formula-step-num{color:#C4B5FD;}
+
+/* Mobile stacking */
+@media(max-width:1024px){
+  .mort-hero-donut{
+    padding-left:0;border-left:none;
+    border-top:1px solid var(--border);
+    padding-top:1rem;width:100%;
+    justify-content:space-between;
+  }
+}
+@media(max-width:640px){
+  .mort-global-header{top:-.35rem;padding-top:.35rem;}
+  .mort-donut-wrap{width:112px;height:112px;}
+  .mort-donut-side{max-width:none;flex:1;min-width:0;}
+  .mort-global-header .ps-hero-value{font-size:2rem;}
+  .mort-hero-donut{flex-direction:column;align-items:stretch;gap:.75rem;}
+  .mort-donut-wrap{align-self:center;}
+}
+/* Start-date control */
+input[type="date"]#mortStartInput{
+  font-family:'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  text-align:left;
+  color-scheme:light;
+}
+html.dark input[type="date"]#mortStartInput,
+html.glass-theme input[type="date"]#mortStartInput{
+  color-scheme:dark;
+}
+input[type="date"]#mortStartInput::-webkit-calendar-picker-indicator{
+  cursor:pointer;
+  opacity:.65;
+  transition:opacity .15s ease;
+}
+input[type="date"]#mortStartInput::-webkit-calendar-picker-indicator:hover{opacity:1;}
+html.dark input[type="date"]#mortStartInput::-webkit-calendar-picker-indicator,
+html.glass-theme input[type="date"]#mortStartInput::-webkit-calendar-picker-indicator{
+  filter:invert(.85);
+  opacity:.8;
+}
+
+/* Finish-date line under the persistent header payoff stat */
+.mort-payoff-finish{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:9.5px;font-weight:700;color:var(--text-3);
+  font-variant-numeric:tabular-nums;
+}
+.mort-amort-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;
+  margin-bottom:.85rem;padding:.65rem .8rem;
+  border-radius:10px;background:var(--surface-2);
+  border:1px solid var(--border);
+}
+.mort-amort-summary-item{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.mort-amort-summary-label{
+  font-size:8.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-4);
+}
+.mort-amort-summary-value{
+  font-size:.85rem;font-weight:800;color:var(--text-1);
+  font-variant-numeric:tabular-nums;
+  font-family:'JetBrains Mono',monospace;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:560px){
+  .mort-amort-summary{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -2624,6 +2927,382 @@ html.glass-theme #comparisonTable{
     </div>
 
   </div>
+</div>
+<!-- ═══════════════════════════════════════════════════════════
+     MORTGAGE & CARRYING COST DASHBOARD
+     ═══════════════════════════════════════════════════════════ -->
+<div class="wb-pane" data-wb-pane="mortgage">
+
+  <!-- ── PERSISTENT STICKY HEADER ─────────────────────────── -->
+  <!-- ── PERSISTENT STICKY HEADER (ps-hero pattern) ───────── -->
+<div id="mortGlobalHeader" class="mort-global-header">
+  <div class="ps-hero">
+
+    <div class="ps-hero-main">
+      <span class="ps-hero-label">Monthly Out-of-Pocket</span>
+      <div class="ps-hero-value" id="mortHeaderMonthly">$0</div>
+      <div class="ps-hero-sub" id="mortHeaderMonthlySub">—</div>
+    </div>
+
+    <div class="ps-hero-stats">
+      <div class="ps-stat">
+        <span class="ps-stat-label">Annual Property Tax</span>
+        <div class="ps-stat-value" id="mortHeaderTax">$0</div>
+        <div class="ps-stat-sub" id="mortHeaderTaxSub">@ 0.00%</div>
+      </div>
+      <div class="ps-stat">
+        <span class="ps-stat-label">Home Insurance Rate</span>
+        <div class="ps-stat-value" id="mortHeaderIns">$0/mo ($0/yr)</div>
+        <div class="ps-stat-sub">Annual premium</div>
+      </div>
+      <div class="ps-stat">
+        <span class="ps-stat-label">Payoff Timeline</span>
+        <div class="ps-stat-value" id="mortHeaderPayoff">—</div>
+        <div class="ps-stat-sub" id="mortHeaderPayoffSub">—</div>
+      </div>
+    </div>
+
+    <div class="mort-hero-donut">
+      <div class="mort-donut-wrap">
+        <canvas id="mortDonutChart"></canvas>
+        <div class="mort-donut-center">
+          <div id="mortDonutCenterLabel" class="mort-donut-center-label">Monthly</div>
+          <div id="mortDonutCenterValue" class="mort-donut-center-value">$0</div>
+        </div>
+      </div>
+      <div class="mort-donut-side">
+        <div class="mort-term-label">Loan Term</div>
+        <div class="mort-term-toggle" id="mortTermToggle">
+  <button type="button" data-term="15" onclick="mortSetTerm(15)">15-Year Fixed</button>
+  <button type="button" data-term="30" class="active" onclick="mortSetTerm(30)">30-Year Fixed</button>
+  <button type="button" class="custom" id="mortTermCustomBtn" style="display:none;"
+          onclick="mortFocusTermInput()" title="Click to edit the exact term">
+    <span class="mort-custom-dot"></span><span id="mortTermCustomLabel">Custom</span>
+  </button>
+</div>
+        <div id="mortDonutLegend" class="mort-donut-legend"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <!-- ── SUB TABS ─────────────────────────────────────────── -->
+  <div class="mort-subtabs" id="mortSubtabs">
+    <button type="button" class="mort-subtab active" data-mort-tab="amortization" onclick="mortSetSubTab('amortization')">
+      <i data-lucide="home" class="w-3.5 h-3.5"></i><span>Mortgage &amp; Amortization</span>
+    </button>
+    <button type="button" class="mort-subtab" data-mort-tab="tax" onclick="mortSetSubTab('tax')">
+      <i data-lucide="landmark" class="w-3.5 h-3.5"></i><span>Property Tax Details</span>
+    </button>
+    <button type="button" class="mort-subtab" data-mort-tab="formula" onclick="mortSetSubTab('formula')">
+      <i data-lucide="sigma" class="w-3.5 h-3.5"></i><span>Step-by-Step Formula</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB A — MORTGAGE & AMORTIZATION
+       ══════════════════════════════════════════════════════ -->
+  <div class="mort-tab-pane active" data-mort-pane="amortization">
+
+    <div class="ps-layout">
+      <!-- ── CONTROLS ───────────────────────────────────── -->
+      <div class="ps-controls">
+        <div class="ps-block">
+          <div class="ps-block-head">
+            <span class="ps-block-label">Loan Parameters</span>
+            <button type="button" onclick="mortReset()" class="ps-mini-btn">
+              <i data-lucide="rotate-ccw"></i> Reset
+            </button>
+          </div>
+<div class="ps-field">
+  <label class="ps-field-label">
+    <span>Mortgage Start Date</span>
+    <span class="ps-field-hint" id="mortStartHint">Today · default</span>
+  </label>
+  <div style="display:flex;gap:.5rem;align-items:center;">
+    <input type="date" id="mortStartInput" class="ps-input"
+           oninput="mortSetStartDate(this.value)"
+           style="flex:1;">
+    <button type="button" onclick="mortResetStartDate()" class="ps-mini-btn"
+            title="Reset to today">
+      <i data-lucide="rotate-ccw"></i>
+    </button>
+  </div>
+  <div style="margin-top:.5rem;font-size:10px;font-weight:600;color:var(--text-4);">
+    Drives payoff finish date, milestone calendar dates, and the amortization table.
+  </div>
+</div>
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Property Value</span>
+              <span class="ps-field-hint" id="mortPropValHint">$622,000</span></label>
+            <div class="ps-field-input">
+              <input type="number" id="mortPropValInput" class="ps-input" value="622000" step="1000" min="50000"
+                oninput="mortInput('propertyValue', this.value)">
+              <input type="range" id="mortPropValSlider" class="slider-hero" min="50000" max="2500000" step="1000" value="622000"
+                oninput="mortSlider('propertyValue', this.value)">
+            </div>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Down Payment</span>
+              <span class="ps-field-hint" id="mortDownHint">5% · $31,100</span></label>
+            <div class="ps-field-input">
+              
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;">
+                <div style="position:relative;">
+                  <input type="number" id="mortDownPctInput" class="ps-input" value="5" step="0.5" min="0" max="100"
+                    oninput="mortDownPct(this.value)" style="padding-right:1.9rem;">
+                  <span style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);font-size:11px;font-weight:800;color:var(--text-4);">%</span>
+                </div>
+                <input type="number" id="mortDownAmtInput" class="ps-input" value="31100" step="1000" min="0"
+                  oninput="mortDownAmt(this.value)">
+              </div>
+              <input type="range" id="mortDownSlider" class="slider-hero" min="0" max="100" step="0.5" value="5"
+                oninput="mortDownPct(this.value)">
+            </div>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Interest Rate</span>
+              <span class="ps-field-hint" id="mortRateHint">5.50%</span></label>
+            <div class="ps-field-input">
+              <input type="number" id="mortRateInput" class="ps-input" value="5.50" step="0.01" min="1" max="15"
+                oninput="mortInput('rate', this.value)">
+              <input type="range" id="mortRateSlider" class="slider-hero" min="1" max="15" step="0.01" value="5.50"
+                oninput="mortSlider('rate', this.value)">
+            </div>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Loan Length</span>
+              <span class="ps-field-hint" id="mortTermHint">30 years</span></label>
+            <div class="ps-field-input">
+              <input type="number" id="mortTermInput" class="ps-input" value="30" step="1" min="1" max="40"
+                oninput="mortInput('term', this.value)">
+              <input type="range" id="mortTermSlider" class="slider-hero" min="1" max="40" step="1" value="30"
+                oninput="mortSlider('term', this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div class="ps-block">
+          <div class="ps-block-head">
+            <span class="ps-block-label">Acceleration &amp; Carrying Costs</span>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Extra Monthly Principal</span>
+              <span class="ps-field-hint" id="mortExtraHint">$0</span></label>
+            <div class="ps-field-input">
+              <input type="number" id="mortExtraInput" class="ps-input" value="0" step="50" min="0"
+                oninput="mortInput('extra', this.value)">
+              <input type="range" id="mortExtraSlider" class="slider-hero" min="0" max="25000" step="50" value="0"
+                oninput="mortSlider('extra', this.value)">
+            </div>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Monthly Utilities</span>
+              <span class="ps-field-hint" id="mortUtilHint">$0</span></label>
+            <div class="ps-field-input">
+              <input type="number" id="mortUtilInput" class="ps-input" value="0" step="10" min="0"
+                oninput="mortInput('utilities', this.value)">
+              <input type="range" id="mortUtilSlider" class="slider-hero" min="0" max="1500" step="10" value="0"
+                oninput="mortSlider('utilities', this.value)">
+            </div>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label"><span>Home Insurance (Annual)</span>
+              <span class="ps-field-hint" id="mortInsHint">$0/yr</span></label>
+            <div class="ps-field-input">
+              <input type="number" id="mortInsInput" class="ps-input" value="0" step="50" min="0"
+                oninput="mortInput('insurance', this.value)">
+              <input type="range" id="mortInsSlider" class="slider-hero" min="0" max="12000" step="50" value="0"
+                oninput="mortSlider('insurance', this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div class="ps-banner">
+          <i data-lucide="info"></i>
+          <span>Bank interest is <b style="color:#FDA4AF;">red</b>, equity is <b style="color:#6EE7B7;">green</b>, accelerated overpayments are <b style="color:#C4B5FD;">purple</b>. Every field is dual-controlled — type a precise value or drag the slider.</span>
+        </div>
+      </div>
+
+      <!-- ── RESULTS / RECEIPT ───────────────────────────── -->
+      <div class="ps-receipt-wrap">
+        <div class="ps-receipt">
+          <div class="ps-receipt-head">
+            <div>
+              <div class="ps-receipt-eyebrow">Long-Term Cost Analysis</div>
+              <div class="ps-receipt-title">Traditional vs Accelerated</div>
+            </div>
+            <span class="ps-receipt-badge" id="mortReceiptBadge">—</span>
+          </div>
+          <div class="ps-receipt-body" style="padding:1rem 0 1.15rem;">
+            <div id="mortComparison" style="padding:0 1.15rem;"></div>
+
+            <div style="padding:1.15rem 1.15rem 0;margin-top:1rem;border-top:1px solid var(--border);">
+              <div class="ps-receipt-eyebrow" style="margin-bottom:.85rem;">True Cumulative Lifetime Cost</div>
+              <div id="mortLifetime"></div>
+            </div>
+
+            <div style="padding:1.15rem 1.15rem 0;margin-top:1rem;border-top:1px solid var(--border);">
+              <div class="ps-receipt-eyebrow" style="margin-bottom:.6rem;">Milestone Timeline</div>
+              <div id="mortMilestones"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AMORTIZATION TABLE ──────────────────────────── -->
+    <div class="surface p-5 lg:p-6" style="margin-top:1.25rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.85rem;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:.75rem;min-width:0;">
+          <span style="width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.10);color:#6D28D9;border:1px solid rgba(139,92,246,.22);flex-shrink:0;">
+            <i data-lucide="list-ordered" class="w-4 h-4"></i>
+          </span>
+          <div style="min-width:0;">
+            <h3 style="font-size:.8125rem;font-weight:800;color:var(--text-1);line-height:1.2;">Month-by-Month Amortization</h3>
+            <p style="font-size:10.5px;font-weight:600;color:var(--text-4);margin-top:2px;">Accelerated schedule (incl. extra principal)</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+          <button onclick="mortExportCSV()" class="btn btn-primary"><i data-lucide="download" class="w-3.5 h-3.5"></i> Export Table to CSV</button>
+        </div>
+      </div>
+<div id="mortAmortSummary"></div>
+      <div class="mort-amort-wrap">
+        <table class="mort-amort-table">
+          <thead>
+  <tr>
+    <th>Month</th>
+    <th>Payment</th>
+    <th>Scheduled Principal</th>
+    <th>Extra Principal</th>
+    <th>Interest</th>
+    <th>Balance</th>
+    <th>Cum. Interest</th>
+  </tr>
+</thead>
+          <tbody id="mortAmortTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="mort-pager">
+        <div class="mort-pager-info" id="mortPagerInfo">—</div>
+        <div style="display:flex;align-items:center;gap:.5rem;">
+          <button id="mortPrevBtn" onclick="mortPager(-1)" class="btn btn-ghost"><i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Prev</button>
+          <span class="mort-pager-info" id="mortPagerPage" style="min-width:82px;text-align:center;">Page 1</span>
+          <button id="mortNextBtn" onclick="mortPager(1)" class="btn btn-ghost">Next <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB B — PROPERTY TAX DETAILS
+       ══════════════════════════════════════════════════════ -->
+  <div class="mort-tab-pane" data-mort-pane="tax">
+    <div class="ps-layout">
+      <div class="ps-controls">
+        <div class="ps-block">
+          <div class="ps-block-head">
+            <span class="ps-block-label">Regional Tax Evaluation</span>
+          </div>
+
+          <div class="ps-field">
+            <label class="ps-field-label">
+              <span>Property Tax Rate</span>
+              <span class="ps-field-hint" id="mortTaxPctHint">2.30%</span>
+            </label>
+            <div class="ps-field-input">
+              <input type="number" id="mortTaxPctInput" class="ps-input" value="2.30" step="0.01" min="0" max="15"
+                oninput="mortInput('taxPct', this.value)">
+              <input type="range" id="mortTaxPctSlider" class="slider-hero" min="0" max="15" step="0.01" value="2.30"
+                oninput="mortSlider('taxPct', this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div class="ps-banner">
+          <i data-lucide="info"></i>
+          <span>Cross-references the shared <b>Property Value</b> from Tab A. Annual tax = Property Value × Tax Rate. Monthly escrow = Annual tax ÷ 12 — these numbers flow up to the persistent header in real time.</span>
+        </div>
+      </div>
+
+      <div class="ps-receipt-wrap">
+        <div class="ps-receipt">
+          <div class="ps-receipt-head">
+            <div>
+              <div class="ps-receipt-eyebrow">Tax Breakdown</div>
+              <div class="ps-receipt-title">Annual &amp; Monthly Liability</div>
+            </div>
+            <span class="ps-receipt-badge">ESCROW</span>
+          </div>
+          <div class="ps-receipt-body" style="padding:1.15rem 1.35rem 1.15rem;">
+            <table class="ps-receipt-table">
+              <tbody>
+                <tr class="ps-receipt-section"><td colspan="2">Calculated Liability</td></tr>
+                <tr class="ps-receipt-row"><td>Property Value Base</td><td id="mortTaxPropBase">$0</td></tr>
+                <tr class="ps-receipt-row"><td>Effective Tax Rate</td><td id="mortTaxEffective">0.00%</td></tr>
+                <tr class="ps-receipt-row"><td>Annual Property Tax</td><td id="mortTaxAnnualOut">$0</td></tr>
+                <tr class="ps-receipt-row"><td>Monthly Escrow Fraction</td><td id="mortTaxMonthlyOut">$0</td></tr>
+                <tr class="ps-receipt-row"><td>Daily Accrual</td><td id="mortTaxDailyOut">$0</td></tr>
+                <tr class="ps-receipt-section"><td colspan="2">Benchmark Comparison</td></tr>
+                <tr class="ps-receipt-row"><td>vs U.S. National Avg (1.07%)</td><td id="mortTaxVsNational">—</td></tr>
+                <tr class="ps-receipt-row"><td>vs Baseline (2.30%)</td><td id="mortTaxVsBaseline">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB C — STEP-BY-STEP FORMULA MATH
+       ══════════════════════════════════════════════════════ -->
+  <div class="mort-tab-pane" data-mort-pane="formula">
+    <div class="surface p-5 lg:p-6">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.1rem;padding-bottom:.85rem;border-bottom:1px solid var(--border);">
+        <span style="width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.10);color:#6D28D9;border:1px solid rgba(139,92,246,.22);flex-shrink:0;">
+          <i data-lucide="sigma" class="w-4 h-4"></i>
+        </span>
+        <div style="min-width:0;">
+          <h3 style="font-size:.8125rem;font-weight:800;color:var(--text-1);line-height:1.2;">Fixed-Rate Mortgage Formula</h3>
+          <p style="font-size:10.5px;font-weight:600;color:var(--text-4);margin-top:2px;">Audit the exact arithmetic behind every number</p>
+        </div>
+      </div>
+
+      <div class="mort-formula">
+        M = P × <em>[</em> r(1+r)<sup>n</sup> <em>]</em> ÷ <em>[</em> (1+r)<sup>n</sup> − 1 <em>]</em>
+      </div>
+
+      <div style="margin-top:1rem;display:grid;gap:.75rem;">
+        <div class="ps-receipt" style="overflow:hidden;">
+          <div class="ps-receipt-head">
+            <div>
+              <div class="ps-receipt-eyebrow">Live Variable Substitution</div>
+              <div class="ps-receipt-title">Your Numbers in the Equation</div>
+            </div>
+          </div>
+          <div class="ps-receipt-body" style="padding:1.15rem 1.35rem 1.2rem;">
+            <div id="mortFormulaSub"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--text-4);margin-bottom:.6rem;">Step-by-Step Arithmetic</div>
+          <div id="mortFormulaSteps"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
       <div class="wb-pane" data-wb-pane="vehicle">
 
@@ -6786,6 +7465,7 @@ function restoreNavSections(){try{const st=JSON.parse(localStorage.getItem(NAV_S
 const WB_TOOLS_FLAT=[
   {id:'paycheck',label:'Paycheck',icon:'receipt',desc:'Take-home pay'},
   {id:'rule72',label:'Rule of 72',icon:'calculator',desc:'Doubling time & required return'},
+  {id:'mortgage',label:'Mortgage',icon:'home',desc:'Accelerated payoff & carrying costs'},   // ← NEW
   {id:'vehicle',label:'Vehicle',icon:'car',desc:'Lease check & used-car valuation'},
   {id:'projections',label:'Projections',icon:'rocket',desc:'Growth projections'},
   {id:'fire',label:'Freedom',icon:'flame',desc:'FIRE progress'},
@@ -6795,7 +7475,8 @@ const WB_TOOLS_FLAT=[
 ];
 const WB_TOOL_GATES = {
   paycheck:    null,
-  rule72:      'wealth_blueprint',        // ← free, everyone gets it
+  rule72:      'wealth_blueprint',
+  mortgage:    'wealth_blueprint',   // ← NEW (Basic+)
   vehicle:     'wealth_blueprint',
   projections: 'wealth_blueprint',
   fire:        'fire_modelling',
@@ -6872,6 +7553,8 @@ function switchWbTool(toolId){
   if(toolId === 'fire') calculateFIRE();
   if(toolId === 'emergency') calculateEmergencyFund();
   if(toolId === 'paycheck'){ psSyncSegs(); calculatePaystub(); }
+    if(toolId === 'mortgage'){ mortInit(); }        // ← NEW
+
   if(toolId === 'vehicle'){
     if(currentVehicleMode === 'lease') leaseCalc();
     else valCalc();
@@ -11285,6 +11968,809 @@ function dismissRequiredSetup(){
   toast('You can finish setup anytime from Settings → Profile.', 'info', 3500);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ACCELERATED MORTGAGE & CARRYING COST DASHBOARDmortInit
+   ═══════════════════════════════════════════════════════════ */
+const MORT_DEFAULT = {
+    startDate: new Date().toISOString().slice(0,10),   // ← today, YYYY-MM-DD
+
+  propertyValue: 622000,
+  downPct: 5,
+  downAmt: 31100,
+  rate: 5.50,
+  term: 30,
+  extra: 0,
+  utilities: 0,
+  insurance: 0,
+  taxPct: 2.30,
+  inflationOn: false,
+  inflationRate: 2.5,
+  page: 1,
+  perPage: 12
+};
+let mortState = JSON.parse(JSON.stringify(MORT_DEFAULT));
+let mortDonutChart = null;
+let mortInited = false;
+let mortLastCalc = null;
+let mortSubTab = 'amortization';
+
+function _m$id(id){ return document.getElementById(id); }
+function _m$set(id, v){ const el = _m$id(id); if(el) el.value = v; }
+function _m$text(id, v){ const el = _m$id(id); if(el) el.innerText = v; }
+
+function mortInit(){
+  if(!mortInited){
+    mortInited = true;
+    if(!mortState.startDate){
+      mortState.startDate = new Date().toISOString().slice(0,10);
+    }
+    mortSyncInputsFromState();
+  }
+  mortSetSubTab(mortSubTab);
+  mortCompute();
+}
+
+function mortReset(){
+  mortState = JSON.parse(JSON.stringify(MORT_DEFAULT));
+  mortSyncInputsFromState();
+  mortCompute();
+  mortSetSubTab('amortization');
+  if(typeof toast === 'function') toast('Mortgage calculator reset.', 'info', 1800);
+}
+
+function mortSyncInputsFromState(){
+  const s = mortState;
+  _m$set('mortPropValSlider', s.propertyValue);
+  _m$set('mortPropValInput',  s.propertyValue);
+  _m$set('mortDownSlider',    s.downPct);
+  _m$set('mortDownPctInput',  s.downPct);
+  _m$set('mortDownAmtInput',  s.downAmt);
+  _m$set('mortRateSlider',    s.rate);
+  _m$set('mortRateInput',     s.rate);
+  _m$set('mortTermSlider',    s.term);
+  _m$set('mortTermInput',     s.term);
+  _m$set('mortExtraSlider',   s.extra);
+  _m$set('mortExtraInput',    s.extra);
+  _m$set('mortUtilSlider',    s.utilities);
+  _m$set('mortUtilInput',     s.utilities);
+  _m$set('mortInsSlider',     s.insurance);
+  _m$set('mortInsInput',      s.insurance);
+  _m$set('mortTaxPctSlider',  s.taxPct);
+  _m$set('mortTaxPctInput',   s.taxPct);
+    const startEl = _m$id('mortStartInput');
+  if(startEl) startEl.value = s.startDate || new Date().toISOString().slice(0,10);
+  mortUpdateHints();
+}
+function mortSetStartDate(v){
+  if(!v){ v = new Date().toISOString().slice(0,10); }
+  const d = new Date(v + 'T12:00:00');
+  if(isNaN(d)) return;
+  mortState.startDate = v;
+  mortCompute();
+}
+
+function mortResetStartDate(){
+  mortState.startDate = new Date().toISOString().slice(0,10);
+  const el = _m$id('mortStartInput');
+  if(el) el.value = mortState.startDate;
+  mortCompute();
+  if(typeof toast === 'function') toast('Start date reset to today.', 'info', 1500);
+}
+
+function mortParseStartDate(){
+  const v = mortState.startDate;
+  if(!v) return new Date();
+  const d = new Date(v + 'T12:00:00');
+  return isNaN(d) ? new Date() : d;
+}
+
+function mortAddMonths(baseDate, months){
+  const d = new Date(baseDate);
+  d.setMonth(d.getMonth() + months);
+  return d;
+}
+
+function mortUpdateStartHint(){
+  const el = _m$id('mortStartHint');
+  if(!el) return;
+  const today = new Date().toISOString().slice(0,10);
+  if(mortState.startDate === today){
+    el.textContent = 'Today · default';
+    el.style.color = 'var(--text-4)';
+  } else {
+    const d = mortParseStartDate();
+    el.textContent = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    el.style.color = '#6D28D9';
+  }
+}function mortSetStartDate(v){
+  if(!v){ v = new Date().toISOString().slice(0,10); }
+  const d = new Date(v + 'T12:00:00');
+  if(isNaN(d)) return;
+  mortState.startDate = v;
+  mortCompute();
+}
+
+function mortResetStartDate(){
+  mortState.startDate = new Date().toISOString().slice(0,10);
+  const el = _m$id('mortStartInput');
+  if(el) el.value = mortState.startDate;
+  mortCompute();
+  if(typeof toast === 'function') toast('Start date reset to today.', 'info', 1500);
+}
+
+function mortParseStartDate(){
+  const v = mortState.startDate;
+  if(!v) return new Date();
+  const d = new Date(v + 'T12:00:00');
+  return isNaN(d) ? new Date() : d;
+}
+
+function mortAddMonths(baseDate, months){
+  const d = new Date(baseDate);
+  d.setMonth(d.getMonth() + months);
+  return d;
+}
+
+function mortUpdateStartHint(){
+  const el = _m$id('mortStartHint');
+  if(!el) return;
+  const today = new Date().toISOString().slice(0,10);
+  if(mortState.startDate === today){
+    el.textContent = 'Today · default';
+    el.style.color = 'var(--text-4)';
+  } else {
+    const d = mortParseStartDate();
+    el.textContent = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    el.style.color = '#6D28D9';
+  }
+}
+
+function mortUpdateHints(){
+    mortUpdateStartHint();
+  const s = mortState;
+  const prop = parseFloat(s.propertyValue) || 0;
+  const downAmt = prop * (parseFloat(s.downPct) || 0) / 100;
+  _m$text('mortPropValHint', formatCurrency(prop, 0));
+  _m$text('mortDownHint',    `${(parseFloat(s.downPct)||0).toFixed(2)}% · ${formatCurrency(downAmt, 0)}`);
+  _m$text('mortRateHint',    `${(parseFloat(s.rate)||0).toFixed(2)}%`);
+  _m$text('mortTermHint',    `${parseInt(s.term)||0} years`);
+  _m$text('mortExtraHint',   formatCurrency(parseFloat(s.extra)||0, 0));
+  _m$text('mortUtilHint',    formatCurrency(parseFloat(s.utilities)||0, 0));
+  _m$text('mortInsHint',     `${formatCurrency(parseFloat(s.insurance)||0, 0)}/yr`);
+  _m$text('mortTaxPctHint',  `${(parseFloat(s.taxPct)||0).toFixed(2)}%`);
+}
+
+function mortSlider(key, v){
+  const num = parseFloat(v) || 0;
+  mortState[key] = num;
+  const mapIn = { propertyValue:'mortPropValInput', rate:'mortRateInput', term:'mortTermInput', extra:'mortExtraInput', utilities:'mortUtilInput', insurance:'mortInsInput', taxPct:'mortTaxPctInput' };
+  if(mapIn[key]) _m$set(mapIn[key], num);
+  if(key === 'propertyValue'){
+    const amt = num * (parseFloat(mortState.downPct)||0) / 100;
+    mortState.downAmt = amt;
+    _m$set('mortDownAmtInput', amt);
+  }
+  mortUpdateHints();
+  mortCompute();
+}
+
+function mortInput(key, v){
+  let num = parseFloat(v);
+  if(isNaN(num)) num = 0;
+  if(num < 0) num = 0;
+  if(key === 'term') num = Math.max(1, Math.min(40, Math.round(num)));
+  if(key === 'taxPct') num = Math.max(0, Math.min(15, num));
+  mortState[key] = num;
+  const mapSl = { propertyValue:'mortPropValSlider', rate:'mortRateSlider', term:'mortTermSlider', extra:'mortExtraSlider', utilities:'mortUtilSlider', insurance:'mortInsSlider', taxPct:'mortTaxPctSlider' };
+  if(mapSl[key]) _m$set(mapSl[key], num);
+  if(key === 'propertyValue'){
+    const amt = num * (parseFloat(mortState.downPct)||0) / 100;
+    mortState.downAmt = amt;
+    _m$set('mortDownAmtInput', amt);
+  }
+  mortUpdateHints();
+  mortCompute();
+}
+
+function mortDownPct(v){
+  const pct = Math.max(0, Math.min(100, parseFloat(v) || 0));
+  mortState.downPct = pct;
+  const prop = parseFloat(mortState.propertyValue) || 0;
+  const amt = prop * pct / 100;
+  mortState.downAmt = amt;
+  _m$set('mortDownSlider', pct);
+  _m$set('mortDownPctInput', pct);
+  _m$set('mortDownAmtInput', amt);
+  mortUpdateHints();
+  mortCompute();
+}
+
+function mortDownAmt(v){
+  let amt = Math.max(0, parseFloat(v) || 0);
+  const prop = parseFloat(mortState.propertyValue) || 0;
+  if(amt > prop) amt = prop;
+  const pct = prop > 0 ? (amt / prop * 100) : 0;
+  mortState.downPct = pct;
+  mortState.downAmt = amt;
+  _m$set('mortDownSlider', pct);
+  _m$set('mortDownPctInput', pct);
+  _m$set('mortDownAmtInput', amt);
+  mortUpdateHints();
+  mortCompute();
+}
+
+function mortSetTerm(y){
+  mortState.term = y;
+  _m$set('mortTermSlider', y);
+  _m$set('mortTermInput', y);
+  mortUpdateHints();
+  mortCompute();
+}
+
+function mortSetSubTab(id){
+  mortSubTab = id;
+  document.querySelectorAll('#mortSubtabs .mort-subtab').forEach(b => b.classList.toggle('active', b.dataset.mortTab === id));
+  document.querySelectorAll('.mort-tab-pane').forEach(p => p.classList.toggle('active', p.dataset.mortPane === id));
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function mortToggleInflation(){
+  const cb = _m$id('mortInflationToggle');
+  mortState.inflationOn = !!(cb && cb.checked);
+  mortCompute();
+}
+function mortSetInflationRate(v){
+  mortState.inflationRate = parseFloat(v) || 0;
+  _m$set('mortInflationRate', mortState.inflationRate);
+  if(mortState.inflationOn) mortCompute();
+}
+
+/* ── Amortization engine ─────────────────────────────── */
+function mortAmortize(P, ratePct, years, extraMonthly){
+  const r = (ratePct / 100) / 12;
+  const n = years * 12;
+  const out = {
+    rows: [], basePayment: 0, months: 0,
+    totalInterest: 0, totalPaid: 0,
+    totalScheduledPrincipal: 0, totalExtraPrincipal: 0
+  };
+  if(P <= 0 || n <= 0) return out;
+
+  const basePayment = r === 0 ? P / n : P * (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1);
+  out.basePayment = basePayment;
+
+  let balance = P;
+  let totalInterest = 0, totalPaid = 0, totalScheduled = 0, totalExtra = 0, month = 0;
+
+  while(balance > 0.01 && month < 1200){
+    month++;
+    const interest = balance * r;
+
+    let scheduledPrincipal = Math.max(0, basePayment - interest);
+    if(scheduledPrincipal > balance) scheduledPrincipal = balance;
+
+    const remainingAfterScheduled = balance - scheduledPrincipal;
+    const extraPrincipal = Math.min(Math.max(0, extraMonthly), Math.max(0, remainingAfterScheduled));
+
+    const principal = scheduledPrincipal + extraPrincipal;
+    const pay = interest + principal;
+
+    balance -= principal;
+    totalInterest  += interest;
+    totalPaid      += pay;
+    totalScheduled += scheduledPrincipal;
+    totalExtra     += extraPrincipal;
+
+    out.rows.push({
+      month,
+      payment: pay,
+      principal,
+      scheduledPrincipal,
+      extraPrincipal,
+      interest,
+      balance: Math.max(0, balance),
+      cumInterest: totalInterest,
+      cumExtra: totalExtra,
+      year: Math.ceil(month / 12)
+    });
+  }
+
+  out.months = out.rows.length;
+  out.totalInterest = totalInterest;
+  out.totalPaid = totalPaid;
+  out.totalScheduledPrincipal = totalScheduled;
+  out.totalExtraPrincipal = totalExtra;
+  return out;
+}
+
+/* ── Main compute pass ───────────────────────────────── */
+function mortCompute(){
+  if(!mortInited) return;
+  const s = mortState;
+  const prop      = parseFloat(s.propertyValue) || 0;
+  const downAmt   = Math.max(0, Math.min(prop, prop * (parseFloat(s.downPct)||0) / 100));
+  const loanAmt   = Math.max(0, prop - downAmt);
+  const rate      = Math.max(0, parseFloat(s.rate) || 0);
+  const years     = Math.max(1, Math.min(40, parseInt(s.term) || 30));
+  const extra     = Math.max(0, parseFloat(s.extra) || 0);
+  const utilities = Math.max(0, parseFloat(s.utilities) || 0);
+  const insurance = Math.max(0, parseFloat(s.insurance) || 0);
+  const taxPct    = Math.max(0, parseFloat(s.taxPct) || 0);
+
+  const annualTax  = prop * taxPct / 100;
+  const monthlyTax = annualTax / 12;
+  const monthlyIns = insurance / 12;
+
+  const trad  = mortAmortize(loanAmt, rate, years, 0);
+  const accel = mortAmortize(loanAmt, rate, years, extra);
+
+  const monthlyPI  = trad.basePayment;
+  const monthlyOOP = monthlyPI + monthlyTax + monthlyIns + utilities;
+  const totalMonthly = monthlyOOP + extra;
+
+  mortLastCalc = { trad, accel, loanAmt, annualTax, monthlyTax, monthlyIns, monthlyPI, monthlyOOP, totalMonthly, prop, downAmt, rate, years, extra, utilities, insurance, taxPct };
+
+  /* ── Persistent header ── */
+  _m$text('mortHeaderMonthly', formatCurrency(monthlyOOP, 0));
+  _m$text('mortHeaderMonthlySub',
+    `${formatCurrency(monthlyPI,0)} P&I · ${formatCurrency(monthlyTax,0)} tax · ${formatCurrency(monthlyIns,0)} ins · ${formatCurrency(utilities,0)} util`);
+  _m$text('mortHeaderTax', formatCurrency(annualTax, 0));
+  _m$text('mortHeaderTaxSub', `@ ${taxPct.toFixed(2)}% of ${formatCurrency(prop,0)}`);
+_m$text('mortHeaderIns', `${formatCurrency(monthlyIns,0)}/mo (${formatCurrency(insurance,0)}/yr)`);
+  _m$text('mortHeaderPayoff', `${(accel.months/12).toFixed(1)} yrs`);
+
+const savedMonths = trad.months - accel.months;
+const savedInt    = trad.totalInterest - accel.totalInterest;
+
+const startD  = mortParseStartDate();
+const finishD = mortAddMonths(startD, accel.months);
+const finishStr = finishD.toLocaleDateString('en-US', { month:'short', year:'numeric' });
+
+_m$text('mortHeaderPayoffSub', extra > 0
+  ? `Ends ${finishStr} · saves ${(savedMonths/12).toFixed(1)} yrs`
+  : `Ends ${finishStr}`);
+  _m$text('mortDonutCenterValue', formatCurrency(totalMonthly, 0));
+  _m$text('mortDonutCenterLabel', extra > 0 ? 'w/ Extra' : 'Monthly');
+  _m$text('mortReceiptBadge', extra > 0 ? `${(savedMonths/12).toFixed(1)} yr faster` : `${(trad.months/12).toFixed(1)} yr term`);
+
+  const customBtn = document.getElementById('mortTermCustomBtn');
+const isCustomTerm = (years !== 15 && years !== 30);
+
+document.querySelectorAll('#mortTermToggle button[data-term]').forEach(b => {
+  b.classList.toggle('active', parseInt(b.dataset.term) === years);
+});
+
+if(customBtn){
+  customBtn.style.display = isCustomTerm ? '' : 'none';
+  customBtn.classList.toggle('active', isCustomTerm);
+  const lbl = document.getElementById('mortTermCustomLabel');
+  if(lbl) lbl.textContent = `${years}-Year Custom`;
+  customBtn.title = `Custom ${years}-year term — click to edit exactly`;
+}
+
+  mortRenderDonut({ pi: monthlyPI, tax: monthlyTax, ins: monthlyIns, util: utilities, extra });
+  mortRenderComparison(trad, accel, loanAmt);
+  mortRenderLifetime(trad, annualTax, insurance);
+  mortRenderMilestones(accel, prop, loanAmt);
+  mortRenderAmortTable();
+  mortRenderTaxTab();
+  mortRenderFormula();
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+  applyPrivacyState();
+}
+function mortFocusTermInput(){
+  const el = _m$id('mortTermInput');
+  if(!el) return;
+  el.focus();
+  if(typeof el.select === 'function') el.select();
+  el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+/* ── Donut chart ─────────────────────────────────────── */
+function mortRenderDonut(parts){
+  const c = _m$id('mortDonutChart');
+  if(!c) return;
+  if(mortDonutChart){ try{ mortDonutChart.destroy(); }catch(_){} }
+  const slices = [
+    { label:'Principal & Interest', value:parts.pi,    color:'#8B5CF6', short:'P&I' },
+    { label:'Property Tax Escrow',  value:parts.tax,   color:'#F59E0B', short:'Tax' },
+    { label:'Home Insurance',       value:parts.ins,   color:'#3B82F6', short:'Ins' },
+    { label:'Utilities',            value:parts.util,  color:'#10B981', short:'Util' },
+    { label:'Extra Principal',      value:parts.extra, color:'#EC4899', short:'Extra' }
+  ].filter(s => s.value > 0);
+
+  const total = slices.reduce((a, s) => a + s.value, 0);
+  if(slices.length === 0){
+    slices.push({ label:'No Data', value:1, color:'rgba(148,163,184,.25)', short:'—' });
+  }
+
+  mortDonutChart = new Chart(c, {
+    type: 'doughnut',
+    data: {
+      labels: slices.map(s => s.label),
+      datasets: [{
+        data: slices.map(s => s.value),
+        backgroundColor: slices.map(s => s.color),
+        borderWidth: 2,
+        borderColor: getChartSurfaceColor(),
+        hoverOffset: 5
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false, cutout:'68%',
+      animation:{ duration:350 },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
+          backgroundColor:'#0B1220', padding:10, cornerRadius:8, displayColors:true,
+          callbacks:{
+  label: ctx => {
+    const t = slices.reduce((a, s) => a + s.value, 0);
+    const p = t > 0 ? (ctx.parsed / t * 100) : 0;
+    return ` ${ctx.label}: ${formatCurrency(ctx.parsed, 0)} (${p.toFixed(1)}%)`;
+  }
+}
+        }
+      }
+    }
+  });
+
+    const legend = _m$id('mortDonutLegend');
+  if(legend){
+    const t = slices.reduce((a, s) => a + s.value, 0);
+    legend.innerHTML = slices
+      .filter(s => s.value > 0)
+      .map(s => {
+        const p = t > 0 ? (s.value / t * 100) : 0;
+        return `<div class="mort-donut-legend-row">
+          <span class="mort-donut-legend-dot" style="background:${s.color};"></span>
+          <span class="mort-donut-legend-label">${s.label}</span>
+          <span class="mort-donut-legend-amount">${formatCurrency(s.value, 0)}</span>
+          <span class="mort-donut-legend-pct">${p.toFixed(1)}%</span>
+        </div>`;
+      })
+      .join('');
+  }
+}
+
+/* ── Comparison cards ────────────────────────────────── */
+function mortRenderComparison(trad, accel, loanAmt){
+  const host = _m$id('mortComparison');
+  if(!host) return;
+  const savedMonths = trad.months - accel.months;
+  const savedInterest = trad.totalInterest - accel.totalInterest;
+  const fmt = formatCurrency;
+  host.innerHTML = `
+    <div class="mort-insight-grid">
+      <div class="mort-insight-card">
+        <div class="mort-metric-label"><span>📅</span> Traditional Payoff</div>
+        <div class="mort-metric-value">${(trad.months/12).toFixed(1)} yrs</div>
+        <div class="mort-metric-sub">${trad.months} payments</div>
+        <div class="divider" style="margin:.5rem 0;"></div>
+        <div class="mort-metric-label">Total Interest</div>
+        <div class="mort-metric-value" style="font-size:1rem;color:#BE123C;">${fmt(trad.totalInterest, 0)}</div>
+      </div>
+      <div class="mort-insight-card" style="border-color:rgba(236,72,153,.38);background:linear-gradient(135deg,rgba(236,72,153,.07),transparent);">
+        <div class="mort-metric-label"><span>🚀</span> Accelerated Payoff</div>
+        <div class="mort-metric-value" style="color:#6D28D9;">${(accel.months/12).toFixed(1)} yrs</div>
+        <div class="mort-metric-sub">${accel.months} payments</div>
+        <div class="divider" style="margin:.5rem 0;"></div>
+        <div class="mort-metric-label">Total Interest</div>
+        <div class="mort-metric-value" style="font-size:1rem;color:#BE123C;">${fmt(accel.totalInterest, 0)}</div>
+      </div>
+      <div class="mort-insight-card" style="border-color:rgba(16,185,129,.4);background:linear-gradient(135deg,rgba(16,185,129,.07),transparent);">
+        <div class="mort-metric-label"><span>💎</span> Savings from Acceleration</div>
+        <div class="mort-metric-value" style="color:#059669;">${fmt(savedInterest, 0)}</div>
+        <div class="mort-metric-sub">interest saved</div>
+        <div class="divider" style="margin:.5rem 0;"></div>
+        <div class="mort-metric-label">Time Saved</div>
+        <div class="mort-metric-value" style="font-size:1rem;color:#059669;">${(savedMonths/12).toFixed(1)} yrs</div>
+      </div>
+      <div class="mort-insight-card">
+        <div class="mort-metric-label"><span>🏦</span> Loan Principal</div>
+        <div class="mort-metric-value">${fmt(loanAmt, 0)}</div>
+        <div class="mort-metric-sub">after down payment</div>
+        <div class="divider" style="margin:.5rem 0;"></div>
+        <div class="mort-metric-label">Extra / Month</div>
+        <div class="mort-metric-value" style="font-size:1rem;color:#EC4899;">${fmt(mortState.extra, 0)}</div>
+      </div>
+    </div>`;
+}
+
+/* ── Lifetime cost + inflation ───────────────────────── */
+function mortRenderLifetime(trad, annualTax, insurance){
+  const host = _m$id('mortLifetime');
+  if(!host) return;
+  const utilYear = (parseFloat(mortState.utilities) || 0) * 12;
+  const yearCount = Math.ceil(trad.months / 12);
+  const inf = mortState.inflationOn ? ((mortState.inflationRate || 0) / 100) : 0;
+
+  const agg = [];
+  for(let y = 1; y <= yearCount; y++){
+    let principalY = 0, interestY = 0;
+    for(let i = 0; i < trad.rows.length; i++){
+      const r = trad.rows[i];
+      if(r.year !== y) continue;
+      principalY += r.principal;
+      interestY  += r.interest;
+    }
+    const totalY = principalY + interestY + annualTax + insurance + utilYear;
+    const factor = inf > 0 ? Math.pow(1 + inf, y - 0.5) : 1;
+    agg.push({ principalY, interestY, taxY: annualTax, insY: insurance, utilY: utilYear, totalY, discounted: totalY / factor });
+  }
+
+  const rawTotal = agg.reduce((s,a)=>s+a.totalY, 0);
+  const adjTotal = agg.reduce((s,a)=>s+a.discounted, 0);
+  const displayTotal = mortState.inflationOn ? adjTotal : rawTotal;
+  const label = mortState.inflationOn ? "Today's Purchasing Power" : 'Nominal Dollars';
+  const fmt = formatCurrency;
+
+  host.innerHTML = `
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-bottom:.85rem;">
+      <div style="min-width:0;">
+        <div class="privacy-target" style="font-size:1.55rem;font-weight:900;letter-spacing:-.025em;color:var(--text-1);font-variant-numeric:tabular-nums;line-height:1.1;">${fmt(displayTotal, 0)}</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-4);margin-top:3px;">${label} · over ${(trad.months/12).toFixed(1)} years</div>
+      </div>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text-2);cursor:pointer;padding:.45rem .75rem;border-radius:9px;background:var(--surface);border:1px solid var(--border-strong);">
+        <input type="checkbox" id="mortInflationToggle" ${mortState.inflationOn ? 'checked' : ''} onchange="mortToggleInflation()" style="accent-color:var(--accent);">
+        <span>Inflation Adjust</span>
+      </label>
+    </div>
+    ${mortState.inflationOn ? `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem;padding:.6rem .75rem;border-radius:10px;background:var(--surface);border:1px solid var(--border);">
+        <i data-lucide="trending-down" class="w-3.5 h-3.5" style="color:#F59E0B;"></i>
+        <span style="font-size:11px;font-weight:700;color:var(--text-3);">Annual inflation rate</span>
+        <input type="number" id="mortInflationRate" step="0.1" min="0" max="15" value="${mortState.inflationRate}"
+          oninput="mortSetInflationRate(this.value)" class="ps-input"
+          style="width:90px;padding:.35rem .55rem;font-size:12px;margin-left:auto;text-align:right;">
+        <span style="font-size:11px;font-weight:700;color:var(--text-3);">%</span>
+      </div>` : ''}
+    <div class="mort-insight-grid" style="grid-template-columns:repeat(auto-fit,minmax(115px,1fr));">
+      ${mortLifetimeCard('Principal',      agg.reduce((s,a)=>s+a.principalY, 0), '#8B5CF6')}
+      ${mortLifetimeCard('Bank Interest',  agg.reduce((s,a)=>s+a.interestY,  0), '#BE123C')}
+      ${mortLifetimeCard('Property Tax',   agg.reduce((s,a)=>s+a.taxY,       0), '#F59E0B')}
+      ${mortLifetimeCard('Insurance',      agg.reduce((s,a)=>s+a.insY,       0), '#3B82F6')}
+      ${mortLifetimeCard('Utilities',      agg.reduce((s,a)=>s+a.utilY,      0), '#10B981')}
+    </div>`;
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+function mortLifetimeCard(label, value, color){
+  return `<div style="padding:.6rem .7rem;border-radius:10px;background:var(--surface);border:1px solid var(--border);min-width:0;">
+    <div style="font-size:8.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-4);">${label}</div>
+    <div class="privacy-target" style="font-size:.85rem;font-weight:800;font-variant-numeric:tabular-nums;color:${color};margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${formatCurrency(value,0)}</div>
+  </div>`;
+}
+
+/* ── Milestone timeline ──────────────────────────────── */
+function mortRenderMilestones(accel, prop, loanAmt){
+  const host = _m$id('mortMilestones');
+  if(!host) return;
+  const rows = accel.rows;
+  let pivotM = null, pmiM = null, eq25 = null, eq50 = null, eq75 = null, eq100 = null;
+  for(let i = 0; i < rows.length; i++){
+    const r = rows[i];
+    if(pivotM === null && r.principal > r.interest) pivotM = r.month;
+    const equity = prop - r.balance;
+    const eqPct = prop > 0 ? (equity / prop) * 100 : 0;
+    if(pmiM  === null && eqPct >= 20) pmiM  = r.month;
+    if(eq25  === null && eqPct >= 25) eq25  = r.month;
+    if(eq50  === null && eqPct >= 50) eq50  = r.month;
+    if(eq75  === null && eqPct >= 75) eq75  = r.month;
+    if(eq100 === null && eqPct >= 100) eq100 = r.month;
+  }
+  const yrMo = m => m ? (m >= 12 ? `${Math.floor(m/12)}y ${m%12}m` : `${m}m`) : 'Not reached';
+
+  const startD = mortParseStartDate();
+  const dateOf = m => {
+    if(!m) return '—';
+    const d = mortAddMonths(startD, m);
+    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  };
+
+  const milestones = [
+    { dot:'#EC4899', label:'Interest Pivot Point',      desc:'First month principal repayment exceeds interest', month:pivotM },
+    { dot:'#F59E0B', label:'20% Equity — PMI Removal',  desc:'You can request PMI removal at 20% equity',        month:pmiM  },
+    { dot:'#8B5CF6', label:'25% Equity Milestone',      desc:'Quarter ownership achieved',                       month:eq25  },
+    { dot:'#3B82F6', label:'50% Equity Milestone',      desc:'Half ownership achieved',                          month:eq50  },
+    { dot:'#10B981', label:'75% Equity Milestone',      desc:'Three-quarters ownership',                         month:eq75  },
+    { dot:'#059669', label:'100% Paid Off',             desc:'Full ownership — mortgage retired',                month:eq100 }
+  ];
+  host.innerHTML = milestones.map(m => `
+    <div class="mort-milestone">
+      <span class="mort-milestone-dot" style="background:${m.dot};"></span>
+      <div style="min-width:0;flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11.5px;font-weight:800;color:var(--text-1);">${m.label}</span>
+          <span class="mort-insight-pill" style="background:${m.dot}1A;color:${m.dot};">${yrMo(m.month)}</span>
+        </div>
+        <div style="font-size:10px;color:var(--text-4);margin-top:2px;">${m.desc} · ${dateOf(m.month)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── Amortization table + pager ─────────────────────── */
+function mortRenderAmortTable(){
+  const host = _m$id('mortAmortTbody');
+  if(!host || !mortLastCalc) return;
+  const rows = mortLastCalc.accel.rows;
+  const pp = mortState.perPage || 12;
+  const totalPages = Math.max(1, Math.ceil(rows.length / pp));
+  let page = mortState.page || 1;
+  if(page > totalPages) page = totalPages;
+  if(page < 1) page = 1;
+  mortState.page = page;
+  const start = (page - 1) * pp;
+  const slice = rows.slice(start, start + pp);
+  const fmt = v => formatCurrency(v, 2);
+
+  const startD = mortParseStartDate();
+  const fmtCalMonth = (m) => {
+    const d = mortAddMonths(startD, m - 1);
+    return d.toLocaleDateString('en-US', { month:'short', year:'2-digit' });
+  };
+
+  /* ── Summary bar ── */
+  const summaryHost = _m$id('mortAmortSummary');
+  if(summaryHost){
+    const totalSched = mortLastCalc.accel.totalScheduledPrincipal;
+    const totalExtra = mortLastCalc.accel.totalExtraPrincipal;
+    const totalInt   = mortLastCalc.accel.totalInterest;
+    const hasExtra   = totalExtra > 0.005;
+    summaryHost.innerHTML = `
+      <div class="mort-amort-summary">
+        <div class="mort-amort-summary-item">
+          <span class="mort-amort-summary-label">Scheduled Principal</span>
+          <span class="mort-amort-summary-value">${formatCurrency(totalSched, 0)}</span>
+        </div>
+        <div class="mort-amort-summary-item">
+          <span class="mort-amort-summary-label">Extra Principal Paid</span>
+          <span class="mort-amort-summary-value" style="color:${hasExtra ? '#EC4899' : 'var(--text-4)'};">
+            ${hasExtra ? '+' : ''}${formatCurrency(totalExtra, 0)}
+          </span>
+        </div>
+        <div class="mort-amort-summary-item">
+          <span class="mort-amort-summary-label">Interest Paid</span>
+          <span class="mort-amort-summary-value" style="color:#BE123C;">${formatCurrency(totalInt, 0)}</span>
+        </div>
+      </div>`;
+  }
+
+  /* ── Table rows ── */
+  host.innerHTML = slice.map(r => {
+    const hasExtra = r.extraPrincipal > 0.005;
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:800;">${fmtCalMonth(r.month)}</div>
+          <div style="font-size:9px;font-weight:600;opacity:.55;">M${r.month} · Yr ${r.year}</div>
+        </td>
+        <td>${fmt(r.payment)}</td>
+        <td>${fmt(r.scheduledPrincipal)}</td>
+        <td style="color:${hasExtra ? '#EC4899' : 'var(--text-4)'};font-weight:${hasExtra ? '800' : '600'};">
+          ${hasExtra ? '+' : ''}${fmt(r.extraPrincipal)}
+        </td>
+        <td style="color:#BE123C;">${fmt(r.interest)}</td>
+        <td>${fmt(r.balance)}</td>
+        <td style="color:#BE123C;">${fmt(r.cumInterest)}</td>
+      </tr>`;
+  }).join('');
+
+  _m$text('mortPagerInfo', `Showing ${rows.length === 0 ? 0 : start+1}–${Math.min(start+pp, rows.length)} of ${rows.length} months`);
+  _m$text('mortPagerPage', `Page ${page} of ${totalPages}`);
+  const prev = _m$id('mortPrevBtn'); if(prev) prev.disabled = page <= 1;
+  const next = _m$id('mortNextBtn'); if(next) next.disabled = page >= totalPages;
+}
+
+function mortPager(dir){
+  const rows = mortLastCalc && mortLastCalc.accel ? mortLastCalc.accel.rows : [];
+  const pp = mortState.perPage || 12;
+  const totalPages = Math.max(1, Math.ceil(rows.length / pp));
+  let p = (mortState.page || 1) + dir;
+  if(p < 1) p = 1;
+  if(p > totalPages) p = totalPages;
+  mortState.page = p;
+  mortRenderAmortTable();
+}
+function mortExportCSV(){
+  if(!mortLastCalc) return;
+  const rows = mortLastCalc.accel.rows;
+  const startD = mortParseStartDate();
+  let csv = 'Month #,Calendar Date,Year,Payment,Scheduled Principal,Extra Principal,Interest,Balance,Cumulative Interest,Cumulative Extra\n';
+  rows.forEach(r => {
+    const calD = mortAddMonths(startD, r.month - 1);
+    const calStr = calD.toLocaleDateString('en-US', { month:'short', year:'numeric' });
+    csv += `${r.month},"${calStr}",${r.year},${r.payment.toFixed(2)},${r.scheduledPrincipal.toFixed(2)},${r.extraPrincipal.toFixed(2)},${r.interest.toFixed(2)},${r.balance.toFixed(2)},${r.cumInterest.toFixed(2)},${r.cumExtra.toFixed(2)}\n`;
+  });
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mortgage_amortization_${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  if(typeof toast === 'function') toast(`Exported ${rows.length} months to CSV.`, 'success');
+}
+
+/* ── Tax tab ─────────────────────────────────────────── */
+function mortRenderTaxTab(){
+  if(!mortLastCalc) return;
+  const { prop, taxPct, annualTax, monthlyTax } = mortLastCalc;
+  _m$text('mortTaxAnnualOut',   formatCurrency(annualTax, 0));
+  _m$text('mortTaxMonthlyOut',  formatCurrency(monthlyTax, 0));
+  _m$text('mortTaxDailyOut',    formatCurrency(annualTax / 365, 2));
+  _m$text('mortTaxEffective',   taxPct.toFixed(2) + '%');
+  _m$text('mortTaxPropBase',    formatCurrency(prop, 0));
+  const avgNational = 1.07;
+  const diffNat = taxPct - avgNational;
+  const diffBas = taxPct - 2.30;
+  _m$text('mortTaxVsNational', `${diffNat >= 0 ? '+' : ''}${diffNat.toFixed(2)} pts`);
+  _m$text('mortTaxVsBaseline', `${diffBas >= 0 ? '+' : ''}${diffBas.toFixed(2)} pts`);
+  _m$set('mortTaxPctSlider', taxPct);
+  _m$set('mortTaxPctInput',  taxPct);
+}
+
+/* ── Formula tab ─────────────────────────────────────── */
+function mortRenderFormula(){
+  if(!mortLastCalc) return;
+  const { loanAmt, rate, years, monthlyPI } = mortLastCalc;
+  const r = (rate / 100) / 12;
+  const n = years * 12;
+  const oneR = Math.pow(1 + r, n);
+  const numer = r * oneR;
+  const denom = oneR - 1;
+
+  const sub = _m$id('mortFormulaSub');
+  if(sub){
+    sub.innerHTML = `
+      <div class="mort-formula-line">P (principal) = <b>${formatCurrency(loanAmt, 2)}</b></div>
+      <div class="mort-formula-line">r (monthly rate) = ${rate.toFixed(2)}% ÷ 12 ÷ 100 = <b>${r.toFixed(6)}</b></div>
+      <div class="mort-formula-line">n (total payments) = ${years} years × 12 = <b>${n}</b></div>
+      <div class="mort-formula-line">(1 + r)<sup>n</sup> = <b>${oneR.toFixed(6)}</b></div>
+      <div class="mort-formula-line">r × (1 + r)<sup>n</sup> = <b>${numer.toFixed(6)}</b></div>
+      <div class="mort-formula-line">(1 + r)<sup>n</sup> − 1 = <b>${denom.toFixed(6)}</b></div>
+      <div class="mort-formula-line" style="margin-top:.5rem;padding-top:.6rem;border-top:1px dashed var(--border);">
+        M = P × [r(1+r)<sup>n</sup>] ÷ [(1+r)<sup>n</sup> − 1] = <b>${formatCurrency(monthlyPI, 2)}</b>
+      </div>`;
+  }
+
+  const steps = _m$id('mortFormulaSteps');
+  if(steps){
+    steps.innerHTML =
+      mortFormulaStep(1, 'Compute monthly interest rate',    `r = ${rate.toFixed(2)}% ÷ 12 ÷ 100 = <b>${r.toFixed(6)}</b>`) +
+      mortFormulaStep(2, 'Compute total number of payments', `n = ${years} × 12 = <b>${n}</b> months`) +
+      mortFormulaStep(3, 'Compound the rate over all payments', `(1 + r)<sup>n</sup> = (1 + ${r.toFixed(6)})<sup>${n}</sup> = <b>${oneR.toFixed(6)}</b>`) +
+      mortFormulaStep(4, 'Build the numerator',              `r × (1 + r)<sup>n</sup> = ${r.toFixed(6)} × ${oneR.toFixed(6)} = <b>${numer.toFixed(6)}</b>`) +
+      mortFormulaStep(5, 'Build the denominator',            `(1 + r)<sup>n</sup> − 1 = ${oneR.toFixed(6)} − 1 = <b>${denom.toFixed(6)}</b>`) +
+      mortFormulaStep(6, 'Multiply by principal',            `M = ${formatCurrency(loanAmt, 2)} × ${numer.toFixed(6)} ÷ ${denom.toFixed(6)} = <b>${formatCurrency(monthlyPI, 2)}</b>`);
+  }
+}
+function mortFormulaStep(num, title, body){
+  return `<div class="mort-formula-step">
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <span class="mort-formula-step-num">${num}</span>
+      <div style="min-width:0;flex:1;">
+        <div style="font-size:11.5px;font-weight:800;color:var(--text-1);margin-bottom:5px;">${title}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:var(--text-2);line-height:1.6;word-break:break-word;">${body}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Re-render on theme change so donut picks up new border color */
+(function mortThemeHook(){
+  const orig = window.pickThemeCard;
+  if(typeof orig === 'function'){
+    window.pickThemeCard = function(theme){
+      orig.apply(this, arguments);
+      try{ if(mortInited) mortCompute(); }catch(_){}
+    };
+  }
+})();
 function initApp(){
   loadAuthState();
   loadNotifications();
