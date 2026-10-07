@@ -40,9 +40,9 @@
     {
       "year": "2026",
       "salary": 195000,
-      "balances": { "k401": 140454, "roth": 15433, "tradIra": 0, "hsa": 8126, "espp": 28621, "cd": 6236, "c529": 3032 },
-      "invested": { "k401": 117738, "roth": 14017, "tradIra": 9374, "hsa": 15287, "espp": 30901, "cd": 6492, "c529": 2900 },
-      "contri":   { "employer": 4846, "user": 4846, "rollover": 0, "k401": 9700, "roth": 0, "tradIra": 0, "hsa": 6565, "espp": 13821, "cd": -11000, "c529": 2900 }
+      "balances": { "k401": 143517, "roth": 15739, "tradIra": 0, "hsa": 8432, "espp": 28915, "cd": 6236, "c529": 3178 },
+      "invested": { "k401": 117738, "roth": 14017, "tradIra": 9374, "hsa": 15287, "espp": 30901, "cd": 6492, "c529": 3000 },
+      "contri":   { "employer": 4846, "user": 4846, "rollover": 0, "k401": 4846, "roth": 0, "tradIra": 0, "hsa": 6565, "espp": 13821, "cd": -11000, "c529": 3000 }
     }
   ]
 }

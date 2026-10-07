@@ -219,7 +219,19 @@ html.glass-theme .chip.active{color:#FFFFFF}
 html.glass-theme .nav-item.active .nav-badge,
 html.glass-theme .mns-tile.active .mns-tile-icon{background:linear-gradient(135deg,#8B5CF6,#EC4899)}
 html.glass-theme .mobile-nav .nav-item.active{background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(236,72,153,.15));color:#FFFFFF;box-shadow:0 0 15px rgba(139,92,246,.30)}
-
+/* Glass theme — nav badges readable on frosted surfaces */
+html.glass-theme .nav-item .nav-badge,
+html.glass-theme .nav-item.active .nav-badge{
+  background:rgba(255,255,255,.10);
+  color:#FFFFFF !important;
+  border-color:rgba(255,255,255,.20);
+}
+html.glass-theme .nav-item.active .nav-badge{
+  background:linear-gradient(135deg,rgba(139,92,246,.35),rgba(236,72,153,.22));
+  border-color:rgba(139,92,246,.55);
+  color:#FFFFFF !important;
+  box-shadow:0 0 10px rgba(139,92,246,.35);
+}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.5rem .85rem;border-radius:var(--radius-sm);font-size:.75rem;font-weight:700;line-height:1;border:1px solid transparent;cursor:pointer;transition:all .15s ease;white-space:nowrap;color:var(--text-1);-webkit-tap-highlight-color:transparent}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--accent-text,#fff);box-shadow:0 4px 14px -6px rgba(16,185,129,.5)}
@@ -1531,7 +1543,58 @@ html.dark .lease-receipt-table tr.lease-row.is-neg td:last-child{color:#FDA4AF}
   .lease-gauge-wrap{padding:1rem 1rem .9rem}
   .lease-verdict{margin:0 1rem 1rem}
 }
+/* ═══════════════════════════════════════════════════════════
+   GLASS THEME — SOLID STICKY TABLE HEADERS
+   Prevents scrolled rows from showing through transparent
+   glass surfaces on thead th and frozen first columns.
+   ═══════════════════════════════════════════════════════════ */
+html.glass-theme .sticky-head table thead th,
+html.glass-theme .sticky-head table th,
+html.glass-theme .ledger-table thead th,
+html.glass-theme .ledger-table thead th:first-child{
+  background:#0D111A !important;
+  backdrop-filter:saturate(140%);
+  -webkit-backdrop-filter:saturate(140%);
+  box-shadow:0 1px 0 rgba(255,255,255,.06);
+}
 
+/* Ledger frozen first column (rows) */
+html.glass-theme .ledger-table tbody td:first-child{
+  background:#11151E !important;
+}
+html.glass-theme .ledger-table tbody tr:hover td:first-child{
+  background:#161B25 !important;
+}
+html.glass-theme .ledger-table tbody tr:hover td{
+  background-color:rgba(139,92,246,.12);
+}
+
+/* Comparison table — frozen year column */
+html.glass-theme .comparison-row .year-cell,
+html.glass-theme .comparison-row.is-current .year-cell{
+  background:#0D111A !important;
+}
+html.glass-theme .comparison-row.is-current .year-cell{
+  background:linear-gradient(rgba(139,92,246,.08),rgba(139,92,246,.08)),#0D111A !important;
+}
+
+/* Generic sticky-header tables used inside .sticky-head wrappers
+   (transactions, ledger drawer, comparison grid, etc.) */
+html.glass-theme .sticky-head{
+  background:#0D111A;
+}
+html.glass-theme #plaidTxTableWrapper,
+html.glass-theme #comparisonTable{
+  background:transparent;
+}
+
+/* Keep the mobile card layout untouched (thead is hidden there) */
+@media(max-width:768px){
+  html.glass-theme .sticky-head table thead th{
+    background:transparent !important;
+    box-shadow:none;
+  }
+}
 </style>
 </head>
 <body>
@@ -1880,12 +1943,12 @@ html.dark .lease-receipt-table tr.lease-row.is-neg td:last-child{color:#FDA4AF}
                   <i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Add Category</span>
                 </button>
               </div>
-              <div class="scroll-x sticky-head">
-                <table id="comparisonTable" class="w-full text-left text-xs mobile-card-table">
-                  <thead><tr style="border-bottom:1px solid var(--border);"></tr></thead>
-                  <tbody class="divide-y" style="border-color:var(--border);"></tbody>
-                </table>
-              </div>
+              <div class="scroll-x sticky-head" style="max-height:20rem;overflow-y:auto;overscroll-behavior:contain;">
+  <table id="comparisonTable" class="w-full text-left text-xs mobile-card-table">
+    <thead><tr style="border-bottom:1px solid var(--border);"></tr></thead>
+    <tbody class="divide-y" style="border-color:var(--border);"></tbody>
+  </table>
+</div>
             </div>
           </div>
 
@@ -2447,7 +2510,121 @@ html.dark .lease-receipt-table tr.lease-row.is-neg td:last-child{color:#FDA4AF}
 
         </div>
       </div>
+<div class="wb-pane" data-wb-pane="rule72">
 
+  <div class="ps-hero">
+    <div class="ps-hero-main">
+      <span class="ps-hero-label">Doubling Result</span>
+      <div class="ps-hero-value" id="r72HeroValue">—</div>
+      <div class="ps-hero-sub" id="r72HeroSub">Enter a rate to calculate</div>
+    </div>
+    <div class="ps-hero-stats">
+      <div class="ps-stat">
+        <span class="ps-stat-label">Rate</span>
+        <div class="ps-stat-value" id="r72HeroRate">—</div>
+        <div class="ps-stat-sub">annual return</div>
+      </div>
+      <div class="ps-stat">
+        <span class="ps-stat-label">Exact Doubling</span>
+        <div class="ps-stat-value" id="r72HeroExact">—</div>
+        <div class="ps-stat-sub">compounded</div>
+      </div>
+      <div class="ps-stat">
+        <span class="ps-stat-label">Final Amount</span>
+        <div class="ps-stat-value" id="r72HeroFinal">—</div>
+        <div class="ps-stat-sub">2× principal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ps-layout">
+
+    <div class="ps-controls">
+
+      <div class="ps-block">
+        <div class="ps-block-head">
+          <span class="ps-block-label">Solve For</span>
+        </div>
+        <div class="ps-seg" id="r72ModeSeg">
+          <button type="button" class="ps-seg-item active" data-mode="rate" onclick="r72PickMode('rate')">Years from Rate</button>
+          <button type="button" class="ps-seg-item" data-mode="years" onclick="r72PickMode('years')">Rate from Years</button>
+        </div>
+      </div>
+
+      <div class="ps-block">
+        <div class="ps-block-head">
+          <span class="ps-block-label">Inputs</span>
+          <button type="button" class="ps-mini-btn" onclick="r72Reset()">
+            <i data-lucide="rotate-ccw"></i> Reset
+          </button>
+        </div>
+
+        <div class="ps-field" id="r72RateField">
+          <label class="ps-field-label">
+            <span>Annual Return / Interest Rate</span>
+            <span class="ps-field-hint" id="r72RateHint">8.00%</span>
+          </label>
+          <div class="ps-field-input">
+            <input type="number" id="r72Rate" class="ps-input" value="8" step="0.1" min="0.1"
+              oninput="r72SyncSlider('r72RateSlider','r72Rate'); r72Calc();">
+            <input type="range" id="r72RateSlider" class="slider-hero" min="0.1" max="30" step="0.1" value="8"
+              oninput="r72SyncInput('r72RateSlider','r72Rate'); r72Calc();">
+          </div>
+        </div>
+
+        <div class="ps-field hidden" id="r72YearsField">
+          <label class="ps-field-label">
+            <span>Desired Years to Double</span>
+            <span class="ps-field-hint" id="r72YearsHint">9.0 yrs</span>
+          </label>
+          <div class="ps-field-input">
+            <input type="number" id="r72Years" class="ps-input" value="9" step="1" min="0.1"
+              oninput="r72SyncSlider('r72YearsSlider','r72Years'); r72Calc();">
+            <input type="range" id="r72YearsSlider" class="slider-hero" min="1" max="50" step="1" value="9"
+              oninput="r72SyncInput('r72YearsSlider','r72Years'); r72Calc();">
+          </div>
+        </div>
+
+        <div class="ps-field">
+          <label class="ps-field-label">
+            <span>Initial Investment <span style="font-weight:600;opacity:.6;">(optional)</span></span>
+            <span class="ps-field-hint" id="r72InitialHint">$10,000</span>
+          </label>
+          <div class="ps-field-input">
+            <input type="number" id="r72Initial" class="ps-input" value="10000" step="1000" min="0"
+              oninput="r72SyncSlider('r72InitialSlider','r72Initial'); r72Calc();">
+            <input type="range" id="r72InitialSlider" class="slider-hero" min="0" max="1000000" step="1000" value="10000"
+              oninput="r72SyncInput('r72InitialSlider','r72Initial'); r72Calc();">
+          </div>
+        </div>
+      </div>
+
+      <div class="ps-banner">
+        <i data-lucide="info"></i>
+        <span>The <b>Rule of 72</b> divides 72 by the annual rate to approximate doubling time. It is a mental shortcut — most accurate near <b>8%</b>, slightly off at very low or very high rates.</span>
+      </div>
+
+    </div>
+
+    <div class="ps-receipt-wrap">
+      <div class="ps-receipt">
+        <div class="ps-receipt-head">
+          <div>
+            <div class="ps-receipt-eyebrow">Rule of 72</div>
+            <div class="ps-receipt-title">Step-by-Step Breakdown</div>
+          </div>
+          <span class="ps-receipt-badge" id="r72Badge">—</span>
+        </div>
+        <div class="ps-receipt-body">
+          <table class="ps-receipt-table">
+            <tbody id="r72ReceiptBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
       <div class="wb-pane" data-wb-pane="vehicle">
 
         <div class="flex items-center justify-between gap-3 mb-5 flex-wrap">
@@ -6608,6 +6785,7 @@ function restoreNavSections(){try{const st=JSON.parse(localStorage.getItem(NAV_S
 
 const WB_TOOLS_FLAT=[
   {id:'paycheck',label:'Paycheck',icon:'receipt',desc:'Take-home pay'},
+  {id:'rule72',label:'Rule of 72',icon:'calculator',desc:'Doubling time & required return'},
   {id:'vehicle',label:'Vehicle',icon:'car',desc:'Lease check & used-car valuation'},
   {id:'projections',label:'Projections',icon:'rocket',desc:'Growth projections'},
   {id:'fire',label:'Freedom',icon:'flame',desc:'FIRE progress'},
@@ -6617,6 +6795,7 @@ const WB_TOOLS_FLAT=[
 ];
 const WB_TOOL_GATES = {
   paycheck:    null,
+  rule72:      'wealth_blueprint',        // ← free, everyone gets it
   vehicle:     'wealth_blueprint',
   projections: 'wealth_blueprint',
   fire:        'fire_modelling',
@@ -7007,9 +7186,194 @@ function leaseCalc() {
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
+
 let currentVehicleMode = 'lease';
 let currentValPerspective = 'buying';
+/* ═══════════════════════════════════════════════════════════
+   RULE OF 72 CALCULATOR
+   ═══════════════════════════════════════════════════════════ */
+let currentR72Mode = 'rate';
 
+function r72PickMode(mode){
+  currentR72Mode = (mode === 'years') ? 'years' : 'rate';
+  document.querySelectorAll('#r72ModeSeg .ps-seg-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === currentR72Mode);
+  });
+  const rf = document.getElementById('r72RateField');
+  const yf = document.getElementById('r72YearsField');
+  if(rf) rf.classList.toggle('hidden', currentR72Mode !== 'rate');
+  if(yf) yf.classList.toggle('hidden', currentR72Mode !== 'years');
+  r72Calc();
+}
+
+function r72SyncSlider(sid, iid){
+  const s = document.getElementById(sid), i = document.getElementById(iid);
+  if(s && i) s.value = i.value;
+}
+function r72SyncInput(sid, iid){
+  const s = document.getElementById(sid), i = document.getElementById(iid);
+  if(s && i) i.value = s.value;
+}
+
+function r72Reset(){
+  const setV = (id, v) => { const el = document.getElementById(id); if(el) el.value = v; };
+  setV('r72Rate', 8);        setV('r72RateSlider', 8);
+  setV('r72Years', 9);       setV('r72YearsSlider', 9);
+  setV('r72Initial', 10000); setV('r72InitialSlider', 10000);
+  r72PickMode('rate');
+  if(typeof toast === 'function') toast('Rule of 72 calculator reset.', 'info', 1800);
+}
+
+function r72Fmt(n, decimals){
+  const d = decimals === undefined ? (Number.isInteger(n) ? 0 : 2) : decimals;
+  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+
+function r72RenderEmpty(){
+  setText('r72HeroValue', '—');
+  setText('r72HeroSub',   'Enter a positive value');
+  setText('r72HeroRate',  '—');
+  setText('r72HeroExact', '—');
+  setText('r72HeroFinal', '—');
+  const rb = document.getElementById('r72ReceiptBody');
+  if(rb){
+    rb.innerHTML = `<tr class="ps-receipt-section"><td colspan="3">Awaiting Input</td></tr>
+      <tr class="ps-receipt-row"><td colspan="3" style="text-align:center;color:var(--text-4);padding:2rem 1rem;">Enter a positive rate or year count to see the breakdown.</td></tr>`;
+  }
+  const badge = document.getElementById('r72Badge');
+  if(badge) badge.textContent = '—';
+}
+
+function r72Calc(){
+  const mode    = currentR72Mode;
+  const initial = parseFloat(document.getElementById('r72Initial')?.value) || 0;
+
+  let rate, years, resultYears, resultRate;
+
+  if(mode === 'rate'){
+    rate = parseFloat(document.getElementById('r72Rate')?.value) || 0;
+    if(rate <= 0){ r72RenderEmpty(); return; }
+    resultYears = 72 / rate;
+    years       = resultYears;
+    resultRate  = rate;
+  } else {
+    years = parseFloat(document.getElementById('r72Years')?.value) || 0;
+    if(years <= 0){ r72RenderEmpty(); return; }
+    resultRate  = 72 / years;
+    rate        = resultRate;
+    resultYears = years;
+  }
+
+  /* Exact compound-interest doubling: t = ln(2) / ln(1 + r) */
+  const r          = rate / 100;
+  const exactYears = Math.log(2) / Math.log(1 + r);
+  const finalAmount = initial > 0 ? initial * 2 : 0;
+
+  /* Hero values */
+  setText('r72HeroValue', mode === 'rate' ? resultYears.toFixed(2) + ' yrs' : resultRate.toFixed(2) + '%');
+  setText('r72HeroSub',   mode === 'rate'
+      ? 'to double at ' + rate.toFixed(2) + '% / yr'
+      : 'required rate to double in ' + years.toFixed(1) + ' yrs');
+  setText('r72HeroRate',  rate.toFixed(2) + '%');
+  setText('r72HeroExact', exactYears.toFixed(2) + ' yrs');
+  setText('r72HeroFinal', initial > 0 ? r72Fmt(finalAmount, 0) : '—');
+
+  /* Field hints */
+  const rh = document.getElementById('r72RateHint');    if(rh) rh.textContent = rate.toFixed(2) + '%';
+  const yh = document.getElementById('r72YearsHint');   if(yh) yh.textContent = years.toFixed(1) + ' yrs';
+  const ih = document.getElementById('r72InitialHint'); if(ih) ih.textContent = r72Fmt(initial, 0);
+
+  /* Receipt badge */
+  const badge = document.getElementById('r72Badge');
+  if(badge) badge.textContent = mode === 'rate' ? rate.toFixed(2) + '% / yr' : years.toFixed(1) + ' yrs';
+
+  /* Accuracy vs exact — drives the caveat copy */
+  const diffPct = exactYears > 0 ? ((resultYears - exactYears) / exactYears) * 100 : 0;
+  const absDiff = Math.abs(diffPct);
+  const accLabel = absDiff < 0.5 ? 'Excellent' : absDiff < 1.5 ? 'Very Good' : absDiff < 3 ? 'Good' : 'Approximate';
+
+  let caveatText;
+  if(rate >= 6 && rate <= 10){
+    caveatText = 'Excellent agreement — within 1% of exact compound interest. This range is where the Rule of 72 shines.';
+  } else if(rate < 6){
+    caveatText = 'Slightly overestimates time. The exact doubling is a touch faster than the shortcut suggests.';
+  } else {
+    caveatText = 'Slightly underestimates time. The exact doubling takes a touch longer than the shortcut suggests.';
+  }
+
+    /* Build receipt — every row uses exactly 3 columns:
+     [label] [muted detail] [value] */
+  const rb = document.getElementById('r72ReceiptBody');
+  if(!rb) return;
+
+  const cell = (label, mid, val) =>
+    `<tr class="ps-receipt-row"><td>${label}</td><td>${mid || ''}</td><td>${val || ''}</td></tr>`;
+
+  let h = '';
+
+  /* ─── 1. Core Calculation ─── */
+  h += `<tr class="ps-receipt-section"><td colspan="3">1 · Core Calculation</td></tr>`;
+  if(mode === 'rate'){
+    h += cell('Formula',      '', '72 ÷ Rate = Years');
+    h += cell('Substitution', '', `72 ÷ ${rate.toFixed(2)}`);
+    h += cell('Doubling time','', `${resultYears.toFixed(2)} yrs`);
+  } else {
+    h += cell('Formula',      '', '72 ÷ Years = Rate');
+    h += cell('Substitution', '', `72 ÷ ${years.toFixed(1)}`);
+    h += cell('Required rate','', `${resultRate.toFixed(2)}% / yr`);
+  }
+
+  /* ─── 2. Exact Compound Interest ─── */
+  h += `<tr class="ps-receipt-section"><td colspan="3">2 · Exact Compound Interest</td></tr>`;
+  h += cell('Formula',            '', 't = ln(2) ÷ ln(1 + r)');
+  h += cell('Exact doubling time','', `${exactYears.toFixed(2)} yrs`);
+  h += cell('Δ vs Rule of 72',    '', `${diffPct >= 0 ? '+' : ''}${diffPct.toFixed(2)}%`);
+  h += cell('Accuracy rating',    '', accLabel);
+
+  /* ─── 3. Practical Example ─── */
+  if(initial > 0){
+    const valueAtRule = initial * Math.pow(1 + r, resultYears);
+    h += `<tr class="ps-receipt-section"><td colspan="3">3 · Practical Example</td></tr>`;
+    h += cell('Initial investment', '', r72Fmt(initial, 0));
+    h += cell('Doubled amount',     '', r72Fmt(finalAmount, 0));
+    h += cell('Rule-of-72 timeline','', `${resultYears.toFixed(2)} yrs`);
+    h += cell('Exact timeline',     '', `${exactYears.toFixed(2)} yrs`);
+    h += cell('Value at rule-of-72 horizon', '', r72Fmt(valueAtRule, 0));
+  }
+
+  /* ─── 4. Caveat ─── */
+  h += `<tr class="ps-receipt-section"><td colspan="3">4 · Rule of 72 Caveat</td></tr>`;
+  h += `<tr class="ps-receipt-row"><td colspan="3" style="text-align:left;white-space:normal;font-family:inherit;font-weight:600;font-size:.75rem;line-height:1.6;color:var(--text-3);padding-top:.4rem;padding-bottom:.9rem;">${caveatText}</td></tr>`;
+
+  /* ─── Net line ─── */
+  h += `<tr class="ps-receipt-net"><td>Result</td><td>${mode === 'rate' ? rate.toFixed(2) + '%' : years.toFixed(1) + ' yrs'}</td><td>${mode === 'rate' ? resultYears.toFixed(2) + ' yrs' : resultRate.toFixed(2) + '%'}</td></tr>`;
+
+  rb.innerHTML = h;
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+/* Ensure the Rule of 72 receipt is populated as soon as the DOM is ready
+   and again the first time its pane becomes visible. */
+(function r72Boot(){
+  const run = () => { try{ r72PickMode(currentR72Mode); r72Calc(); }catch(e){ console.error('[r72 boot]', e); } };
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+
+  /* Second pass — after bootApp() has had a chance to build the pane */
+  window.addEventListener('load', () => setTimeout(run, 300));
+
+  /* Watch the pane for the moment it becomes visible (class change) */
+  const pane = document.querySelector('.wb-pane[data-wb-pane="rule72"]');
+  if(pane && typeof MutationObserver !== 'undefined'){
+    new MutationObserver(() => {
+      if(pane.classList.contains('active')) run();
+    }).observe(pane, { attributes: true, attributeFilter: ['class'] });
+  }
+})();
 function setVehicleMode(mode){
   currentVehicleMode = (mode === 'valuation') ? 'valuation' : 'lease';
   document.querySelectorAll('#vehicleModeSeg .seg-item').forEach(b => {
@@ -8076,6 +8440,14 @@ function applyPortfolioPayload(d){
   if(Array.isArray(d.defaultAccountData)) portfolioData = JSON.parse(JSON.stringify(d.defaultAccountData));
   localStorage.setItem('categoryPortfolioData', JSON.stringify(portfolioData));
   updateCurrencyLabels();
+  /* Back-fill: keep k401 in sync with its sub-fields on every load */
+portfolioData.forEach(r => {
+  if(!r.contri) r.contri = {};
+  r.contri.k401 = (Number(r.contri.employer) || 0)
+                + (Number(r.contri.user)     || 0)
+                + (Number(r.contri.rollover) || 0);
+});
+localStorage.setItem('categoryPortfolioData', JSON.stringify(portfolioData));
 }
 function ensureDefaultCategoriesAndLimits(){
   if(!categoriesConfig.length){
@@ -8335,7 +8707,7 @@ function dwAccounts(){const a=[...allAccounts()].sort((x,y)=>Math.abs(Number(y.b
 function dwSpend(){const f=getFilteredExpenseTransactions('exp');const t=f.reduce((s,x)=>s+(parseFloat(x.amount)||0),0);const b=parseFloat(expenseStore.monthlyBudget)||0;const p=b>0?Math.min(100,t/b*100):0;const c=p>85?'#BE123C':p>=50?'#B45309':'#059669';return `<div class="space-y-3"><div class="privacy-target text-2xl font-extrabold tracking-tight" style="color:#BE123C;">${formatCurrency(t,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">of ${formatCurrency(b,0)} monthly budget · ${expLocalDateRange.label}</div><div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:${c};transition:width .4s;"></div></div><div class="flex justify-between text-[10px] font-bold"><span style="color:var(--text-4);">${p.toFixed(1)}% used</span><span style="color:var(--text-3);">${f.length} transactions</span></div></div>`;}
 function dwRecent(){const l=getUnifiedTransactions().sort((a,b)=>new Date(b._date)-new Date(a._date)).slice(0,6);if(l.length===0)return `<div class="text-xs" style="color:var(--text-4);">No recent activity.</div>`;return `<div class="space-y-1">${l.map(tx=>{const c=expenseStore.categories.find(x=>x.id===tx._categoryId)||{label:'Uncategorized',color:'#71717A'};return `<div class="flex items-center gap-2 py-1"><span class="text-base shrink-0">${expenseEmoji(c)}</span><div class="min-w-0 flex-grow"><div class="text-[11px] font-bold truncate" style="color:var(--text-1);">${esc(tx._description)}</div><div class="text-[9px] font-mono" style="color:var(--text-4);">${tx._date}</div></div><div class="privacy-target text-[11px] font-extrabold font-mono shrink-0" style="color:#BE123C;">${formatCurrency(tx._amount)}</div></div>`;}).join('')}</div>`;}
 function dwFire(){const e=parseFloat($id('fireAnnualExpenses')?.value)||0;const s=parseFloat($id('fireWithdrawalRate')?.value)||4;const t=s>0?e/(s/100):0;const c=unifiedStore.startingBal;const p=t>0?Math.min(100,c/t*100):0;return `<div class="space-y-3"><div class="privacy-target text-2xl font-extrabold" style="color:var(--text-1);">${formatCurrency(c,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">of ${formatCurrency(t,0)} target</div><div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent-2),#DB2777);transition:width .4s;"></div></div><div class="flex items-center justify-between text-[11px] font-bold"><span style="color:#BE185D;">${p.toFixed(1)}%</span><span style="color:var(--text-3);">${c>=t?'✓ Target met':'In progress'}</span></div></div>`;}
-function dwContrib(){const y=$id('yearFilter')?.value||currentYear();const d=portfolioData.find(x=>x.year===y);if(!d)return'';const items=[{label:'401(k)',emoji:'🏦',limitId:'limit401k',val:d.contri?.user||0},{label:'IRA',emoji:'🌱',limitId:'limitIra',val:(d.contri?.roth||0)+(d.contri?.tradIra||0)},{label:'HSA',emoji:'🩺',limitId:'limitHsa',val:d.contri?.hsa||0},{label:'529',emoji:'🎓',limitId:'limit529',val:d.contri?.c529||0}];return `<div class="space-y-2.5">${items.map(i=>{const l=parseFloat($id(i.limitId)?.value)||1;const p=Math.min(100,i.val/l*100);return `<div class="space-y-1"><div class="flex justify-between text-[10px] font-bold"><span style="color:var(--text-2);">${i.emoji} ${i.label}</span><span class="privacy-target font-mono" style="color:var(--text-3);">${formatCurrency(i.val,0)} / ${formatCurrency(l,0)}</span></div><div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));"></div></div></div>`;}).join('')}</div>`;}
+function dwContrib(){const y=$id('yearFilter')?.value||currentYear();const d=portfolioData.find(x=>x.year===y);if(!d)return'';const items=[{label:'401(k)',emoji:'🏦',limitId:'limit401k',val:(d.contri?.user||0)+(d.contri?.employer||0)},{label:'IRA',emoji:'🌱',limitId:'limitIra',val:(d.contri?.roth||0)+(d.contri?.tradIra||0)},{label:'HSA',emoji:'🩺',limitId:'limitHsa',val:d.contri?.hsa||0},{label:'529',emoji:'🎓',limitId:'limit529',val:d.contri?.c529||0}];return `<div class="space-y-2.5">${items.map(i=>{const l=parseFloat($id(i.limitId)?.value)||1;const p=Math.min(100,i.val/l*100);return `<div class="space-y-1"><div class="flex justify-between text-[10px] font-bold"><span style="color:var(--text-2);">${i.emoji} ${i.label}</span><span class="privacy-target font-mono" style="color:var(--text-3);">${formatCurrency(i.val,0)} / ${formatCurrency(l,0)}</span></div><div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));"></div></div></div>`;}).join('')}</div>`;}
 function dwTaxBuckets(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];if(!d)return'';const h=appSettings.hiddenCategories.portfolio||[];const c=categoriesConfig.filter(x=>!h.includes(x.key));const t=getTotalBal(d);let ex=0,df=0,tx=0,sp=0;c.forEach(cat=>{const v=d.balances[cat.key]||0;if(cat.type==='exempt')ex+=v;else if(cat.type==='deferred')df+=v;else if(cat.type==='special')sp+=v;else tx+=v;});const tot=t||1;const rows=[{l:'Tax-Exempt',e:'🌱',v:ex,c:'#BE185D'},{l:'Tax-Deferred',e:'📊',v:df,c:'#6D28D9'},{l:'Taxable',e:'💵',v:tx,c:'#B45309'},{l:'Special',e:'🩺',v:sp,c:'#1D4ED8'}];return `<div class="space-y-2">${rows.map(r=>`<div class="flex items-center justify-between"><span class="text-[11px] font-bold flex items-center gap-1.5" style="color:var(--text-2);">${r.e} ${r.l}</span><div class="text-right"><span class="privacy-target text-xs font-extrabold font-mono" style="color:${r.c};">${formatCurrency(r.v,0)}</span><span class="text-[9px] font-bold ml-1" style="color:var(--text-4);">${(r.v/tot*100).toFixed(0)}%</span></div></div>`).join('')}</div>`;}
 function dwCategories(){const h=appSettings.hiddenCategories.expense||[];const f=getFilteredExpenseTransactions('exp');const t=expenseStore.categories.filter(c=>!h.includes(c.id)).map(c=>({...c,total:f.filter(x=>x.categoryId===c.id).reduce((s,x)=>s+(parseFloat(x.amount)||0),0)})).filter(c=>c.total>0).sort((a,b)=>b.total-a.total).slice(0,5);if(t.length===0)return `<div class="text-xs" style="color:var(--text-4);">No spend data yet.</div>`;return `<div class="space-y-2">${t.map(c=>`<div class="flex items-center gap-2"><span class="text-base shrink-0">${expenseEmoji(c)}</span><span class="text-[11px] font-bold truncate flex-grow" style="color:var(--text-2);">${esc(c.label)}</span><span class="privacy-target text-[11px] font-extrabold font-mono shrink-0" style="color:var(--text-1);">${formatCurrency(c.total,0)}</span></div>`).join('')}</div>`;}
 function dwSubs(){const f=getFilteredExpenseTransactions('exp');const s=f.filter(x=>x.isRecurring);const t=s.reduce((a,x)=>a+(parseFloat(x.amount)||0),0);return `<div class="space-y-2"><div class="privacy-target text-xl font-extrabold" style="color:#6D28D9;">${formatCurrency(t,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">/ month across ${s.length} subscriptions</div></div>`;}
@@ -8355,7 +8727,17 @@ function dashDrop(e){if(!dashCustomizeMode||!_dashDragSrc)return;e.preventDefaul
 function dashDragEnd(e){document.querySelectorAll('.dash-widget').forEach(el=>el.classList.remove('dragging','drag-over'));_dashDragSrc=null;}
 function getTotalBal(data){if(!data||!data.balances)return 0;const h=appSettings.hiddenCategories.portfolio||[];return Object.entries(data.balances).reduce((s,[k,v])=>{if(h.includes(k))return s;return s+(Number(v)||0);},0);}
 function getTotalInvested(data){const h=appSettings.hiddenCategories.portfolio||[];return Object.entries(data.invested||{}).reduce((s,[k,v])=>h.includes(k)?s:s+Number(v),0);}
-function getTotalContri(data){const h=appSettings.hiddenCategories.portfolio||[];return Object.entries(data.contri||{}).reduce((s,[k,v])=>h.includes(k)?s:s+Number(v),0);}
+function getTotalContri(data){
+  const h = appSettings.hiddenCategories.portfolio || [];
+  /* These three are sub-components of `k401` — counting them too would
+     double the 401(k) money in every total. */
+  const SUBFIELDS = ['employer', 'user', 'rollover'];
+  return Object.entries(data.contri || {}).reduce((s, [k, v]) => {
+    if (h.includes(k))       return s;
+    if (SUBFIELDS.includes(k)) return s;
+    return s + (Number(v) || 0);
+  }, 0);
+}
 function updateDashboard(){const yf=$id('yearFilter');if(!yf)return;const y=yf.value;const i=portfolioData.findIndex(d=>d.year===y);const d=portfolioData[i],p=i>0?portfolioData[i-1]:null;if(d){renderKPIs(d,p);if(lastSelectedYear!==y){updateDefaultLimitsForYear(y);lastSelectedYear=y;const ps=$id('payCustomSalary');if(ps&&tempSalaryOverride.paycheck===null)ps.value=getEffectiveAnnualIncome()||0;initAllToolSliders();}renderIRSProgress();renderCharts(d);renderMiniCharts();if(!unifiedStore.isUserOverridden){unifiedStore.startingBal=getTotalBal(d);const c=d.contri?(d.contri.user||0):0;unifiedStore.monthlyContri=Math.round(c/12)||0;if($id('projStartingBal')){$id('projStartingBal').value=unifiedStore.startingBal;$id('projStartingBalSlider').value=unifiedStore.startingBal;$id('projStartingBalVal').innerText=Math.round(unifiedStore.startingBal).toLocaleString();}if($id('projMonthlyContri')){$id('projMonthlyContri').value=unifiedStore.monthlyContri;$id('projMonthlyContriSlider').value=unifiedStore.monthlyContri;$id('projMonthlyContriVal').innerText=unifiedStore.monthlyContri.toLocaleString();}}propagateUnifiedDataStore();renderTaxBuckets();renderRebalancer();renderStrategicHub();calculatePaystub();applyPrivacyState();dashRender();updatePortfolioDataStatus();}}
 function propagateUnifiedDataStore(){updateProjections();calculateFIRE();calculateEmergencyFund();calculateInflation();applyPrivacyState();}
 function syncProjectionsAndPropagate(){const s=$id('projStartingBal'),m=$id('projMonthlyContri'),a=$id('projAnnualReturn');if(s)unifiedStore.startingBal=parseFloat(s.value)||0;if(m)unifiedStore.monthlyContri=parseFloat(m.value)||0;if(a)unifiedStore.annualReturn=parseFloat(a.value)||0;unifiedStore.isUserOverridden=true;propagateUnifiedDataStore();}
@@ -8381,7 +8763,7 @@ function renderIRSProgress(){
   const cy=cd.getFullYear().toString();
   const am = y===cy ? cd.getMonth()+1 : (parseInt(y)<parseInt(cy) ? 12 : 1);
 
-  const u4=d.contri?(d.contri.user||0):0;
+const u4=d.contri?((d.contri.user||0)+(d.contri.employer||0)):0;
   const ui=d.contri?((d.contri.roth||0)+(d.contri.tradIra||0)):0;
   const uh=d.contri?(d.contri.hsa||0):0;
   const u5=d.contri?(d.contri.c529||0):0;
@@ -8722,7 +9104,27 @@ function addNewYearRow(){
   toast(`Added ${ny} — every category starts at 0.`,'success');
   populateLedgerYearFilter();
 }
-function syncInputsToData(){portfolioData.forEach((row,i)=>{row.salary=parseFloat($id(`sal-${i}`)?.value)||0;categoriesConfig.forEach(c=>{if($id(`${c.key}-${i}`))row.balances[c.key]=parseFloat($id(`${c.key}-${i}`).value)||0;if($id(`inv_${c.key}-${i}`))row.invested[c.key]=parseFloat($id(`inv_${c.key}-${i}`).value)||0;if($id(`c_${c.key}-${i}`))row.contri[c.key]=parseFloat($id(`c_${c.key}-${i}`).value)||0;});if($id(`emp-${i}`))row.contri.employer=parseFloat($id(`emp-${i}`).value)||0;if($id(`user-${i}`))row.contri.user=parseFloat($id(`user-${i}`).value)||0;if($id(`roll-${i}`))row.contri.rollover=parseFloat($id(`roll-${i}`).value)||0;});updateDashboard();}
+function syncInputsToData(){
+  portfolioData.forEach((row,i)=>{
+    row.salary = parseFloat($id(`sal-${i}`)?.value) || 0;
+    categoriesConfig.forEach(c=>{
+      if($id(`${c.key}-${i}`))        row.balances[c.key] = parseFloat($id(`${c.key}-${i}`).value) || 0;
+      if($id(`inv_${c.key}-${i}`))    row.invested[c.key] = parseFloat($id(`inv_${c.key}-${i}`).value) || 0;
+      if($id(`c_${c.key}-${i}`))      row.contri[c.key]   = parseFloat($id(`c_${c.key}-${i}`).value) || 0;
+    });
+    if($id(`emp-${i}`))  row.contri.employer = parseFloat($id(`emp-${i}`).value) || 0;
+    if($id(`user-${i}`)) row.contri.user     = parseFloat($id(`user-${i}`).value) || 0;
+    if($id(`roll-${i}`)) row.contri.rollover = parseFloat($id(`roll-${i}`).value) || 0;
+
+    /* 401(k) = Employer + User + Rollover — kept in sync automatically */
+    row.contri.k401 = (Number(row.contri.employer) || 0)
+                    + (Number(row.contri.user)     || 0)
+                    + (Number(row.contri.rollover) || 0);
+    const k401El = $id(`k401calc-${i}`);
+    if(k401El) k401El.textContent = formatCurrency(row.contri.k401, 0);
+  });
+  updateDashboard();
+}
 function getMappedCategoriesForYear(year){const r=[];const a=allAccounts().filter(x=>x.mapping&&x.mapping.enabled&&x.mapping.year===year);const seen=new Set();a.forEach(x=>{const k=x.mapping.portfolioKey;if(!seen.has(k)){seen.add(k);const cat=categoriesConfig.find(c=>c.key===k);if(cat)r.push(cat);}});return r;}
 function buildDynamicTableHeaders(){const bh=document.querySelector("#balancesTable thead tr"),ih=document.querySelector("#investedTable thead tr"),ch=document.querySelector("#contributionsTable thead tr");const sy=getCurrencySymbol();const h=appSettings.hiddenCategories.portfolio||[];const vc=categoriesConfig.filter(x=>!h.includes(x.key));let bHtml=`<th class="py-3 px-4">Year</th><th class="py-3 px-4 text-right">Salary (${sy})</th>`,iHtml=`<th class="py-3 px-4">Year</th>`;vc.forEach(cat=>{bHtml+=`<th class="py-3 px-4 text-right">${cat.label}</th>`;iHtml+=`<th class="py-3 px-4 text-right">${cat.label} Basis</th>`;});bHtml+=`<th class="py-3 px-4 text-right">Total</th><th class="py-3 px-4 text-right">Invested</th><th class="py-3 px-4 text-right">Gain (${sy})</th><th class="py-3 px-4 text-right">Gain (%)</th><th class="py-3 px-4">Mapped</th>`;iHtml+=`<th class="py-3 px-4 text-right">Total Invested</th>`;if(bh)bh.innerHTML=bHtml;if(ih)ih.innerHTML=iHtml;let cHtml=`<th class="py-3 px-4">Year</th><th class="py-3 px-4 text-right">Employer</th><th class="py-3 px-4 text-right">User</th><th class="py-3 px-4 text-right">Rollover</th>`;vc.forEach(cat=>{cHtml+=`<th class="py-3 px-4 text-right">${cat.label}</th>`;});cHtml+=`<th class="py-3 px-4 text-right">Return (${sy})</th><th class="py-3 px-4 text-right">Return (%)</th>`;if(ch)ch.innerHTML=cHtml;updateCurrencyLabels();}
 function buildDynamicMiniCards(){
@@ -8736,7 +9138,19 @@ function buildDynamicMiniCards(){
     c.innerHTML += `<div class="surface p-4"><div class="flex justify-between items-center mb-1.5 gap-2"><span class="text-xs font-bold flex items-center gap-1.5 min-w-0" style="color:var(--text-2);"><span class="text-sm leading-none shrink-0">${categoryEmoji(cat)}</span><span class="truncate">${cat.label}</span></span><span id="latest_${cat.key}" class="privacy-target text-xs font-bold shrink-0" style="color:${cat.color};">${getCurrencySymbol()}0</span></div><div class="space-y-1 text-[10px] mb-2.5" style="color:var(--text-4);"><div class="flex justify-between gap-2"><span>Invested Basis</span><b id="invested_${cat.key}" class="privacy-target" style="color:var(--text-2);">${getCurrencySymbol()}0</b></div><div class="flex justify-between gap-2"><span>Overall Growth</span><b id="gain_${cat.key}" class="privacy-target">${getCurrencySymbol()}0 (0%)</b></div><div class="flex justify-between gap-2 pt-1" style="border-top:1px solid var(--border);"><span>Yearly Gain</span><b id="yearly_gain_${cat.key}" class="privacy-target">${getCurrencySymbol()}0 (0%)</b></div></div><div class="h-20"><canvas id="chartMini_${cat.key}"></canvas></div></div>`;
   });
 }
-function renderTables(){const bb=document.querySelector("#balancesTable tbody"),ib=document.querySelector("#investedTable tbody"),cb=document.querySelector("#contributionsTable tbody");if(bb)bb.innerHTML="";if(ib)ib.innerHTML="";if(cb)cb.innerHTML="";const h=appSettings.hiddenCategories.portfolio||[];const vc=categoriesConfig.filter(x=>!h.includes(x.key));const sd=[...portfolioData].sort((a,b)=>parseInt(b.year)-parseInt(a.year));const fd=ledgerYearFilter==='all'?sd:sd.filter(r=>r.year===ledgerYearFilter);fd.forEach(row=>{const i=portfolioData.findIndex(d=>d.year===row.year);if(!row.balances)row.balances={};if(!row.invested)row.invested={};if(!row.contri)row.contri={};const tB=getTotalBal(row),tI=getTotalInvested(row);const tgv=tB-tI;const tgp=tI>0?((tgv/tI)*100).toFixed(2):"0.00";const s=tgv>=0?'+':'';let bC=`<td class="py-3 px-4 font-bold" style="color:var(--text-1);" data-label="Year">${row.year}</td><td class="py-3 px-4 text-right" data-label="Salary (${getCurrencySymbol()})"><input type="number" class="input !w-24 !py-1 text-right font-mono" value="${row.salary||0}" id="sal-${i}" oninput="syncInputsToData()"></td>`;let iC=`<td class="py-3 px-4 font-bold" style="color:var(--text-1);" data-label="Year">${row.year}</td>`;vc.forEach(cat=>{bC+=`<td class="py-3 px-4 text-right" data-label="${cat.label}"><input type="number" class="input !w-24 !py-1 text-right font-mono" value="${row.balances[cat.key]||0}" id="${cat.key}-${i}" oninput="syncInputsToData()"></td>`;iC+=`<td class="py-3 px-4 text-right" data-label="${cat.label} Basis"><input type="number" class="input !w-24 !py-1 text-right font-mono" value="${row.invested[cat.key]||0}" id="inv_${cat.key}-${i}" oninput="syncInputsToData()"></td>`;});bC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:var(--text-2);" data-label="Total"><span>${formatCurrency(tB,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:var(--text-2);" data-label="Invested"><span>${formatCurrency(tI,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${tgv>=0?'#059669':'#BE123C'};" data-label="Gain ($)"><span>${s}${formatCurrency(tgv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${tgv>=0?'#059669':'#BE123C'};" data-label="Gain (%)"><span>${s}${tgp}%</span></td>`;const mc=getMappedCategoriesForYear(row.year);if(mc.length===0)bC+=`<td class="py-3 px-4" data-label="Mapped"><span class="text-[10px] italic" style="color:var(--text-4);">Manual entry</span></td>`;else bC+=`<td class="py-3 px-4" data-label="Mapped"><div class="flex flex-wrap gap-1 justify-end">${mc.map(c=>`<span class="badge badge-violet whitespace-nowrap"><span>${categoryEmoji(c)}</span>${c.label}</span>`).join('')}</div></td>`;iC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:var(--text-2);" data-label="Total Invested"><span>${formatCurrency(tI,0)}</span></td>`;if(bb)bb.innerHTML+=`<tr class="transition-all">${bC}</tr>`;if(ib)ib.innerHTML+=`<tr class="transition-all">${iC}</tr>`;let cC=`<td class="py-3 px-4 font-bold" style="color:var(--text-1);" data-label="Year">${row.year}</td><td class="py-3 px-4 text-right" data-label="Employer"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri.employer||0}" id="emp-${i}" oninput="syncInputsToData()"></td><td class="py-3 px-4 text-right" data-label="User"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri.user||0}" id="user-${i}" oninput="syncInputsToData()"></td><td class="py-3 px-4 text-right" data-label="Rollover"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri.rollover||0}" id="roll-${i}" oninput="syncInputsToData()"></td>`;vc.forEach(cat=>{cC+=`<td class="py-3 px-4 text-right" data-label="${cat.label}"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri[cat.key]||0}" id="c_${cat.key}-${i}" oninput="syncInputsToData()"></td>`;});const r=getDynamicReturns(i);cC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:${r.amount>=0?'#059669':'#BE123C'};" data-label="Return ($)"><span>${formatCurrency(r.amount,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${r.pct>=0?'#059669':'#BE123C'};" data-label="Return (%)"><span>${r.pct}%</span></td>`;if(cb)cb.innerHTML+=`<tr class="transition-all">${cC}</tr>`;});}
+function renderTables(){const bb=document.querySelector("#balancesTable tbody"),ib=document.querySelector("#investedTable tbody"),cb=document.querySelector("#contributionsTable tbody");if(bb)bb.innerHTML="";if(ib)ib.innerHTML="";if(cb)cb.innerHTML="";const h=appSettings.hiddenCategories.portfolio||[];const vc=categoriesConfig.filter(x=>!h.includes(x.key));const sd=[...portfolioData].sort((a,b)=>parseInt(b.year)-parseInt(a.year));const fd=ledgerYearFilter==='all'?sd:sd.filter(r=>r.year===ledgerYearFilter);fd.forEach(row=>{const i=portfolioData.findIndex(d=>d.year===row.year);if(!row.balances)row.balances={};if(!row.invested)row.invested={};if(!row.contri)row.contri={};const tB=getTotalBal(row),tI=getTotalInvested(row);const tgv=tB-tI;const tgp=tI>0?((tgv/tI)*100).toFixed(2):"0.00";const s=tgv>=0?'+':'';let bC=`<td class="py-3 px-4 font-bold" style="color:var(--text-1);" data-label="Year">${row.year}</td><td class="py-3 px-4 text-right" data-label="Salary (${getCurrencySymbol()})"><input type="number" class="input !w-24 !py-1 text-right font-mono" value="${row.salary||0}" id="sal-${i}" oninput="syncInputsToData()"></td>`;let iC=`<td class="py-3 px-4 font-bold" style="color:var(--text-1);" data-label="Year">${row.year}</td>`;vc.forEach(cat=>{bC+=`<td class="py-3 px-4 text-right" data-label="${cat.label}"><input type="number" class="input !w-24 !py-1 text-right font-mono" value="${row.balances[cat.key]||0}" id="${cat.key}-${i}" oninput="syncInputsToData()"></td>`;iC+=`<td class="py-3 px-4 text-right" data-label="${cat.label} Basis"><input type="number" class="input !w-24 !py-1 text-right font-mono" value="${row.invested[cat.key]||0}" id="inv_${cat.key}-${i}" oninput="syncInputsToData()"></td>`;});bC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:var(--text-2);" data-label="Total"><span>${formatCurrency(tB,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:var(--text-2);" data-label="Invested"><span>${formatCurrency(tI,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${tgv>=0?'#059669':'#BE123C'};" data-label="Gain ($)"><span>${s}${formatCurrency(tgv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${tgv>=0?'#059669':'#BE123C'};" data-label="Gain (%)"><span>${s}${tgp}%</span></td>`;const mc=getMappedCategoriesForYear(row.year);if(mc.length===0)bC+=`<td class="py-3 px-4" data-label="Mapped"><span class="text-[10px] italic" style="color:var(--text-4);">Manual entry</span></td>`;else bC+=`<td class="py-3 px-4" data-label="Mapped"><div class="flex flex-wrap gap-1 justify-end">${mc.map(c=>`<span class="badge badge-violet whitespace-nowrap"><span>${categoryEmoji(c)}</span>${c.label}</span>`).join('')}</div></td>`;iC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:var(--text-2);" data-label="Total Invested"><span>${formatCurrency(tI,0)}</span></td>`;if(bb)bb.innerHTML+=`<tr class="transition-all">${bC}</tr>`;if(ib)ib.innerHTML+=`<tr class="transition-all">${iC}</tr>`;let cC=`<td class="py-3 px-4 font-bold" style="color:var(--text-1);" data-label="Year">${row.year}</td><td class="py-3 px-4 text-right" data-label="Employer"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri.employer||0}" id="emp-${i}" oninput="syncInputsToData()"></td><td class="py-3 px-4 text-right" data-label="User"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri.user||0}" id="user-${i}" oninput="syncInputsToData()"></td><td class="py-3 px-4 text-right" data-label="Rollover"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri.rollover||0}" id="roll-${i}" oninput="syncInputsToData()"></td>`;
+vc.forEach(cat=>{
+  if(cat.key === 'k401'){
+    /* 401(k) is read-only — auto-calculated from Employer + User + Rollover */
+    const k401Total = (Number(row.contri.employer) || 0)
+                    + (Number(row.contri.user)     || 0)
+                    + (Number(row.contri.rollover) || 0);
+    row.contri.k401 = k401Total;
+    cC+=`<td class="py-3 px-4 text-right" data-label="${cat.label}"><span id="k401calc-${i}" class="text-xs font-bold font-mono privacy-target" style="color:#6D28D9;" title="Auto-calculated: Employer + User + Rollover">${formatCurrency(k401Total,0)}</span></td>`;
+  } else {
+    cC+=`<td class="py-3 px-4 text-right" data-label="${cat.label}"><input type="number" class="input !w-20 !py-1 text-right font-mono" value="${row.contri[cat.key]||0}" id="c_${cat.key}-${i}" oninput="syncInputsToData()"></td>`;
+  }
+});const r=getDynamicReturns(i);cC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:${r.amount>=0?'#059669':'#BE123C'};" data-label="Return ($)"><span>${formatCurrency(r.amount,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${r.pct>=0?'#059669':'#BE123C'};" data-label="Return (%)"><span>${r.pct}%</span></td>`;if(cb)cb.innerHTML+=`<tr class="transition-all">${cC}</tr>`;});}
 
 function renderCharts(sd){
   if(growthChart) growthChart.destroy();
