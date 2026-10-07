@@ -8120,6 +8120,7 @@ const TAB_TITLES={
 let currentTabId='tab-dashboard';
 function updateTabHeading(tabId){const m=TAB_TITLES[tabId];if(!m)return;const h=$id('activeTabHeading'),s=$id('activeTabSubtitle'),i=$id('tabIconWrap');if(h)h.innerText=m.title;if(s)s.innerText=m.sub;if(i)i.innerHTML=`<i data-lucide="${m.icon}" class="w-5 h-5"></i>`;if(typeof lucide!=='undefined')lucide.createIcons();}
 function toggleMobileMenu(){const a=document.querySelector('aside.desktop-sidebar'),o=$id('mobileMenuOverlay');if(a)a.classList.toggle('mobile-open');if(o)o.classList.toggle('hidden');}
+
 function switchMainTab(event,tabId,scrollTop=false){
   document.querySelectorAll('.main-tab-content').forEach(el=>el.classList.add('hidden'));
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
@@ -8133,10 +8134,46 @@ function switchMainTab(event,tabId,scrollTop=false){
   if(event&&event.currentTarget&&event.currentTarget.classList.contains('nav-item'))event.currentTarget.classList.add('active');
   const a=document.querySelector('aside.desktop-sidebar');if(a&&a.classList.contains('mobile-open'))toggleMobileMenu();
   const m=$id('mainScroll');if(m)m.scrollTop=0;
-  if(tabId==='tab-dashboard'){ dashRender(); refreshOnboarding(); }
+
+  if(tabId==='tab-dashboard'){
+    dashRender();
+    refreshOnboarding();
+    /* Deferred pass — re-measure every dashboard chart after layout settles */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      try{ refreshAllYearCharts(); }catch(e){ console.warn(e); }
+      [_dashGrowthChart, _dashAllocChart, _dashProjChart].forEach(ch => {
+        try{ ch && ch.resize(); }catch(_){}
+      });
+    }));
+  }
   else if(tabId==='tab-overview'){
-    setTimeout(()=>{document.querySelectorAll('#tab-overview canvas').forEach(cv=>{try{ const inst = (typeof Chart!=='undefined' && Chart.getChart) ? Chart.getChart(cv) : null; if(inst) inst.resize(); }catch(_){}});}, 480);
-    requestAnimationFrame(()=>{try{const y = $id('yearFilter')?.value || currentYear();const d = portfolioData.find(x=>x.year===y) || portfolioData[portfolioData.length-1];if(d) renderCharts(d);renderComparisonTable();renderMiniCharts();renderRebalancer();updatePortfolioDataStatus();}catch(_){}});
+    setTimeout(()=>{
+      document.querySelectorAll('#tab-overview canvas').forEach(cv=>{
+        try{
+          const inst = (typeof Chart!=='undefined' && Chart.getChart) ? Chart.getChart(cv) : null;
+          if(inst) inst.resize();
+        }catch(_){}
+      });
+    }, 480);
+
+    requestAnimationFrame(()=>{
+      try{
+        const y = $id('yearFilter')?.value || currentYear();
+        const d = portfolioData.find(x=>x.year===y) || portfolioData[portfolioData.length-1];
+        if(d) renderCharts(d);
+        renderComparisonTable();
+        renderMiniCharts();
+        renderRebalancer();
+        updatePortfolioDataStatus();
+      }catch(_){}
+      /* Second pass — deferred chart refresh after canvases are measurable */
+      requestAnimationFrame(() => {
+        try{ refreshAllYearCharts(); }catch(e){ console.warn(e); }
+        [growthChart, categoryChart, historyChart, projectionChart].forEach(ch => {
+          try{ ch && ch.resize(); }catch(_){}
+        });
+      });
+    });
   }
   else if(tabId==='tab-goals') initGoalsTab();
   else if(tabId==='tab-credit') initCreditTab();
@@ -8151,13 +8188,14 @@ function switchMainTab(event,tabId,scrollTop=false){
   }
   else if(tabId==='tab-settings'){ loadSettingsUI(); const ts=_pendingSettingsSection||'profile'; _pendingSettingsSection=null; switchSettingsSection(ts); }
   else if(tabId==='tab-pricing'){ renderSubscriptionUI(); }
-    applyPrivacyState();updateFilterCountBadges();
+
+  applyPrivacyState();
+  updateFilterCountBadges();
   updateMobileBottomNav(tabId);
   setTimeout(renderChartToggles,50);
   if(tabId === 'tab-pricing'){ renderSubscriptionUI(); }
   setTimeout(renderTabLockOverlays, 30);
 }
-
 const MOBILE_NAV_SECTIONS = [
   { label:'Money', items:[
     { tab:'tab-dashboard',    icon:'gauge',             label:'Dashboard' },
@@ -8413,7 +8451,46 @@ function executeCommand(i){const f=window._cmdFiltered||[];const item=f[i];if(!i
 $id('cmdInput')?.addEventListener('input',e=>renderCommandList(e.target.value));
 $id('cmdInput')?.addEventListener('keydown',e=>{const f=window._cmdFiltered||[];if(e.key==='ArrowDown'){e.preventDefault();cmdSelectedIdx=Math.min(f.length-1,cmdSelectedIdx+1);renderCommandList(e.target.value);}else if(e.key==='ArrowUp'){e.preventDefault();cmdSelectedIdx=Math.max(0,cmdSelectedIdx-1);renderCommandList(e.target.value);}else if(e.key==='Enter'){e.preventDefault();executeCommand(cmdSelectedIdx);}else if(e.key==='Escape'){closeCommandPalette();}});
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommandPalette();}if(e.key==='Escape'){closeCommandPalette();closeDatePopover();closeTxLocalDatePopover();closeExpLocalDatePopover();closeBudgetDatePopover();closeFilterSheet();closeProfileMenu();closeSettingsSheet();closeMobileNavSheet();closeAllFloatMenus();}if(e.key==='/'&&!e.metaKey&&!e.ctrlKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();openCommandPalette();}});
+/* ─────────────────────────────────────────────────────────────
+   YEAR LOOKUP — single source of truth. Never returns the wrong
+   row. If the requested year isn't found, it says so loudly.
+   ───────────────────────────────────────────────────────────── */
+function getSelectedYear(){
+  const el = document.getElementById('yearFilter');
+  return el ? String(el.value || '') : '';
+}
 
+function getSelectedPortfolioRow(){
+  const y = getSelectedYear();
+  if(!y) return { row: null, index: -1, year: '' };
+  const idx = portfolioData.findIndex(d => String(d.year) === y);
+  if(idx < 0){
+    console.warn(
+      '[year-lookup] no row for year', JSON.stringify(y),
+      '· available:', portfolioData.map(d => String(d.year))
+    );
+    return { row: null, index: -1, year: y };
+  }
+  return { row: portfolioData[idx], index: idx, year: y };
+}
+
+/* Convenience: safe row-or-null without the console noise */
+function findYearRowSafe(year){
+  const t = String(year);
+  return portfolioData.find(d => String(d.year) === t) || null;
+}
+
+/* Console helper — run `debugYears()` any time to inspect state */
+window.debugYears = function(){
+  const el = document.getElementById('yearFilter');
+  console.log('━━━ YEAR DIAGNOSTIC ━━━');
+  console.log('Dropdown value     :', el ? JSON.stringify(el.value) : '(no #yearFilter)');
+  console.log('Dropdown options   :', el ? [...el.options].map(o => o.value) : []);
+  console.log('portfolioData rows :', portfolioData.map(d => ({ year: d.year, type: typeof d.year })));
+  console.log('findIndex result   :', portfolioData.findIndex(d => String(d.year) === String(el?.value)));
+  console.log('Selected row       :', findYearRowSafe(el?.value));
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━');
+};
 async function loadDataFromJSON(){
   const handle = getUserHandle();
   if(handle && handle !== 'guest'){
@@ -8426,7 +8503,14 @@ async function loadDataFromJSON(){
   }
   const s=localStorage.getItem('categoryPortfolioData');
   if(s){
-    try{ portfolioData=JSON.parse(s); ensureDefaultCategoriesAndLimits(); initDashboard(); return; }catch(_){}
+    try{
+      portfolioData = JSON.parse(s);
+      normalizePortfolioYears();   /* ← fix */
+      sortPortfolioByYear();       /* ← fix */
+      ensureDefaultCategoriesAndLimits();
+      initDashboard();
+      return;
+    }catch(_){}
   }
   seedFreshPortfolio();
   initDashboard();
@@ -8438,16 +8522,22 @@ function applyPortfolioPayload(d){
   if(Array.isArray(d.categories) && d.categories.length) categoriesConfig = d.categories;
   if(d.irsBaseLimits) irsBaseLimits = d.irsBaseLimits;
   if(Array.isArray(d.defaultAccountData)) portfolioData = JSON.parse(JSON.stringify(d.defaultAccountData));
+
+  /* ── Normalise every year to a string, then sort ascending ── */
+  normalizePortfolioYears();
+  sortPortfolioByYear();
+
   localStorage.setItem('categoryPortfolioData', JSON.stringify(portfolioData));
   updateCurrencyLabels();
+
   /* Back-fill: keep k401 in sync with its sub-fields on every load */
-portfolioData.forEach(r => {
-  if(!r.contri) r.contri = {};
-  r.contri.k401 = (Number(r.contri.employer) || 0)
-                + (Number(r.contri.user)     || 0)
-                + (Number(r.contri.rollover) || 0);
-});
-localStorage.setItem('categoryPortfolioData', JSON.stringify(portfolioData));
+  portfolioData.forEach(r => {
+    if(!r.contri) r.contri = {};
+    r.contri.k401 = (Number(r.contri.employer) || 0)
+                  + (Number(r.contri.user)     || 0)
+                  + (Number(r.contri.rollover) || 0);
+  });
+  localStorage.setItem('categoryPortfolioData', JSON.stringify(portfolioData));
 }
 function ensureDefaultCategoriesAndLimits(){
   if(!categoriesConfig.length){
@@ -8648,12 +8738,24 @@ function initDashboard(){
   try { valCalc(); } catch(_){}
 }
 function populateYearFilter(){
-  const sf=$id('yearFilter');if(!sf)return;
-  const cur=sf.value;
-  const years=[...portfolioData].map(d=>d.year).sort((a,b)=>parseInt(b)-parseInt(a));
-  sf.innerHTML = years.map(y=>`<option value="${y}">${y}</option>`).join('');
-  if(years.includes(cur)) sf.value=cur;
-  else if(years.length) sf.value=years[0];
+  const sf = document.getElementById('yearFilter');
+  if(!sf) return;
+
+  /* Always normalise first — belts and braces */
+  normalizePortfolioYears();
+  sortPortfolioByYear();
+
+  const cur = String(sf.value || '');
+  const years = [...portfolioData]
+    .map(d => String(d.year))
+    .sort((a, b) => parseInt(b) - parseInt(a));   /* newest first */
+
+  sf.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+
+  if(years.includes(cur)) sf.value = cur;
+  else if(years.length)   sf.value = years[0];
+
+  console.log('[populateYearFilter] options:', years, '· selected:', sf.value);
 }
 function updateNavBadges(){
   setText('navAccountsBadge', allAccounts().length);
@@ -8701,23 +8803,156 @@ function dashRender(){const g=$id('dashGrid');if(!g)return;const v=dashLayout.fi
 function dashWidgetWrapper(key,inner){const d=DASH_WIDGET_DEFS[key];return `<div class="dash-widget" data-widget="${key}" data-size="${d.size}"><div class="surface p-4 lg:p-5 h-full flex flex-col"><div class="flex items-center gap-2.5 mb-3 pb-3" style="border-bottom:1px solid var(--border);"><span class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.20);"><i data-lucide="${d.icon}" class="w-4 h-4" style="color:#6D28D9;"></i></span><h3 class="text-xs font-extrabold tracking-tight flex-grow min-w-0 truncate" style="color:var(--text-1);">${d.label}</h3><div class="dash-widget-tools flex items-center gap-0.5 shrink-0"><button onclick="dashMove('${key}',-1)" class="dash-only-customize p-1 rounded hidden" style="color:var(--text-4);" title="Move up"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i></button><button onclick="dashMove('${key}',1)" class="dash-only-customize p-1 rounded hidden" style="color:var(--text-4);" title="Move down"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i></button><span class="dash-only-customize dash-widget-handle px-1 hidden" style="color:var(--text-4);cursor:grab;" title="Drag to reorder"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i></span><button onclick="dashHide('${key}')" class="dash-only-customize p-1 rounded hidden" style="color:#BE123C;" title="Remove"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div></div><div class="dash-widget-body flex-grow min-h-0">${inner}</div></div></div>`;}
 function dashKpiTile(emoji,label,value,color){return `<div class="rounded-xl p-3" style="background:var(--surface-2);border:1px solid var(--border);"><div class="flex items-center gap-1.5 mb-1"><span class="text-sm leading-none">${emoji}</span><span class="text-[9.5px] font-extrabold uppercase tracking-wider truncate" style="color:var(--text-4);">${label}</span></div><div class="privacy-target text-base lg:text-lg font-extrabold leading-tight" style="color:${color};">${value}</div></div>`;}
 function dashWidgetBody(key){try{switch(key){case'kpis':return dwKPIs();case'networth':return dwNetWorth();case'growth':return `<div class="h-56"><canvas id="dashGrowthChart"></canvas></div>`;case'allocation':return `<div class="h-56 flex justify-center items-center"><canvas id="dashAllocChart"></canvas></div>`;case'accounts':return dwAccounts();case'spend':return dwSpend();case'recent':return dwRecent();case'fire':return dwFire();case'contrib':return dwContrib();case'taxbuckets':return dwTaxBuckets();case'categories':return dwCategories();case'projections':return `<div class="h-56"><canvas id="dashProjChart"></canvas></div>`;case'subs':return dwSubs();case'ef':return dwEF();case'yoy':return dwYoY();case'hub':return dwHub();default:return'';}}catch(e){return `<div class="text-xs" style="color:#BE123C;">Failed to render widget.</div>`;}}
-function dwKPIs(){const y=$id('yearFilter')?.value||currentYear();const i=portfolioData.findIndex(d=>d.year===y);const d=portfolioData[i];const salary=getEffectiveAnnualIncome()||0;if(!d){return `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">${dashKpiTile('💵','Gross Salary',formatCurrency(salary,0),'#059669')}<div class="col-span-full text-xs" style="color:var(--text-4);">No portfolio data for ${y}.</div></div>`;}const r=getDynamicReturns(i);const t=getTotalBal(d),c=getTotalContri(d);let cg=0,ps=0;for(let x=0;x<=i;x++){const rr=getDynamicReturns(x);cg+=rr.amount;ps+=rr.pct;}const ap=i>=0?ps/(i+1):0;return `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">${dashKpiTile('💵','Gross Salary',formatCurrency(salary,0),'#059669')}${dashKpiTile('💼','Portfolio',formatCurrency(t,0),'var(--text-1)')}${dashKpiTile('💰','Contributions',formatCurrency(c,0),'#6D28D9')}${dashKpiTile('📈','Annual Return',formatCurrency(r.amount,0),r.amount>=0?'#059669':'#BE123C')}${dashKpiTile('🎯','Return %',r.pct+'%',r.pct>=0?'#059669':'#BE123C')}${dashKpiTile('🏆','Cumulative',formatCurrency(cg,0),cg>=0?'#059669':'#BE123C')}${dashKpiTile('📊','Avg Rate %',ap.toFixed(2)+'%',ap>=0?'#DB2777':'#BE123C')}</div>`;}
+function dwKPIs(){
+  const { row: d, index: i, year: y } = getSelectedPortfolioRow();
+  const salary = getEffectiveAnnualIncome() || 0;
+
+  if(!d){
+    return `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+      ${dashKpiTile('💵','Gross Salary',formatCurrency(salary,0),'#059669')}
+      <div class="col-span-full text-xs" style="color:var(--text-4);">No portfolio data for ${esc(y)}.</div>
+    </div>`;
+  }
+
+  const r = getDynamicReturns(i);
+  const t = getTotalBal(d);
+  const c = getTotalContri(d);
+
+  let cg = 0, ps = 0;
+  for(let x = 0; x <= i; x++){ const rr = getDynamicReturns(x); cg += rr.amount; ps += rr.pct; }
+  const ap = i >= 0 ? ps / (i + 1) : 0;
+
+  return `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+    ${dashKpiTile('💵','Gross Salary',formatCurrency(salary,0),'#059669')}
+    ${dashKpiTile('💼','Portfolio',formatCurrency(t,0),'var(--text-1)')}
+    ${dashKpiTile('💰','Contributions',formatCurrency(c,0),'#6D28D9')}
+    ${dashKpiTile('📈','Annual Return',formatCurrency(r.amount,0),r.amount>=0?'#059669':'#BE123C')}
+    ${dashKpiTile('🎯','Return %',r.pct+'%',r.pct>=0?'#059669':'#BE123C')}
+    ${dashKpiTile('🏆','Cumulative',formatCurrency(cg,0),cg>=0?'#059669':'#BE123C')}
+    ${dashKpiTile('📊','Avg Rate %',ap.toFixed(2)+'%',ap>=0?'#DB2777':'#BE123C')}
+  </div>`;
+}
 function dwNetWorth(){const a=allAccounts();const ass=a.filter(x=>!accountTypeMeta(x.type).liability).reduce((s,x)=>s+(Number(x.balance)||0),0);const l=a.filter(x=>accountTypeMeta(x.type).liability).reduce((s,x)=>s+(Number(x.balance)||0),0);const n=ass-l,t=ass+l,ap=t>0?ass/t*100:0;return `<div class="space-y-3"><div class="privacy-target text-3xl font-extrabold tracking-tight" style="color:${n>=0?'var(--text-1)':'#BE123C'};">${formatCurrency(n,0)}</div><div class="text-[11px] font-semibold" style="color:var(--text-4);">${a.length} accounts</div><div class="h-2 rounded-full overflow-hidden flex" style="background:var(--surface-3);"><div style="width:${ap}%;background:linear-gradient(90deg,#10B981,#34D399);"></div><div style="width:${100-ap}%;background:linear-gradient(90deg,#F43F5E,#FB7185);"></div></div><div class="grid grid-cols-2 gap-3 pt-1"><div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Assets</div><div class="privacy-target text-sm font-extrabold" style="color:#059669;">${formatCurrency(ass,0)}</div></div><div class="text-right"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Liabilities</div><div class="privacy-target text-sm font-extrabold" style="color:#BE123C;">${formatCurrency(l,0)}</div></div></div></div>`;}
 function dwAccounts(){const a=[...allAccounts()].sort((x,y)=>Math.abs(Number(y.balance)||0)-Math.abs(Number(x.balance)||0)).slice(0,5);if(a.length===0)return `<div class="text-xs" style="color:var(--text-4);">No accounts yet.</div>`;return `<div class="space-y-2">${a.map(x=>{const m=accountTypeMeta(x.type);const l=m.liability;const b=Number(x.balance)||0;return `<div class="flex items-center gap-2.5 py-1"><span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm shrink-0" style="background:${(x.color||'#8B5CF6')}18;border:1px solid ${(x.color||'#8B5CF6')}33;">${m.emoji}</span><div class="min-w-0 flex-grow"><div class="text-xs font-bold truncate" style="color:var(--text-1);">${esc(x.name)}</div><div class="text-[10px] truncate" style="color:var(--text-4);">${esc(x.institution||'—')}${x.mask?' ••'+x.mask:''}</div></div><div class="text-right shrink-0"><div class="privacy-target text-xs font-extrabold font-mono" style="color:${l?'#BE123C':'#059669'};">${l?'−':''}${formatCurrency(b,0)}</div></div></div>`;}).join('')}</div>`;}
 function dwSpend(){const f=getFilteredExpenseTransactions('exp');const t=f.reduce((s,x)=>s+(parseFloat(x.amount)||0),0);const b=parseFloat(expenseStore.monthlyBudget)||0;const p=b>0?Math.min(100,t/b*100):0;const c=p>85?'#BE123C':p>=50?'#B45309':'#059669';return `<div class="space-y-3"><div class="privacy-target text-2xl font-extrabold tracking-tight" style="color:#BE123C;">${formatCurrency(t,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">of ${formatCurrency(b,0)} monthly budget · ${expLocalDateRange.label}</div><div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:${c};transition:width .4s;"></div></div><div class="flex justify-between text-[10px] font-bold"><span style="color:var(--text-4);">${p.toFixed(1)}% used</span><span style="color:var(--text-3);">${f.length} transactions</span></div></div>`;}
 function dwRecent(){const l=getUnifiedTransactions().sort((a,b)=>new Date(b._date)-new Date(a._date)).slice(0,6);if(l.length===0)return `<div class="text-xs" style="color:var(--text-4);">No recent activity.</div>`;return `<div class="space-y-1">${l.map(tx=>{const c=expenseStore.categories.find(x=>x.id===tx._categoryId)||{label:'Uncategorized',color:'#71717A'};return `<div class="flex items-center gap-2 py-1"><span class="text-base shrink-0">${expenseEmoji(c)}</span><div class="min-w-0 flex-grow"><div class="text-[11px] font-bold truncate" style="color:var(--text-1);">${esc(tx._description)}</div><div class="text-[9px] font-mono" style="color:var(--text-4);">${tx._date}</div></div><div class="privacy-target text-[11px] font-extrabold font-mono shrink-0" style="color:#BE123C;">${formatCurrency(tx._amount)}</div></div>`;}).join('')}</div>`;}
 function dwFire(){const e=parseFloat($id('fireAnnualExpenses')?.value)||0;const s=parseFloat($id('fireWithdrawalRate')?.value)||4;const t=s>0?e/(s/100):0;const c=unifiedStore.startingBal;const p=t>0?Math.min(100,c/t*100):0;return `<div class="space-y-3"><div class="privacy-target text-2xl font-extrabold" style="color:var(--text-1);">${formatCurrency(c,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">of ${formatCurrency(t,0)} target</div><div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent-2),#DB2777);transition:width .4s;"></div></div><div class="flex items-center justify-between text-[11px] font-bold"><span style="color:#BE185D;">${p.toFixed(1)}%</span><span style="color:var(--text-3);">${c>=t?'✓ Target met':'In progress'}</span></div></div>`;}
-function dwContrib(){const y=$id('yearFilter')?.value||currentYear();const d=portfolioData.find(x=>x.year===y);if(!d)return'';const items=[{label:'401(k)',emoji:'🏦',limitId:'limit401k',val:(d.contri?.user||0)+(d.contri?.employer||0)},{label:'IRA',emoji:'🌱',limitId:'limitIra',val:(d.contri?.roth||0)+(d.contri?.tradIra||0)},{label:'HSA',emoji:'🩺',limitId:'limitHsa',val:d.contri?.hsa||0},{label:'529',emoji:'🎓',limitId:'limit529',val:d.contri?.c529||0}];return `<div class="space-y-2.5">${items.map(i=>{const l=parseFloat($id(i.limitId)?.value)||1;const p=Math.min(100,i.val/l*100);return `<div class="space-y-1"><div class="flex justify-between text-[10px] font-bold"><span style="color:var(--text-2);">${i.emoji} ${i.label}</span><span class="privacy-target font-mono" style="color:var(--text-3);">${formatCurrency(i.val,0)} / ${formatCurrency(l,0)}</span></div><div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));"></div></div></div>`;}).join('')}</div>`;}
-function dwTaxBuckets(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];if(!d)return'';const h=appSettings.hiddenCategories.portfolio||[];const c=categoriesConfig.filter(x=>!h.includes(x.key));const t=getTotalBal(d);let ex=0,df=0,tx=0,sp=0;c.forEach(cat=>{const v=d.balances[cat.key]||0;if(cat.type==='exempt')ex+=v;else if(cat.type==='deferred')df+=v;else if(cat.type==='special')sp+=v;else tx+=v;});const tot=t||1;const rows=[{l:'Tax-Exempt',e:'🌱',v:ex,c:'#BE185D'},{l:'Tax-Deferred',e:'📊',v:df,c:'#6D28D9'},{l:'Taxable',e:'💵',v:tx,c:'#B45309'},{l:'Special',e:'🩺',v:sp,c:'#1D4ED8'}];return `<div class="space-y-2">${rows.map(r=>`<div class="flex items-center justify-between"><span class="text-[11px] font-bold flex items-center gap-1.5" style="color:var(--text-2);">${r.e} ${r.l}</span><div class="text-right"><span class="privacy-target text-xs font-extrabold font-mono" style="color:${r.c};">${formatCurrency(r.v,0)}</span><span class="text-[9px] font-bold ml-1" style="color:var(--text-4);">${(r.v/tot*100).toFixed(0)}%</span></div></div>`).join('')}</div>`;}
+function dwContrib(){
+  const { row: d } = getSelectedPortfolioRow();
+  if(!d) return '';
+  const items=[
+    {label:'401(k)',emoji:'🏦',limitId:'limit401k',val:(d.contri?.user||0)+(d.contri?.employer||0)},
+    {label:'IRA',   emoji:'🌱',limitId:'limitIra', val:(d.contri?.roth||0)+(d.contri?.tradIra||0)},
+    {label:'HSA',   emoji:'🩺',limitId:'limitHsa', val:d.contri?.hsa||0},
+    {label:'529',   emoji:'🎓',limitId:'limit529', val:d.contri?.c529||0}
+  ];
+  return `<div class="space-y-2.5">${items.map(i=>{
+    const l = parseFloat($id(i.limitId)?.value) || 1;
+    const p = Math.min(100, i.val/l*100);
+    return `<div class="space-y-1"><div class="flex justify-between text-[10px] font-bold"><span style="color:var(--text-2);">${i.emoji} ${i.label}</span><span class="privacy-target font-mono" style="color:var(--text-3);">${formatCurrency(i.val,0)} / ${formatCurrency(l,0)}</span></div><div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));"></div></div></div>`;
+  }).join('')}</div>`;
+}
+function dwTaxBuckets(){
+  const { row: d } = getSelectedPortfolioRow();
+  if(!d) return '';
+  const h  = appSettings.hiddenCategories.portfolio || [];
+  const c  = categoriesConfig.filter(x => !h.includes(x.key));
+  const t  = getTotalBal(d);
+  let ex = 0, df = 0, tx = 0, sp = 0;
+  c.forEach(cat => {
+    const v = d.balances?.[cat.key] || 0;
+    if(cat.type === 'exempt')        ex += v;
+    else if(cat.type === 'deferred') df += v;
+    else if(cat.type === 'special')  sp += v;
+    else                             tx += v;
+  });
+  const tot  = t || 1;
+  const rows = [
+    { l:'Tax-Exempt',   e:'🌱', v:ex, c:'#BE185D' },
+    { l:'Tax-Deferred', e:'📊', v:df, c:'#6D28D9' },
+    { l:'Taxable',      e:'💵', v:tx, c:'#B45309' },
+    { l:'Special',      e:'🩺', v:sp, c:'#1D4ED8' }
+  ];
+  return `<div class="space-y-2">${rows.map(r =>
+    `<div class="flex items-center justify-between"><span class="text-[11px] font-bold flex items-center gap-1.5" style="color:var(--text-2);">${r.e} ${r.l}</span><div class="text-right"><span class="privacy-target text-xs font-extrabold font-mono" style="color:${r.c};">${formatCurrency(r.v,0)}</span><span class="text-[9px] font-bold ml-1" style="color:var(--text-4);">${(r.v/tot*100).toFixed(0)}%</span></div></div>`
+  ).join('')}</div>`;
+}
 function dwCategories(){const h=appSettings.hiddenCategories.expense||[];const f=getFilteredExpenseTransactions('exp');const t=expenseStore.categories.filter(c=>!h.includes(c.id)).map(c=>({...c,total:f.filter(x=>x.categoryId===c.id).reduce((s,x)=>s+(parseFloat(x.amount)||0),0)})).filter(c=>c.total>0).sort((a,b)=>b.total-a.total).slice(0,5);if(t.length===0)return `<div class="text-xs" style="color:var(--text-4);">No spend data yet.</div>`;return `<div class="space-y-2">${t.map(c=>`<div class="flex items-center gap-2"><span class="text-base shrink-0">${expenseEmoji(c)}</span><span class="text-[11px] font-bold truncate flex-grow" style="color:var(--text-2);">${esc(c.label)}</span><span class="privacy-target text-[11px] font-extrabold font-mono shrink-0" style="color:var(--text-1);">${formatCurrency(c.total,0)}</span></div>`).join('')}</div>`;}
 function dwSubs(){const f=getFilteredExpenseTransactions('exp');const s=f.filter(x=>x.isRecurring);const t=s.reduce((a,x)=>a+(parseFloat(x.amount)||0),0);return `<div class="space-y-2"><div class="privacy-target text-xl font-extrabold" style="color:#6D28D9;">${formatCurrency(t,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">/ month across ${s.length} subscriptions</div></div>`;}
-function dwEF(){const e=parseFloat($id('efMonthlyExp')?.value)||0;const m=parseInt($id('efTargetMonths')?.value)||6;const t=e*m;const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];const c=d?.balances?.cd||0;const p=t>0?Math.min(100,c/t*100):0;return `<div class="space-y-2"><div class="privacy-target text-xl font-extrabold" style="color:var(--text-1);">${formatCurrency(c,0)}</div><div class="text-[10px] font-bold" style="color:var(--text-4);">of ${formatCurrency(t,0)} (${m}-month runway)</div><div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3);"><div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent-3),#6366F1);"></div></div></div>`;}
-function dwYoY(){const y=$id('yearFilter')?.value;const i=portfolioData.findIndex(d=>d.year===y);const c=portfolioData[i];const p=i>0?portfolioData[i-1]:null;if(!c)return'';const cb=getTotalBal(c),pb=p?getTotalBal(p):0;const df=cb-pb;const pc=pb>0?df/pb*100:0;return `<div class="space-y-3"><div class="grid grid-cols-2 gap-3"><div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">${y}</div><div class="privacy-target text-base font-extrabold" style="color:var(--text-1);">${formatCurrency(cb,0)}</div></div><div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">${p?.year||'—'}</div><div class="privacy-target text-base font-extrabold" style="color:var(--text-3);">${formatCurrency(pb,0)}</div></div></div><div class="pt-3" style="border-top:1px solid var(--border);"><div class="flex justify-between items-baseline"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">YoY Change</span><span class="privacy-target text-base font-extrabold" style="color:${df>=0?'#059669':'#BE123C'};">${df>=0?'+':''}${formatCurrency(df,0)} <span class="text-xs opacity-70">(${pc.toFixed(1)}%)</span></span></div></div></div>`;}
+function dwEF(){
+  const e = parseFloat($id('efMonthlyExp')?.value) || 0;
+  const m = parseInt($id('efTargetMonths')?.value) || 6;
+  const t = e * m;
+  const { row: d } = getSelectedPortfolioRow();
+  const c = d?.balances?.cd || 0;
+  const p = t > 0 ? Math.min(100, c/t*100) : 0;
+  return `<div class="space-y-2">
+    <div class="privacy-target text-xl font-extrabold" style="color:var(--text-1);">${formatCurrency(c,0)}</div>
+    <div class="text-[10px] font-bold" style="color:var(--text-4);">of ${formatCurrency(t,0)} (${m}-month runway)</div>
+    <div class="h-2 rounded-full overflow-hidden" style="background:var(--surface-3);">
+      <div style="width:${p}%;height:100%;background:linear-gradient(90deg,var(--accent-3),#6366F1);"></div>
+    </div>
+  </div>`;
+}
+function dwYoY(){
+  const { row: c, index: i, year: y } = getSelectedPortfolioRow();
+  if(!c) return `<div class="text-xs" style="color:var(--text-4);">No data for ${esc(y)}.</div>`;
+
+  const p  = i > 0 ? portfolioData[i - 1] : null;
+  const cb = getTotalBal(c);
+  const pb = p ? getTotalBal(p) : 0;
+  const df = cb - pb;
+  const pc = pb > 0 ? df / pb * 100 : 0;
+
+  return `<div class="space-y-3">
+    <div class="grid grid-cols-2 gap-3">
+      <div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">${c.year}</div>
+           <div class="privacy-target text-base font-extrabold" style="color:var(--text-1);">${formatCurrency(cb,0)}</div></div>
+      <div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">${p?.year||'—'}</div>
+           <div class="privacy-target text-base font-extrabold" style="color:var(--text-3);">${formatCurrency(pb,0)}</div></div>
+    </div>
+    <div class="pt-3" style="border-top:1px solid var(--border);">
+      <div class="flex justify-between items-baseline">
+        <span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">YoY Change</span>
+        <span class="privacy-target text-base font-extrabold" style="color:${df>=0?'#059669':'#BE123C'};">
+          ${df>=0?'+':''}${formatCurrency(df,0)} <span class="text-xs opacity-70">(${pc.toFixed(1)}%)</span>
+        </span>
+      </div>
+    </div>
+  </div>`;
+}
 function dwHub(){const eff=getEffectiveAnnualIncome();const s=eff||0;const n=s*0.72;const srcLabel=eff>0?'Income Profile':'Not set — add in Settings';return `<div class="space-y-2"><div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Gross Salary</div><div class="privacy-target text-base font-extrabold" style="color:var(--text-1);">${formatCurrency(s,0)}</div><div class="text-[9px]" style="color:var(--text-4);">Source: ${srcLabel}</div></div><div><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Est. Net Take-Home</div><div class="privacy-target text-base font-extrabold" style="color:#059669;">${formatCurrency(n,0)}</div></div></div>`;}
 function dashAfterRender(){if($id('dashGrowthChart'))dashRenderGrowthChart();if($id('dashAllocChart'))dashRenderAllocChart();if($id('dashProjChart'))dashRenderProjChart();}
 let _dashGrowthChart,_dashAllocChart,_dashProjChart;
 function dashRenderGrowthChart(){const c=$id('dashGrowthChart');if(!c)return;const y=portfolioData.map(d=>d.year),d=portfolioData.map(x=>getTotalBal(x));if(_dashGrowthChart)_dashGrowthChart.destroy();const t=chartTypeState.dashGrowth==='bar'?'bar':'line';const ia=chartTypeState.dashGrowth==='area';const ctx=c.getContext('2d');const g=ctx.createLinearGradient(0,0,0,220);g.addColorStop(0,'rgba(139,92,246,0.28)');g.addColorStop(1,'rgba(139,92,246,0)');_dashGrowthChart=new Chart(c,{type:t,data:{labels:y,datasets:[{data:d,borderColor:'#8B5CF6',backgroundColor:t==='bar'?'#8B5CF6':g,fill:ia,tension:.35,borderWidth:2,pointRadius:t==='bar'?0:3,pointBackgroundColor:'#8B5CF6',borderRadius:t==='bar'?4:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>formatCurrency(ctx.parsed.y,0)}}},scales:{x:{grid:{display:false}},y:{grid:{color:getChartGridColor()},ticks:{callback:v=>getCurrencySymbol()+(v/1000).toFixed(0)+'k'}}}}});}
-function dashRenderAllocChart(){const c=$id('dashAllocChart');if(!c)return;const y=$id('yearFilter')?.value||currentYear();const d=portfolioData.find(x=>x.year===y);if(!d)return;const h=appSettings.hiddenCategories.portfolio||[];const v=categoriesConfig.filter(x=>!h.includes(x.key));if(_dashAllocChart)_dashAllocChart.destroy();const t=chartTypeState.dashAlloc;const ct=t==='polar'?'polarArea':(t==='pie'?'pie':'doughnut');const co=t==='pie'?'0%':(t==='polar'?'0%':'68%');_dashAllocChart=new Chart(c,{type:ct,data:{labels:v.map(x=>x.label),datasets:[{data:v.map(x=>d.balances[x.key]||0),backgroundColor:v.map(x=>x.color),borderWidth:2,borderColor:getChartSurfaceColor()}]},options:{responsive:true,maintainAspectRatio:false,cutout:co,plugins:{legend:{position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:6,usePointStyle:true,pointStyle:'circle',font:{size:9}}}}}});}
+function dashRenderAllocChart(){
+  const c = $id('dashAllocChart');
+  if(!c) return;
+  const { row: d } = getSelectedPortfolioRow();
+  if(!d) return;
+  const h = appSettings.hiddenCategories.portfolio || [];
+  const v = categoriesConfig.filter(x => !h.includes(x.key));
+  if(_dashAllocChart) _dashAllocChart.destroy();
+  const t  = chartTypeState.dashAlloc;
+  const ct = t === 'polar' ? 'polarArea' : (t === 'pie' ? 'pie' : 'doughnut');
+  const co = t === 'pie' ? '0%' : (t === 'polar' ? '0%' : '68%');
+  _dashAllocChart = new Chart(c, {
+    type: ct,
+    data: {
+      labels: v.map(x => x.label),
+      datasets: [{
+        data: v.map(x => d.balances?.[x.key] || 0),
+        backgroundColor: v.map(x => x.color),
+        borderWidth: 2,
+        borderColor: getChartSurfaceColor()
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false, cutout:co,
+      plugins: { legend: { position:'bottom', labels:{ boxWidth:8, boxHeight:8, padding:6, usePointStyle:true, pointStyle:'circle', font:{size:9} } } }
+    }
+  });
+}
 function dashRenderProjChart(){const c=$id('dashProjChart');if(!c)return;const sb=unifiedStore.startingBal,m=unifiedStore.monthlyContri,r=(unifiedStore.annualReturn/100)/12;const l=[],v=[];let b=sb;for(let y=1;y<=15;y++){for(let mo=0;mo<12;mo++)b=(b+m)*(1+r);l.push((parseInt(currentYear())+y).toString());v.push(Math.round(b));}if(_dashProjChart)_dashProjChart.destroy();const ct=chartTypeState.dashProj==='line'||chartTypeState.dashProj==='area'?'line':'bar';const ia=chartTypeState.dashProj==='area';_dashProjChart=new Chart(c,{type:ct,data:{labels:l,datasets:[{data:v,backgroundColor:ct==='bar'?v.map((_,i)=>i===v.length-1?'#EC4899':getChartBarColor()):'rgba(139,92,246,.15)',borderColor:'#8B5CF6',borderWidth:2,fill:ia,tension:.35,borderRadius:4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>formatCurrency(ctx.parsed.y,0)}}},scales:{x:{grid:{display:false}},y:{grid:{color:getChartGridColor()},ticks:{callback:v=>getCurrencySymbol()+(v/1000).toFixed(0)+'k'}}}}});}
 let _dashDragSrc=null;
 function dashDragStart(e){if(!dashCustomizeMode){e.preventDefault();return;}const el=e.currentTarget;_dashDragSrc=el.dataset.widget;el.classList.add('dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',_dashDragSrc);}catch(_){}}
@@ -8738,7 +8973,106 @@ function getTotalContri(data){
     return s + (Number(v) || 0);
   }, 0);
 }
-function updateDashboard(){const yf=$id('yearFilter');if(!yf)return;const y=yf.value;const i=portfolioData.findIndex(d=>d.year===y);const d=portfolioData[i],p=i>0?portfolioData[i-1]:null;if(d){renderKPIs(d,p);if(lastSelectedYear!==y){updateDefaultLimitsForYear(y);lastSelectedYear=y;const ps=$id('payCustomSalary');if(ps&&tempSalaryOverride.paycheck===null)ps.value=getEffectiveAnnualIncome()||0;initAllToolSliders();}renderIRSProgress();renderCharts(d);renderMiniCharts();if(!unifiedStore.isUserOverridden){unifiedStore.startingBal=getTotalBal(d);const c=d.contri?(d.contri.user||0):0;unifiedStore.monthlyContri=Math.round(c/12)||0;if($id('projStartingBal')){$id('projStartingBal').value=unifiedStore.startingBal;$id('projStartingBalSlider').value=unifiedStore.startingBal;$id('projStartingBalVal').innerText=Math.round(unifiedStore.startingBal).toLocaleString();}if($id('projMonthlyContri')){$id('projMonthlyContri').value=unifiedStore.monthlyContri;$id('projMonthlyContriSlider').value=unifiedStore.monthlyContri;$id('projMonthlyContriVal').innerText=unifiedStore.monthlyContri.toLocaleString();}}propagateUnifiedDataStore();renderTaxBuckets();renderRebalancer();renderStrategicHub();calculatePaystub();applyPrivacyState();dashRender();updatePortfolioDataStatus();}}
+function updateDashboard(){
+  const yf = document.getElementById('yearFilter');
+  if(!yf) return;
+
+  const { row: d, index: i, year: y } = getSelectedPortfolioRow();
+
+  if(!d){
+    toast(`No portfolio data for ${y || '(no year selected)'}.`, 'warning', 2600);
+    return;
+  }
+
+  const p = i > 0 ? portfolioData[i - 1] : null;
+
+  renderKPIs(d, p);
+
+  if(lastSelectedYear !== y){
+    updateDefaultLimitsForYear(y);
+    lastSelectedYear = y;
+    const ps = document.getElementById('payCustomSalary');
+    if(ps && tempSalaryOverride.paycheck === null) ps.value = getEffectiveAnnualIncome() || 0;
+    initAllToolSliders();
+  }
+
+  renderIRSProgress();
+  renderCharts(d);
+  renderMiniCharts();
+
+  if(!unifiedStore.isUserOverridden){
+    unifiedStore.startingBal  = getTotalBal(d);
+    const c = d.contri ? (d.contri.user || 0) : 0;
+    unifiedStore.monthlyContri = Math.round(c / 12) || 0;
+
+    const sb      = document.getElementById('projStartingBal');
+    const sbSl    = document.getElementById('projStartingBalSlider');
+    const sbVal   = document.getElementById('projStartingBalVal');
+    if(sb)    sb.value        = unifiedStore.startingBal;
+    if(sbSl)  sbSl.value      = unifiedStore.startingBal;
+    if(sbVal) sbVal.innerText = Math.round(unifiedStore.startingBal).toLocaleString();
+
+    const mc      = document.getElementById('projMonthlyContri');
+    const mcSl    = document.getElementById('projMonthlyContriSlider');
+    const mcVal   = document.getElementById('projMonthlyContriVal');
+    if(mc)    mc.value        = unifiedStore.monthlyContri;
+    if(mcSl)  mcSl.value      = unifiedStore.monthlyContri;
+    if(mcVal) mcVal.innerText = unifiedStore.monthlyContri.toLocaleString();
+  }
+
+  propagateUnifiedDataStore();
+  renderTaxBuckets();
+  renderRebalancer();
+  renderStrategicHub();
+  calculatePaystub();
+  applyPrivacyState();
+  dashRender();
+  updatePortfolioDataStatus();
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    refreshAllYearCharts();
+    [growthChart, categoryChart, historyChart, projectionChart,
+     _dashGrowthChart, _dashAllocChart, _dashProjChart].forEach(ch => {
+      try{ ch && ch.resize(); }catch(_){}
+    });
+  }));
+}
+/* ═══════════════════════════════════════════════════════════
+   PORTFOLIO YEAR NORMALISATION
+   Every year is stored as a STRING everywhere in the app.
+   These helpers guarantee lookups never fail on type mismatch.
+   ═══════════════════════════════════════════════════════════ */
+function normalizePortfolioYears(){
+  if(!Array.isArray(portfolioData)) return;
+  portfolioData.forEach(r => { if(r && r.year != null) r.year = String(r.year); });
+}
+function sortPortfolioByYear(){
+  if(!Array.isArray(portfolioData)) return;
+  portfolioData.sort((a,b) => parseInt(a.year) - parseInt(b.year));
+}
+function findPortfolioRow(year){
+  const t = String(year);
+  return portfolioData.find(d => String(d.year) === t);
+}
+function findPortfolioIndex(year){
+  const t = String(year);
+  return portfolioData.findIndex(d => String(d.year) === t);
+}
+function refreshAllYearCharts(){
+  try{ if(document.getElementById('dashGrowthChart')) dashRenderGrowthChart(); }catch(_){}
+  try{ if(document.getElementById('dashAllocChart'))  dashRenderAllocChart();  }catch(_){}
+  try{ if(document.getElementById('dashProjChart'))   dashRenderProjChart();   }catch(_){}
+
+  try{
+    const gc = document.getElementById('growthChart');
+    if(gc && gc.offsetWidth > 0 && gc.offsetHeight > 0){
+      const d = getSelectedPortfolioRow().row;
+      if(d) renderCharts(d);
+    }
+  }catch(_){}
+
+  try{ renderMiniCharts(); }catch(_){}
+}
 function propagateUnifiedDataStore(){updateProjections();calculateFIRE();calculateEmergencyFund();calculateInflation();applyPrivacyState();}
 function syncProjectionsAndPropagate(){const s=$id('projStartingBal'),m=$id('projMonthlyContri'),a=$id('projAnnualReturn');if(s)unifiedStore.startingBal=parseFloat(s.value)||0;if(m)unifiedStore.monthlyContri=parseFloat(m.value)||0;if(a)unifiedStore.annualReturn=parseFloat(a.value)||0;unifiedStore.isUserOverridden=true;propagateUnifiedDataStore();}
 function setCompoundingFreq(freq){compoundingFrequency=freq;const map={daily:'btnFreqDaily',monthly:'btnFreqMonthly',yearly:'btnFreqYearly'};Object.entries(map).forEach(([k,id])=>{const b=$id(id);if(!b)return;if(k===freq){b.style.background='linear-gradient(135deg,var(--accent),var(--accent-2))';b.style.color='#fff';}else{b.style.background='transparent';b.style.color='var(--text-3)';}});refreshContributionFieldForFrequency();updateProjections();}
@@ -8808,11 +9142,32 @@ function calculateFIRE(){
 
 function calculateEmergencyFund(){
   if(!hasFeature('wealth_blueprint')){
-    setText('efTargetVal','$0');setText('efActualCashText','');setText('efRunwayText','');setText('efAllocationBadge','—');
+    setText('efTargetVal','$0');
+    setText('efActualCashText','');
+    setText('efRunwayText','');
+    setText('efAllocationBadge','—');
     return;
   }
-  const e=parseFloat($id('efMonthlyExp')?.value)||0;const m=parseInt($id('efTargetMonths')?.value)||6;const rf=e*m;const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];const ac=d?(d.balances?.cd||0):0;setText('efTargetVal',formatCurrency(rf,0));setText('efActualCashText',`Actual Ledger Cash: ${formatCurrency(ac,0)}`);const b=$id('efAllocationBadge');const df=ac-rf;if(b){if(df>500){b.innerText="Over-allocated";b.className="badge badge-amber";}else if(df<-500){b.innerText="Liquidity Risk";b.className="badge badge-rose";}else{b.innerText="Optimal";b.className="badge badge-emerald";}}const rm=(ac/(e||1)).toFixed(1);setText('efRunwayText',`Current liquid cash provides ${rm} months of emergency runway.`);}
+  const e  = parseFloat($id('efMonthlyExp')?.value) || 0;
+  const m  = parseInt($id('efTargetMonths')?.value) || 6;
+  const rf = e * m;
 
+  const { row: d } = getSelectedPortfolioRow();
+  const ac = d?.balances?.cd || 0;
+
+  setText('efTargetVal', formatCurrency(rf, 0));
+  setText('efActualCashText', `Actual Ledger Cash: ${formatCurrency(ac, 0)}`);
+
+  const b  = $id('efAllocationBadge');
+  const df = ac - rf;
+  if(b){
+    if(df > 500){       b.innerText = "Over-allocated"; b.className = "badge badge-amber";   }
+    else if(df < -500){ b.innerText = "Liquidity Risk"; b.className = "badge badge-rose";    }
+    else{               b.innerText = "Optimal";        b.className = "badge badge-emerald"; }
+  }
+  const rm = (ac / (e || 1)).toFixed(1);
+  setText('efRunwayText', `Current liquid cash provides ${rm} months of emergency runway.`);
+}
 function calculateInflation(){
   if(!hasFeature('wealth_blueprint')){
     setText('infRealValue','$0');setText('infSummaryText','');
@@ -8824,20 +9179,63 @@ function calculateInflation(){
 function syncInflationSliders(src){const ai=$id('infCustomAmount'),as=$id('infAmountSlider');if(!ai||!as)return;if(src==='slider')ai.value=as.value;else{let v=parseFloat(ai.value)||0;const mx=parseFloat(as.max)||2000000;if(v>mx)as.max=Math.ceil(v/1000)*1000;as.value=v;}calculateInflation();}
 function setInflationAmount(v){const ai=$id('infCustomAmount'),as=$id('infAmountSlider');if(ai)ai.value=v;if(as){if(v>parseFloat(as.max))as.max=Math.ceil(v/1000)*1000;as.value=v;}calculateInflation();}
 
-function renderTaxBuckets(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];if(!d||!d.balances)return;const h=appSettings.hiddenCategories.portfolio||[];const c=categoriesConfig.filter(x=>!h.includes(x.key));const t=getTotalBal(d);let ex=0,df=0,tx=0,sp=0;c.forEach(cat=>{const v=d.balances[cat.key]||0;if(cat.type==='exempt')ex+=v;else if(cat.type==='deferred')df+=v;else if(cat.type==='special')sp+=v;else tx+=v;});setHTML('taxBucketContainer',`<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">🌱</span> Tax-Exempt (Roth)</div><div class="privacy-target text-base font-extrabold" style="color:#BE185D;">${formatCurrency(ex,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(ex/(t||1)*100).toFixed(1)}% of portfolio</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">📊</span> Tax-Deferred</div><div class="privacy-target text-base font-extrabold" style="color:#6D28D9;">${formatCurrency(df,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(df/(t||1)*100).toFixed(1)}% of portfolio</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">💵</span> Taxable Brokerage</div><div class="privacy-target text-base font-extrabold" style="color:#B45309;">${formatCurrency(tx,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(tx/(t||1)*100).toFixed(1)}% of portfolio</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">🩺</span> Special Purpose</div><div class="privacy-target text-base font-extrabold" style="color:#1D4ED8;">${formatCurrency(sp,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(sp/(t||1)*100).toFixed(1)}% of portfolio</div></div>`);}
-function renderStrategicHub(){const y=$id('yearFilter')?.value;const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];const s=d?(d.salary||0):0;const tp=getTotalBal(d);const es=Math.round(s*.05);const eb=d?(d.balances?.espp||0):0;const cb=d?(d.balances?.cd||0):0;setHTML('texasAcceleratorContainer',`<div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Baseline Annual Income</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:var(--text-1);">${formatCurrency(s,0)}</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#059669;">Est. 0% State Tax Arbitrage</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:#059669;">+${formatCurrency(es,0)} / yr</div></div><div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#B45309;">Property Tax Buffer Target</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:#B45309;">${formatCurrency(Math.round(s*.025),0)} / yr</div></div></div>`);setHTML('macroMatrixContainer',`<h4 class="text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-2 mb-3" style="color:#6D28D9;"><i data-lucide="compass" class="w-4 h-4"></i> Module B1 · Tactical Macro Matrix</h4><div class="scroll-x"><table class="w-full text-left text-xs"><thead><tr style="border-bottom:1px solid var(--border);"><th class="py-3 px-4">Tactical Pillar</th><th class="py-3 px-4">Current Baseline</th><th class="py-3 px-4">Macro Rationale</th><th class="py-3 px-4">Execution Path</th></tr></thead><tbody class="divide-y" style="border-color:var(--border);"><tr><td class="py-3.5 px-4 font-bold" style="color:var(--text-1);">💵 Cash-Drag Optimization</td><td class="py-3.5 px-4 privacy-target" style="color:var(--text-2);">${formatCurrency(cb,0)} in Cash/CD</td><td class="py-3.5 px-4" style="color:var(--text-4);">Elevated Treasury yields optimise liquid cash sweeps.</td><td class="py-3.5 px-4 font-semibold" style="color:#6D28D9;">Transition into short-term laddered CDs/Treasuries.</td></tr><tr><td class="py-3.5 px-4 font-bold" style="color:var(--text-1);">📈 ESPP Concentration</td><td class="py-3.5 px-4 privacy-target" style="color:var(--text-2);">${formatCurrency(eb,0)} (${tp>0?(eb/tp*100).toFixed(1):0}%)</td><td class="py-3.5 px-4" style="color:var(--text-4);">Concentration breaches safety thresholds.</td><td class="py-3.5 px-4 font-semibold" style="color:#059669;">Stagger-sell ESPP surplus into 401(k)/Roth.</td></tr></tbody></table></div>`);if(typeof lucide!=='undefined')lucide.createIcons();}
+function renderTaxBuckets(){
+  const { row: d, year: y } = getSelectedPortfolioRow();
+  if(!d || !d.balances){
+    setHTML('taxBucketContainer', `<div class="col-span-full p-6 text-center text-xs" style="color:var(--text-4);">No portfolio data for ${esc(y || 'the selected year')}.</div>`);
+    return;
+  }
+  const h  = appSettings.hiddenCategories.portfolio || [];
+  const c  = categoriesConfig.filter(x => !h.includes(x.key));
+  const t  = getTotalBal(d);
+  let ex = 0, df = 0, tx = 0, sp = 0;
+  c.forEach(cat => {
+    const v = d.balances[cat.key] || 0;
+    if(cat.type === 'exempt')        ex += v;
+    else if(cat.type === 'deferred') df += v;
+    else if(cat.type === 'special')  sp += v;
+    else                             tx += v;
+  });
+  const tot = t || 1;
+  setHTML('taxBucketContainer',
+    `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">🌱</span> Tax-Exempt (Roth)</div><div class="privacy-target text-base font-extrabold" style="color:#BE185D;">${formatCurrency(ex,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(ex/tot*100).toFixed(1)}% of portfolio</div></div>` +
+    `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">📊</span> Tax-Deferred</div><div class="privacy-target text-base font-extrabold" style="color:#6D28D9;">${formatCurrency(df,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(df/tot*100).toFixed(1)}% of portfolio</div></div>` +
+    `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">💵</span> Taxable Brokerage</div><div class="privacy-target text-base font-extrabold" style="color:#B45309;">${formatCurrency(tx,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(tx/tot*100).toFixed(1)}% of portfolio</div></div>` +
+    `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><div class="text-xs font-bold flex items-center gap-2 mb-1.5" style="color:var(--text-2);"><span class="text-sm">🩺</span> Special Purpose</div><div class="privacy-target text-base font-extrabold" style="color:#1D4ED8;">${formatCurrency(sp,0)}</div><div class="text-[10px] font-semibold mt-0.5" style="color:var(--text-4);">${(sp/tot*100).toFixed(1)}% of portfolio</div></div>`
+  );
+}
+function renderStrategicHub(){
+  const { row: d } = getSelectedPortfolioRow();
+  const s  = d ? (d.salary || 0) : 0;
+  const tp = d ? getTotalBal(d) : 0;
+  const es = Math.round(s * .05);
+  const eb = d ? (d.balances?.espp || 0) : 0;
+  const cb = d ? (d.balances?.cd   || 0) : 0;
 
+  setHTML('texasAcceleratorContainer',
+    `<div class="grid grid-cols-1 md:grid-cols-3 gap-4">` +
+      `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:var(--text-4);">Baseline Annual Income</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:var(--text-1);">${formatCurrency(s,0)}</div></div>` +
+      `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#059669;">Est. 0% State Tax Arbitrage</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:#059669;">+${formatCurrency(es,0)} / yr</div></div>` +
+      `<div class="rounded-2xl p-4" style="background:var(--surface-2);border:1px solid var(--border);"><span class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#B45309;">Property Tax Buffer Target</span><div class="privacy-target text-xl font-extrabold mt-1" style="color:#B45309;">${formatCurrency(Math.round(s*.025),0)} / yr</div></div>` +
+    `</div>`
+  );
+
+  setHTML('macroMatrixContainer',
+    `<h4 class="text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-2 mb-3" style="color:#6D28D9;"><i data-lucide="compass" class="w-4 h-4"></i> Module B1 · Tactical Macro Matrix</h4><div class="scroll-x"><table class="w-full text-left text-xs"><thead><tr style="border-bottom:1px solid var(--border);"><th class="py-3 px-4">Tactical Pillar</th><th class="py-3 px-4">Current Baseline</th><th class="py-3 px-4">Macro Rationale</th><th class="py-3 px-4">Execution Path</th></tr></thead><tbody class="divide-y" style="border-color:var(--border);"><tr><td class="py-3.5 px-4 font-bold" style="color:var(--text-1);">💵 Cash-Drag Optimization</td><td class="py-3.5 px-4 privacy-target" style="color:var(--text-2);">${formatCurrency(cb,0)} in Cash/CD</td><td class="py-3.5 px-4" style="color:var(--text-4);">Elevated Treasury yields optimise liquid cash sweeps.</td><td class="py-3.5 px-4 font-semibold" style="color:#6D28D9;">Transition into short-term laddered CDs/Treasuries.</td></tr><tr><td class="py-3.5 px-4 font-bold" style="color:var(--text-1);">📈 ESPP Concentration</td><td class="py-3.5 px-4 privacy-target" style="color:var(--text-2);">${formatCurrency(eb,0)} (${tp>0?(eb/tp*100).toFixed(1):0}%)</td><td class="py-3.5 px-4" style="color:var(--text-4);">Concentration breaches safety thresholds.</td><td class="py-3.5 px-4 font-semibold" style="color:#059669;">Stagger-sell ESPP surplus into 401(k)/Roth.</td></tr></tbody></table></div>`
+  );
+
+  if(typeof lucide !== 'undefined') lucide.createIcons();
+}
 function calculatePaystub(){
-  const y  = $id('yearFilter')?.value;
-  const d  = portfolioData.find(x=>x.year===y) || portfolioData[portfolioData.length-1];
+  const { row: d, year: y } = getSelectedPortfolioRow();
   const fc = parseInt($id('payFrequency')?.value) || 26;
   const fs = $id('paystubFilingStatus')?.value || 'single';
 
   const msi = parseFloat($id('payCustomSalary')?.value);
   let as;
-  if(tempSalaryOverride.paycheck !== null)      as = tempSalaryOverride.paycheck;
-  else if(!isNaN(msi) && msi > 0)               as = msi;
-  else                                          as = getEffectiveAnnualIncome() || 0;
+  if(tempSalaryOverride.paycheck !== null) as = tempSalaryOverride.paycheck;
+  else if(!isNaN(msi) && msi > 0)          as = msi;
+  else                                     as = getEffectiveAnnualIncome() || 0;
 
   const gp = as / fc;
 
@@ -8848,7 +9246,7 @@ function calculatePaystub(){
     const me = $id(`${item.id}_method`)?.value || 'fixed';
     const v  = parseFloat($id(`${item.id}_val`)?.value) || 0;
     let pa = 0;
-    if(me === 'fixed')       pa = ty === 'per_paycheck' ? v : (v / fc);
+    if(me === 'fixed')          pa = ty === 'per_paycheck' ? v : (v / fc);
     else if(me === 'gross_pct') pa = gp * (v / 100);
     const rg = Math.max(0, gp - tpt);
     const ap = Math.min(pa, rg);
@@ -8870,8 +9268,8 @@ function calculatePaystub(){
   const asw = parseFloat($id('addWithholdState')?.value) || 0;
   const al  = parseFloat($id('addWithholdLocal')?.value) || 0;
 
-  const yb  = TaxBrackets[y] || TaxBrackets["2026"];
-  const bl  = yb[fs] || yb.single;
+  const yb = TaxBrackets[y] || TaxBrackets["2026"];
+  const bl = yb[fs] || yb.single;
   let fta = 0, pl = 0;
   for(let i = 0; i < bl.length; i++){
     const { limit, rate } = bl[i];
@@ -8892,7 +9290,7 @@ function calculatePaystub(){
   const postri = [];
   customPostTaxDeductions.forEach(item => {
     let pa = 0;
-    if(item.method === 'fixed')        pa = item.type === 'per_paycheck' ? item.amount : (item.amount / fc);
+    if(item.method === 'fixed')          pa = item.type === 'per_paycheck' ? item.amount : (item.amount / fc);
     else if(item.method === 'gross_pct') pa = gp * (item.amount / 100);
     const rn = Math.max(0, pnp - tpost);
     const ap = Math.min(pa, rn);
@@ -8902,13 +9300,12 @@ function calculatePaystub(){
 
   const nth  = Math.max(0, pnp - tpost);
   const ntha = nth * fc;
-
   const effTax = gp > 0 ? (ttp / gp) * 100 : 0;
 
-  setText('psNetPeriod',    formatCurrency(nth, 2));
-  setText('psGrossPeriod',  formatCurrency(gp, 2));
-  setText('psEffTax',       effTax.toFixed(1) + '%');
-  setText('psAnnualNet',    formatCurrency(ntha, 0));
+  setText('psNetPeriod',   formatCurrency(nth, 2));
+  setText('psGrossPeriod', formatCurrency(gp, 2));
+  setText('psEffTax',      effTax.toFixed(1) + '%');
+  setText('psAnnualNet',   formatCurrency(ntha, 0));
 
   const periodWord = fc === 52 ? 'per week'
                     : fc === 26 ? 'per paycheck · bi-weekly'
@@ -8927,7 +9324,6 @@ function calculatePaystub(){
     const cleanPost = s => String(s).replace(/^\[\-\]\s*Post-Tax\s*/, '');
 
     let h = '';
-
     h += `<tr class="ps-receipt-section"><td colspan="3">Earnings</td></tr>`;
     h += `<tr class="ps-receipt-row"><td>Gross Salary</td><td>${fmt(gp)}</td><td>${fmt(gp * fc)}</td></tr>`;
 
@@ -8954,7 +9350,6 @@ function calculatePaystub(){
     }
 
     h += `<tr class="ps-receipt-net"><td>Net Take-Home</td><td>${fmt(nth)}</td><td>${fmt(ntha)}</td></tr>`;
-
     rb.innerHTML = h;
   }
 
@@ -8981,47 +9376,63 @@ function renderRebalancer(){
   if(content){ hideLockOverlay(content); content.removeAttribute('data-gated-content'); }
   ['driftTolerance','rebalExpenseRatio','rebalIdleCash'].forEach(id => { const el = $id(id); if(el) el.disabled = false; });
 
-  const tb=$id('rebalanceTableBody'); if(!tb) return;
-  const y=$id('yearFilter')?.value;
-  const d=portfolioData.find(x=>x.year===y)||portfolioData[portfolioData.length-1];
-  if(!d||!d.balances){ tb.innerHTML=`<tr><td colspan="8" class="py-6 text-center text-xs" style="color:var(--text-4);">No portfolio data available yet.</td></tr>`; setText('actionPlanSummaryText','Awaiting portfolio data…'); return; }
-  const h=appSettings.hiddenCategories.portfolio||[];
-  const c=categoriesConfig.filter(x=>!h.includes(x.key));
-  const t=getTotalBal(d);
-  const dt=parseFloat($id('driftTolerance')?.value||5);
-  const de=Math.round(100/(c.length||1));
-  tb.innerHTML="";
-  const sl=[],bu=[]; let od=0;
-  c.forEach(cat=>{
-    const v=d.balances?(d.balances[cat.key]||0):0;
-    const cp=t>0?v/t*100:0;
-    const tp=customTargets[cat.key]!==undefined?customTargets[cat.key]:de;
-    const adp=Math.abs(cp-tp);
-    const isod=adp>dt;
+  const tb = $id('rebalanceTableBody'); if(!tb) return;
+
+  const { row: d, year: y } = getSelectedPortfolioRow();
+  if(!d || !d.balances){
+    tb.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-xs" style="color:var(--text-4);">No portfolio data for ${esc(y || 'the selected year')}.</td></tr>`;
+    setText('actionPlanSummaryText', 'Awaiting portfolio data…');
+    return;
+  }
+
+  const h  = appSettings.hiddenCategories.portfolio || [];
+  const c  = categoriesConfig.filter(x => !h.includes(x.key));
+  const t  = getTotalBal(d);
+  const dt = parseFloat($id('driftTolerance')?.value || 5);
+  const de = Math.round(100 / (c.length || 1));
+  tb.innerHTML = '';
+  const sl = [], bu = []; let od = 0;
+
+  c.forEach(cat => {
+    const v  = d.balances?.[cat.key] || 0;
+    const cp = t > 0 ? v/t*100 : 0;
+    const tp = customTargets[cat.key] !== undefined ? customTargets[cat.key] : de;
+    const adp = Math.abs(cp - tp);
+    const isod = adp > dt;
     if(isod) od++;
-    const tv=t*(tp/100);
-    const df=v-tv;
-    if(df>.01) sl.push({label:cat.label,amount:df});
-    else if(df<-.01) bu.push({label:cat.label,amount:Math.abs(df)});
-    const bh=isod ? `<span class="badge badge-rose whitespace-nowrap"><i data-lucide="alert-triangle" class="w-3 h-3"></i> OVER DRIFT</span>` : `<span class="badge badge-emerald whitespace-nowrap"><i data-lucide="check-circle-2" class="w-3 h-3"></i> BALANCED</span>`;
-    tb.innerHTML+=`<tr class="transition-all" style="${isod?'background:rgba(251,113,133,.06);':''}"><td class="py-3 px-4 font-bold" style="color:var(--text-2);" data-label="Asset Class"><span class="inline-flex items-center gap-2"><span>${categoryEmoji(cat)}</span>${cat.label}</span></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Current Value"><span>${formatCurrency(v,0)}</span></td><td class="py-3 px-4 font-semibold text-right font-mono" style="color:var(--text-2);" data-label="Current %"><span>${cp.toFixed(1)}%</span></td><td class="py-3 px-4 text-right" data-label="Target %"><div><input type="number" step="0.1" class="input !w-16 !py-1 text-right font-mono" value="${tp}" onchange="handleTargetInput('${cat.key}', this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">%</div></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Target Balance"><span>${formatCurrency(tv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${isod?'#BE123C':'var(--text-3)'};" data-label="Abs. Delta %"><span>${adp.toFixed(1)}%</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${df>=0?'#059669':'#BE123C'};" data-label="Rebalance Delta"><span>${df>=0?'+':''}${formatCurrency(df,0)}</span></td><td class="py-3 px-4" data-label="Drift Status"><div>${bh}</div></td></tr>`;
+    const tv = t * (tp/100);
+    const df = v - tv;
+    if(df >  .01) sl.push({ label:cat.label, amount:df });
+    else if(df < -.01) bu.push({ label:cat.label, amount:Math.abs(df) });
+    const bh = isod
+      ? `<span class="badge badge-rose whitespace-nowrap"><i data-lucide="alert-triangle" class="w-3 h-3"></i> OVER DRIFT</span>`
+      : `<span class="badge badge-emerald whitespace-nowrap"><i data-lucide="check-circle-2" class="w-3 h-3"></i> BALANCED</span>`;
+    tb.innerHTML += `<tr class="transition-all" style="${isod?'background:rgba(251,113,133,.06);':''}"><td class="py-3 px-4 font-bold" style="color:var(--text-2);" data-label="Asset Class"><span class="inline-flex items-center gap-2"><span>${categoryEmoji(cat)}</span>${cat.label}</span></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Current Value"><span>${formatCurrency(v,0)}</span></td><td class="py-3 px-4 font-semibold text-right font-mono" style="color:var(--text-2);" data-label="Current %"><span>${cp.toFixed(1)}%</span></td><td class="py-3 px-4 text-right" data-label="Target %"><div><input type="number" step="0.1" class="input !w-16 !py-1 text-right font-mono" value="${tp}" onchange="handleTargetInput('${cat.key}', this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">%</div></td><td class="py-3 px-4 text-right font-mono" style="color:var(--text-2);" data-label="Target Balance"><span>${formatCurrency(tv,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${isod?'#BE123C':'var(--text-3)'};" data-label="Abs. Delta %"><span>${adp.toFixed(1)}%</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${df>=0?'#059669':'#BE123C'};" data-label="Rebalance Delta"><span>${df>=0?'+':''}${formatCurrency(df,0)}</span></td><td class="py-3 px-4" data-label="Drift Status"><div>${bh}</div></td></tr>`;
   });
-  const se=$id('actionPlanSummaryText');
+
+  const se = $id('actionPlanSummaryText');
   if(se){
-    if(od===0){ se.innerText=`[✓] Portfolio is fully balanced within your ${dt.toFixed(1)}% drift tolerance threshold.\nNo cross-account trade execution is necessary at this time.`; }
-    else {
-      let sl2=[]; sl2.push(`[!] REBALANCING ALERT: ${od} asset layer(s) breach your ${dt.toFixed(1)}% drift tolerance threshold.\n`); sl2.push(`EXECUTION STEPS TO RESTORE TARGETS:`);
-      const mp=Math.min(sl.length,bu.length);
-      for(let i=0;i<mp;i++){ const am=Math.min(sl[i].amount,bu[i].amount); sl2.push(`• Sell ${formatCurrency(am,0)} of [${sl[i].label}] and buy ${formatCurrency(am,0)} of [${bu[i].label}] to restore target balance.`); }
-      se.innerText=sl2.join('\n');
+    if(od === 0){
+      se.innerText = `[✓] Portfolio is fully balanced within your ${dt.toFixed(1)}% drift tolerance threshold.\nNo cross-account trade execution is necessary at this time.`;
+    } else {
+      const sl2 = [];
+      sl2.push(`[!] REBALANCING ALERT: ${od} asset layer(s) breach your ${dt.toFixed(1)}% drift tolerance threshold.\n`);
+      sl2.push(`EXECUTION STEPS TO RESTORE TARGETS:`);
+      const mp = Math.min(sl.length, bu.length);
+      for(let i = 0; i < mp; i++){
+        const am = Math.min(sl[i].amount, bu[i].amount);
+        sl2.push(`• Sell ${formatCurrency(am,0)} of [${sl[i].label}] and buy ${formatCurrency(am,0)} of [${bu[i].label}] to restore target balance.`);
+      }
+      se.innerText = sl2.join('\n');
     }
   }
-  const er=parseFloat($id('rebalExpenseRatio')?.value||0);
-  const ic=parseFloat($id('rebalIdleCash')?.value||0);
-  const ip=Math.max(0,t-ic);
-  const afd=ip*(er/100);
-  setText('annualFeeDragVal',`${formatCurrency(afd,0)} / yr`);
-  if(typeof lucide!=='undefined') lucide.createIcons();
+
+  const er = parseFloat($id('rebalExpenseRatio')?.value || 0);
+  const ic = parseFloat($id('rebalIdleCash')?.value || 0);
+  const ip = Math.max(0, t - ic);
+  const afd = ip * (er/100);
+  setText('annualFeeDragVal', `${formatCurrency(afd,0)} / yr`);
+  if(typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function renderComparisonTable(){
@@ -9153,23 +9564,29 @@ vc.forEach(cat=>{
 });const r=getDynamicReturns(i);cC+=`<td class="py-3 px-4 font-bold text-right font-mono" style="color:${r.amount>=0?'#059669':'#BE123C'};" data-label="Return ($)"><span>${formatCurrency(r.amount,0)}</span></td><td class="py-3 px-4 font-bold text-right font-mono" style="color:${r.pct>=0?'#059669':'#BE123C'};" data-label="Return (%)"><span>${r.pct}%</span></td>`;if(cb)cb.innerHTML+=`<tr class="transition-all">${cC}</tr>`;});}
 
 function renderCharts(sd){
-  if(growthChart) growthChart.destroy();
+  /* Ensure we're passed the correct row — never fall back to the newest year */
+  if(!sd){
+    sd = getSelectedPortfolioRow().row;
+    if(!sd){ console.warn('[renderCharts] no selected row'); return; }
+  }
+
+  if(growthChart)   growthChart.destroy();
   if(categoryChart) categoryChart.destroy();
-  if(historyChart) historyChart.destroy();
+  if(historyChart)  historyChart.destroy();
 
   const gcProbe = $id('growthChart');
   if(gcProbe && (gcProbe.offsetWidth === 0 || gcProbe.offsetHeight === 0)) return;
 
-  const isFree = !hasFeature('wealth_blueprint');
-  const fullY  = portfolioData.map(d => d.year);
-  const fullTB = portfolioData.map(d => getTotalBal(d));
+  const isFree   = !hasFeature('wealth_blueprint');
+  const fullY    = portfolioData.map(d => d.year);
+  const fullTB   = portfolioData.map(d => getTotalBal(d));
   const startIdx = isFree ? Math.max(0, fullY.length - 12) : 0;
-  const y  = fullY.slice(startIdx);
-  const tb = fullTB.slice(startIdx);
+  const y        = fullY.slice(startIdx);
+  const tb       = fullTB.slice(startIdx);
 
-  const gc=$id('growthChart');
+  const gc = $id('growthChart');
   if(gc){
-    const t = chartTypeState.growth;
+    const t  = chartTypeState.growth;
     const ct = (t === 'line' || t === 'area') ? 'line' : 'bar';
     const ia = t === 'area';
     const gr = gc.getContext('2d').createLinearGradient(0,0,0,300);
@@ -9193,18 +9610,26 @@ function renderCharts(sd){
       },
       options: {
         responsive:true, maintainAspectRatio:false,
-        plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#0B1220', padding:12, cornerRadius:10, displayColors:false, callbacks:{ label: ctx => formatCurrency(ctx.parsed.y,0) } } },
-        scales:{ x:{grid:{display:false}}, y:{ grid:{color:getChartGridColor()}, ticks:{ callback:v => getCurrencySymbol() + (v/1000).toFixed(0) + 'k' } } }
+        plugins:{
+          legend:{ display:false },
+          tooltip:{ backgroundColor:'#0B1220', padding:12, cornerRadius:10, displayColors:false,
+                    callbacks:{ label: ctx => formatCurrency(ctx.parsed.y,0) } }
+        },
+        scales:{
+          x:{ grid:{display:false} },
+          y:{ grid:{ color:getChartGridColor() },
+              ticks:{ callback:v => getCurrencySymbol() + (v/1000).toFixed(0) + 'k' } }
+        }
       }
     });
   }
 
-  const h = appSettings.hiddenCategories.portfolio || [];
+  const h  = appSettings.hiddenCategories.portfolio || [];
   const vc = categoriesConfig.filter(x => !h.includes(x.key));
 
-  const cc=$id('categoryChart');
+  const cc = $id('categoryChart');
   if(cc){
-    const t = chartTypeState.category;
+    const t  = chartTypeState.category;
     const ct = t === 'polar' ? 'polarArea' : (t === 'pie' ? 'pie' : 'doughnut');
     const co = t === 'pie' ? '0%' : (t === 'polar' ? '0%' : '68%');
     categoryChart = new Chart(cc, {
@@ -9217,13 +9642,16 @@ function renderCharts(sd){
           borderWidth: 2, borderColor: getChartSurfaceColor()
         }]
       },
-      options: { responsive:true, maintainAspectRatio:false, cutout:co, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, boxHeight:10, padding:12, usePointStyle:true, pointStyle:'circle' } } } }
+      options: {
+        responsive:true, maintainAspectRatio:false, cutout:co,
+        plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, boxHeight:10, padding:12, usePointStyle:true, pointStyle:'circle' } } }
+      }
     });
   }
 
-  const hc=$id('historyChart');
+  const hc = $id('historyChart');
   if(hc){
-    const t = chartTypeState.history;
+    const t  = chartTypeState.history;
     const ct = t === 'bar' ? 'bar' : 'line';
     const ia = t === 'area';
     const trimmed = portfolioData.slice(startIdx);
@@ -9240,7 +9668,10 @@ function renderCharts(sd){
       data: { labels: y, datasets: hd },
       options: {
         responsive:true, maintainAspectRatio:false,
-        scales:{ x:{ stacked: ct === 'bar', grid:{display:false} }, y:{ stacked: ct === 'bar', ticks:{ callback:v => getCurrencySymbol() + (v/1000).toFixed(0) + 'k' } } },
+        scales:{
+          x:{ stacked: ct === 'bar', grid:{display:false} },
+          y:{ stacked: ct === 'bar', ticks:{ callback:v => getCurrencySymbol() + (v/1000).toFixed(0) + 'k' } }
+        },
         plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, boxHeight:10, padding:10, usePointStyle:true, pointStyle:'circle' } } }
       }
     });
@@ -9259,7 +9690,74 @@ function renderMiniCharts(){
     if(host) host.innerHTML = '';
     return;
   }
-  const y=$id('yearFilter')?.value;const yi=portfolioData.findIndex(d=>d.year===y);const ad=portfolioData[yi]||portfolioData[portfolioData.length-1];const pd=yi>0?portfolioData[yi-1]:null;if(!ad)return;const yl=portfolioData.map(d=>d.year);const h=appSettings.hiddenCategories.portfolio||[];categoriesConfig.forEach(cat=>{if(h.includes(cat.key))return;const dv=portfolioData.map(d=>d.balances?(d.balances[cat.key]||0):0);const lv=ad.balances?(ad.balances[cat.key]||0):0;const iv=(ad.invested&&ad.invested[cat.key])?ad.invested[cat.key]:0;const glv=lv-iv;const glp=iv>0?((glv/iv)*100).toFixed(2):"0.00";const pv=pd&&pd.balances?(pd.balances[cat.key]||0):0;const uc=ad.contri?(ad.contri[cat.key]||0):0;const ygv=lv-(pv+uc);const ygb=pv+uc;const ygp=ygb>0?((ygv/ygb)*100).toFixed(2):"0.00";const le=$id(`latest_${cat.key}`),ie=$id(`invested_${cat.key}`),ge=$id(`gain_${cat.key}`),ye=$id(`yearly_gain_${cat.key}`);if(le)le.innerText=formatCurrency(lv,0);if(ie)ie.innerText=formatCurrency(iv,0);if(ge){const s=glv>=0?'+':'';ge.innerText=`${s}${formatCurrency(glv,0)} (${s}${glp}%)`;ge.style.color=glv>=0?'#059669':'#BE123C';}if(ye){if(!pd){ye.innerText="Base Year";ye.style.color='var(--text-4)';}else{const s=ygv>=0?'+':'';ye.innerText=`${s}${formatCurrency(ygv,0)} (${s}${ygp}%)`;ye.style.color=ygv>=0?'#059669':'#BE123C';}}const c=$id(`chartMini_${cat.key}`);if(c){if(miniCharts[cat.key])miniCharts[cat.key].destroy();miniCharts[cat.key]=new Chart(c,{type:'line',data:{labels:yl,datasets:[{data:dv,borderColor:cat.color,backgroundColor:cat.color+'1A',fill:true,tension:.3,borderWidth:2,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});}});
+
+  const { row: ad, index: yi } = getSelectedPortfolioRow();
+  const pd = yi > 0 ? portfolioData[yi - 1] : null;
+  if(!ad) return;
+
+  const yl = portfolioData.map(d => d.year);
+  const h  = appSettings.hiddenCategories.portfolio || [];
+
+  categoriesConfig.forEach(cat => {
+    if(h.includes(cat.key)) return;
+
+    const dv  = portfolioData.map(d => d.balances ? (d.balances[cat.key] || 0) : 0);
+    const lv  = ad.balances ? (ad.balances[cat.key] || 0) : 0;
+    const iv  = (ad.invested && ad.invested[cat.key]) ? ad.invested[cat.key] : 0;
+    const glv = lv - iv;
+    const glp = iv > 0 ? ((glv / iv) * 100).toFixed(2) : "0.00";
+
+    const pv  = pd && pd.balances ? (pd.balances[cat.key] || 0) : 0;
+    const uc  = ad.contri ? (ad.contri[cat.key] || 0) : 0;
+    const ygv = lv - (pv + uc);
+    const ygb = pv + uc;
+    const ygp = ygb > 0 ? ((ygv / ygb) * 100).toFixed(2) : "0.00";
+
+    const le = $id(`latest_${cat.key}`);
+    const ie = $id(`invested_${cat.key}`);
+    const ge = $id(`gain_${cat.key}`);
+    const ye = $id(`yearly_gain_${cat.key}`);
+
+    if(le) le.innerText = formatCurrency(lv, 0);
+    if(ie) ie.innerText = formatCurrency(iv, 0);
+
+    if(ge){
+      const s = glv >= 0 ? '+' : '';
+      ge.innerText = `${s}${formatCurrency(glv, 0)} (${s}${glp}%)`;
+      ge.style.color = glv >= 0 ? '#059669' : '#BE123C';
+    }
+
+    if(ye){
+      if(!pd){ ye.innerText = "Base Year"; ye.style.color = 'var(--text-4)'; }
+      else {
+        const s = ygv >= 0 ? '+' : '';
+        ye.innerText = `${s}${formatCurrency(ygv, 0)} (${s}${ygp}%)`;
+        ye.style.color = ygv >= 0 ? '#059669' : '#BE123C';
+      }
+    }
+
+    const c = $id(`chartMini_${cat.key}`);
+    if(c){
+      if(miniCharts[cat.key]) miniCharts[cat.key].destroy();
+      miniCharts[cat.key] = new Chart(c, {
+        type: 'line',
+        data: {
+          labels: yl,
+          datasets: [{
+            data: dv,
+            borderColor: cat.color,
+            backgroundColor: cat.color + '1A',
+            fill: true, tension: .3, borderWidth: 2, pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { display: false }, y: { display: false } }
+        }
+      });
+    }
+  });
 }
 let expenseStore={selectedCurrency:"USD",monthlyBudget:0,categories:[],cards:[],transactions:[]};
 let expCategoryChartInstance=null,expenseDataSource="none";
